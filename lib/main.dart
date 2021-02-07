@@ -11,9 +11,9 @@ import 'package:unitrade_web_v2/shared/string.dart';
 import 'models/user.dart';
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -26,9 +26,9 @@ class MyApp extends StatelessWidget {
         title: MAIN_TITLE,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.amber, 
-          accentColor: Colors.amber[200]),
+            brightness: Brightness.light,
+            primarySwatch: Colors.amber,
+            accentColor: Colors.amber[200]),
         home: MyHomePage(
           title: HOME_PAGE,
         ),
@@ -72,9 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Center(
               child: Container(
+                color: Colors.deepOrange[400],
                 width: 300.0,
-                child: RaisedButton(
-                  color: Colors.deepOrange[400],
+                child: ElevatedButton(
                   child: Text(
                     SIGN_IN_TEXT,
                     style: buttonStyle,

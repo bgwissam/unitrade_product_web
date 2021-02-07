@@ -56,43 +56,43 @@ class Type {
 
 class CategoryList {
   static List<String> categoryList(String productType) {
-    if(productType != null)
-    switch (productType) {
-      case TAB_PAINT_TEXT:
-        return [
-          PU_BUTTON,
-          NC_BUTTON,
-          AC_BUTTON,
-          GLUE_BUTTON,
-          EXT_BUTTON,
-          SPECIAL_PRODUCT,
-          THINNER,
-        ];
-        break;
-      case TAB_WOOD_TEXT:
-        return [
-          MDF_BUTTON,
-          SOLID_BUTTON,
-          FIRE_BUTTON,
-          CHIP_BUTTON,
-          HPL_BUTTON,
-        ];
-        break;
-      case TAB_SS_TEXT:
-        return [
-          COR_BUTTON,
-          MON_BUTTON,
-          SS_ADHESIVE_BUTTON,
-        ];
-        break;
-      case TAB_ACCESSORIES_TEXT:
-        return [
-          HINGES,
-          RUNNERS,
-        ];
-        break;
-
-    }
+    if (productType != null)
+      switch (productType) {
+        case TAB_PAINT_TEXT:
+          return [
+            PU_BUTTON,
+            NC_BUTTON,
+            AC_BUTTON,
+            GLUE_BUTTON,
+            EXT_BUTTON,
+            SPECIAL_PRODUCT,
+            THINNER,
+          ];
+          break;
+        case TAB_WOOD_TEXT:
+          return [
+            MDF_BUTTON,
+            SOLID_BUTTON,
+            FIRE_BUTTON,
+            CHIP_BUTTON,
+            HPL_BUTTON,
+          ];
+          break;
+        case TAB_SS_TEXT:
+          return [
+            COR_BUTTON,
+            MON_BUTTON,
+            SS_ADHESIVE_BUTTON,
+          ];
+          break;
+        case TAB_ACCESSORIES_TEXT:
+          return [
+            HINGES,
+            RUNNERS,
+            FLAP,
+          ];
+          break;
+      }
     return null;
   }
 }
@@ -125,6 +125,29 @@ class BusinessType {
       'Carpentry',
       'Retail',
       'Contractor',
+    ];
+  }
+}
+
+class AccessoriesOptions {
+  static List<String> extensions() {
+    return [
+      'Full Extension',
+      'Part Extension',
+    ];
+  }
+
+  static List<String> closing() {
+    return [
+      'Push to Open',
+      'Soft Closing',
+    ];
+  }
+
+  static List<String> flapStrenght() {
+    return [
+      'Strong',
+      'Weak',
     ];
   }
 }

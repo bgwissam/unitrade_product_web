@@ -68,6 +68,12 @@ class _ProductFormState extends State<ProductForm> {
   String closingType;
   String productColor;
   String productImageUrl;
+  //Option for the accessories
+  String extensionType;
+  String flapStrenght;
+  List<String> _runnersExtension = AccessoriesOptions.extensions();
+  List<String> _runnerClosing = AccessoriesOptions.closing();
+  List<String> _flapStrength = AccessoriesOptions.flapStrenght();
   List<dynamic> imageUrls;
   List<String> _brandList = [];
   String error = 'No Error detected';
@@ -299,7 +305,6 @@ class _ProductFormState extends State<ProductForm> {
           ? imageListUrls = []
           : imageListUrls =
               new List<dynamic>.from(widget.lightProduct.imageListUrls);
-
     } else if (widget.accessoriesProduct != null) {
       itemCode = widget.accessoriesProduct.itemCode;
       productName = widget.accessoriesProduct.productName;
@@ -597,8 +602,8 @@ class _ProductFormState extends State<ProductForm> {
               : Container(),
           //Will validate the current field and save the product edited or added to the database
           Container(
-            child: RaisedButton(
-              color: Colors.amber[400],
+            color: Colors.amber[400],
+            child: ElevatedButton(
               child: Text(SAVE_PRODUCT, style: buttonStyle),
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
@@ -833,34 +838,36 @@ class _ProductFormState extends State<ProductForm> {
             ),
           ),
           //Will validate the current field and save the product edited or added to the database
-          RaisedButton(
+          Container(
             color: Colors.amber[400],
-            child: Text(UPDATE_PRICE, style: buttonStyle),
-            onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                var result;
-                DatabaseService databaseService = DatabaseService();
-                setState(() {
-                  loading = true;
-                });
-                if (widget.paintProducts != null) {
-                  if (productType == TAB_PAINT_TEXT) {
-                    result = await databaseService.updatePaintPriceField(
-                      uid: widget.paintProducts.uid,
-                      productPrice: productPrice,
-                    );
-                  }
+            child: ElevatedButton(
+              child: Text(UPDATE_PRICE, style: buttonStyle),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  var result;
+                  DatabaseService databaseService = DatabaseService();
+                  setState(() {
+                    loading = true;
+                  });
+                  if (widget.paintProducts != null) {
+                    if (productType == TAB_PAINT_TEXT) {
+                      result = await databaseService.updatePaintPriceField(
+                        uid: widget.paintProducts.uid,
+                        productPrice: productPrice,
+                      );
+                    }
 
-                  if (result == null) {
-                    setState(() {
-                      loading = false;
-                      error = 'Failed to update this product';
-                    });
+                    if (result == null) {
+                      setState(() {
+                        loading = false;
+                        error = 'Failed to update this product';
+                      });
+                    }
                   }
+                  Navigator.pop(context);
                 }
-                Navigator.pop(context);
-              }
-            },
+              },
+            ),
           )
         ],
       ),
@@ -1336,20 +1343,22 @@ class _ProductFormState extends State<ProductForm> {
           ),
           //Show current PDF File Data sheet
           _pdfUrl != null
-              ? FlatButton(
+              ? Container(
                   padding: EdgeInsets.all(15.0),
                   color: Colors.red[200],
                   height: 40.0,
-                  shape: RoundedRectangleBorder(
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      side: BorderSide(color: Colors.black)),
-                  child: Text(TDS),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PDFFileViewer(
-                        pdfUrl: _pdfUrl,
-                        productName: productName,
+                      border: Border.all(color: Colors.black)),
+                  child: TextButton(
+                    child: Text(TDS),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PDFFileViewer(
+                          pdfUrl: _pdfUrl,
+                          productName: productName,
+                        ),
                       ),
                     ),
                   ),
@@ -1739,20 +1748,22 @@ class _ProductFormState extends State<ProductForm> {
               ),
               //Show current PDF File Data sheet
               _pdfUrl != null
-                  ? FlatButton(
+                  ? Container(
                       padding: EdgeInsets.all(15.0),
-                      color: Colors.red[200],
                       height: 40.0,
-                      shape: RoundedRectangleBorder(
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(color: Colors.black)),
-                      child: Text(TDS),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PDFFileViewer(
-                            pdfUrl: _pdfUrl,
-                            productName: productName,
+                          border: Border.all(color: Colors.black)),
+                      color: Colors.red[200],
+                      child: TextButton(
+                        child: Text(TDS),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PDFFileViewer(
+                              pdfUrl: _pdfUrl,
+                              productName: productName,
+                            ),
                           ),
                         ),
                       ),
@@ -2529,8 +2540,9 @@ class _ProductFormState extends State<ProductForm> {
                     ? Row(
                         children: [
                           //Product Length
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2,
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
                             child: TextFormField(
                               initialValue: length != null
                                   ? length.toString()
@@ -2548,7 +2560,108 @@ class _ProductFormState extends State<ProductForm> {
                                 });
                               },
                             ),
+                          ),
+                          SizedBox(
+                            width: 6.0,
+                          ),
+                          productCategory != FLAP ? Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: extensionType,
+                                hint: Text(EXTENSION_TYPE),
+                                onChanged: (String val) {
+                                  setState(() {
+                                    extensionType = val;
+                                  });
+                                },
+                                selectedItemBuilder: (BuildContext context) {
+                                  return _runnersExtension
+                                      .map((item) => Text(
+                                            item,
+                                            style: textStyle1,
+                                          ))
+                                      .toList();
+                                },
+                                items: _runnersExtension
+                                    .map((item) => DropdownMenuItem(
+                                          child: Text(item),
+                                          value: item,
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                          ) :
+                          //Flap strenght mechanism
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.loose,
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: flapStrenght,
+                                hint: Text(FLAP_STENGTH),
+                                onChanged: (String val) {
+                                  setState(() {
+                                    flapStrenght = val;
+                                  });
+                                },
+                                selectedItemBuilder: (BuildContext context) {
+                                  return _flapStrength
+                                      .map((item) => Text(
+                                            item,
+                                            style: textStyle1,
+                                          ))
+                                      .toList();
+                                },
+                                items: _flapStrength
+                                    .map((item) => DropdownMenuItem(
+                                          child: Text(item),
+                                          value: item,
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
                           )
+                          ,
+                          SizedBox(
+                            width: 6.0,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.loose,
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: closingType,
+                                hint: Text(CLOSING_TYPE),
+                                onChanged: (String val) {
+                                  setState(() {
+                                    closingType = val;
+                                  });
+                                },
+                                selectedItemBuilder: (BuildContext context) {
+                                  return _runnerClosing
+                                      .map((item) => Text(
+                                            item,
+                                            style: textStyle1,
+                                          ))
+                                      .toList();
+                                },
+                                items: _runnerClosing
+                                    .map((item) => DropdownMenuItem(
+                                          child: Text(item),
+                                          value: item,
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     : Row(

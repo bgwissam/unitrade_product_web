@@ -152,10 +152,10 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  Future _signInWithCurrentCredentials(
-      String emailUser, String passwordUser) async {
-    var result = await _auth.signInWithUserNameandPassword(emailUser, passwordUser);
-    print('The signin in result is: $result');
-    return result;
-  }
+  // Future _signInWithCurrentCredentials(
+  //     String emailUser, String passwordUser) async {
+  //   var result = await _auth.signInWithUserNameandPassword(emailUser, passwordUser);
+  //   print('The signin in result is: $result');
+  //   return result;
+  // }
 }

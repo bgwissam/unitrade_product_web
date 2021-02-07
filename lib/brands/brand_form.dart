@@ -253,8 +253,8 @@ class _BrandFormState extends State<BrandForm> {
                         return Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Container(
-                            child: FlatButton(
-                              color: Colors.grey[400],
+                            color: Colors.grey[400],
+                            child: TextButton(
                               child: Text(
                                 brandCategories[index],
                                 style: textStyle3,
@@ -320,8 +320,8 @@ class _BrandFormState extends State<BrandForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                child: RaisedButton(
-                  color: Colors.amber[400],
+                color: Colors.amber[400],
+                child: ElevatedButton(
                   child: Text(SAVE_BRAND, style: buttonStyle),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {

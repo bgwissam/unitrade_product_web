@@ -78,6 +78,9 @@ const String PRODUCT_COST = 'Item Cost';
 const String PRODUCT_PACKING_UNIT = 'Unit';
 const String PRODUCT_PACKING_UNIT_VALIDATION = 'Packing unit is needed';
 const String CANNOT_READ_IMAGE = 'Can\'t add selected image';
+const String EXTENSION_TYPE = 'Extension Type';
+const String CLOSING_TYPE = 'Closing Type';
+const String FLAP_STENGTH = 'Flap Strength';
 //Product Form validation
 const String PRODUCT_LENGTH_VAL_ZERO = 'Product length should be greater than zero';
 const String PRODUCT_LENGTH_VAL_EMPTY = 'Product length should not be empty';
@@ -125,6 +128,7 @@ const String SS_ADHESIVE_BUTTON = 'Adh. Solid Surface';
 const String SALICE_BUTTON = 'Fit Out';
 const String HINGES = 'Hinges';
 const String RUNNERS = 'Runners';
+const String FLAP = 'Flap Mechanism';
 const String HAFELE_BUTTON = 'Lights';
 const String INDAUX_BUTTON = 'Fit Out';
 

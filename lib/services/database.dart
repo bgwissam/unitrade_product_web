@@ -639,7 +639,7 @@ class DatabaseService {
   Future<List<WoodProduct>> woodProductIdList(String uid) async {
     var document;
     try {
-      document = await woodCollection.document(uid).get();
+      document = await woodCollection.doc(uid).get();
       print('the received docuement $document');
     } catch (e) {
       print(e);
@@ -752,7 +752,7 @@ class DatabaseService {
   Future deletesolidSurfaceProduct(
       {String uid, List<dynamic> imageUids}) async {
     try {
-      await solidCollection.document(uid).delete();
+      await solidCollection.doc(uid).delete();
       for (var imageUid in imageUids)
         await FirebaseStorage.instance
             .ref(imageUid)
