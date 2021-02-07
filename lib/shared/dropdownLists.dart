@@ -150,4 +150,11 @@ class AccessoriesOptions {
       'Weak',
     ];
   }
+
+  static List<String> itemSide() {
+    return [
+      'Left',
+      'Right'
+    ];
+  }
 }

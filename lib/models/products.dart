@@ -146,6 +146,9 @@ class Accessories {
   String description;
   double productPrice;
   double productCost;
+  String extensionType;
+  String itemSide;
+  String flapStrength;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;
@@ -159,6 +162,9 @@ class Accessories {
     this.length,
     this.angle,
     this.closingType,
+    this.itemSide,
+    this.extensionType,
+    this.flapStrength,
     this.color,
     this.description,
     this.productPrice,

@@ -81,6 +81,7 @@ const String CANNOT_READ_IMAGE = 'Can\'t add selected image';
 const String EXTENSION_TYPE = 'Extension Type';
 const String CLOSING_TYPE = 'Closing Type';
 const String FLAP_STENGTH = 'Flap Strength';
+const String ITEM_SIDE = 'Side';
 //Product Form validation
 const String PRODUCT_LENGTH_VAL_ZERO = 'Product length should be greater than zero';
 const String PRODUCT_LENGTH_VAL_EMPTY = 'Product length should not be empty';

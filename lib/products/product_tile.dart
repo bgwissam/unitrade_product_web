@@ -222,9 +222,9 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
-            !isAdmin
-                ? Container()
-                : Expanded(flex: 1, child: _buildUpdateDeleteButton(context))
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(flex: 1, child: _buildUpdateDeleteButton(context))
+                : SizedBox()
           ],
         ),
       ),
@@ -301,7 +301,9 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
-            !isAdmin ? Container() : _buildUpdateDeleteButton(context)
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(child: _buildUpdateDeleteButton(context))
+                : SizedBox()
           ],
         ),
       ),
@@ -359,15 +361,17 @@ class _ProductTileState extends State<ProductTile> {
             Expanded(
               flex: 1,
               child: Container(
-                child: widget.woodProduct.thickness != null ? new Text(
-                  'Dimensions:\n ${widget.woodProduct.length}x${widget.woodProduct.width}x${widget.woodProduct.thickness} mm\n',
-                  style: textStyle1,
-                  textAlign: TextAlign.center,
-                ) : new Text(
-                  'Packing: ${widget.woodProduct.productPack} ml',
-                  style: textStyle1,
-                  textAlign: TextAlign.center,
-                ),
+                child: widget.woodProduct.thickness != null
+                    ? new Text(
+                        'Dimensions:\n ${widget.woodProduct.length}x${widget.woodProduct.width}x${widget.woodProduct.thickness} mm\n',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                    : new Text(
+                        'Packing: ${widget.woodProduct.productPack} ml',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      ),
               ),
             ),
             //Price field
@@ -382,7 +386,9 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
-            !isAdmin ? Container() : _buildUpdateDeleteButton(context)
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(child: _buildUpdateDeleteButton(context))
+                : SizedBox()
           ],
         ),
       ),
@@ -442,7 +448,9 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
-            !isAdmin ? Container() : _buildUpdateDeleteButton(context)
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(child: _buildUpdateDeleteButton(context))
+                : SizedBox()
           ],
         ),
       ),
@@ -534,7 +542,9 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
-            !isAdmin ? Container() : _buildUpdateDeleteButton(context)
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(child: _buildUpdateDeleteButton(context))
+                : SizedBox()
           ],
         ),
       ),

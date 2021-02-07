@@ -70,10 +70,12 @@ class _ProductFormState extends State<ProductForm> {
   String productImageUrl;
   //Option for the accessories
   String extensionType;
-  String flapStrenght;
+  String flapStrength;
+  String itemSide;
   List<String> _runnersExtension = AccessoriesOptions.extensions();
   List<String> _runnerClosing = AccessoriesOptions.closing();
   List<String> _flapStrength = AccessoriesOptions.flapStrenght();
+  List<String> _itemSide = AccessoriesOptions.itemSide();
   List<dynamic> imageUrls;
   List<String> _brandList = [];
   String error = 'No Error detected';
@@ -314,6 +316,9 @@ class _ProductFormState extends State<ProductForm> {
       length = widget.accessoriesProduct.length;
       angle = widget.accessoriesProduct.angle;
       closingType = widget.accessoriesProduct.closingType;
+      itemSide = widget.accessoriesProduct.itemSide;
+      flapStrength = widget.accessoriesProduct.flapStrength;
+      extensionType = widget.accessoriesProduct.extensionType;
       productPrice = widget.accessoriesProduct.productPrice;
       productCost = widget.accessoriesProduct.productCost;
       //productTags = widget.accessoriesProduct.productTags;
@@ -612,6 +617,8 @@ class _ProductFormState extends State<ProductForm> {
                   setState(() {
                     loading = true;
                   });
+                  print(extensionType);
+
                   if (widget.paintProducts == null &&
                       widget.woodProduct == null &&
                       widget.lightProduct == null &&
@@ -669,18 +676,6 @@ class _ProductFormState extends State<ProductForm> {
                           productPack: productPack,
                           color: productColor,
                           imageListUrls: imageListUrls);
-                    //variable for adding a lights products
-                    else if (productType == TAB_LIGHT_TEXT)
-                      result = await databaseService.addLightsProduct(
-                          productName: productName,
-                          productBrand: productBrand,
-                          productType: productType,
-                          dimensions: dimensions,
-                          watt: watt,
-                          voltage: voltage,
-                          productCategory: productCategory,
-                          color: productColor,
-                          imageListUrls: imageListUrls);
                     //variable for adding accessories products
                     else if (productType == TAB_ACCESSORIES_TEXT)
                       result = await databaseService.addAccessoriesProduct(
@@ -691,6 +686,9 @@ class _ProductFormState extends State<ProductForm> {
                           length: length,
                           angle: angle,
                           closingType: closingType,
+                          itemSide: itemSide,
+                          extensionType: extensionType,
+                          flapStrength: flapStrength,
                           productCategory: productCategory,
                           color: productColor,
                           productPrice: productPrice,
@@ -743,7 +741,6 @@ class _ProductFormState extends State<ProductForm> {
                           imageListUrls: imageListUrls,
                           pdfUrl: _pdfUrl);
                     else if (productType == TAB_SS_TEXT) {
-                      print('Product Pack: $productPack');
                       result = await DatabaseService()
                           .updateSolidSurfaceProduct(
                               uid: widget.woodProduct.uid,
@@ -762,18 +759,6 @@ class _ProductFormState extends State<ProductForm> {
                               color: productColor,
                               imageListUrls: imageListUrls,
                               pdfUrl: _pdfUrl);
-                    } else if (productType == TAB_LIGHT_TEXT) {
-                      result = await DatabaseService().updateLightsProduct(
-                          uid: widget.lightProduct.uid,
-                          productName: productName,
-                          productBrand: productBrand,
-                          productType: productType,
-                          dimensions: dimensions,
-                          watt: watt,
-                          voltage: voltage,
-                          productCategory: productCategory,
-                          color: productColor,
-                          imageListUrls: imageListUrls);
                     } else if (productType == TAB_ACCESSORIES_TEXT)
                       result = await databaseService.updateAccessoriesProduct(
                           uid: widget.accessoriesProduct.uid,
@@ -784,6 +769,9 @@ class _ProductFormState extends State<ProductForm> {
                           length: length,
                           angle: angle,
                           closingType: closingType,
+                          itemSide: itemSide,
+                          extensionType: extensionType,
+                          flapStrength: flapStrength,
                           productCategory: productCategory,
                           productPrice: productPrice,
                           productCost: productCost,
@@ -2540,94 +2528,99 @@ class _ProductFormState extends State<ProductForm> {
                     ? Row(
                         children: [
                           //Product Length
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: TextFormField(
-                              initialValue: length != null
-                                  ? length.toString()
-                                  : zeroValue,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              style: textStyle1,
-                              decoration: textInputDecoration.copyWith(
-                                  labelText: PRODUCT_LENGHT),
-                              onChanged: (val) {
-                                setState(() {
-                                  length = double.parse(val);
-                                });
-                              },
-                            ),
-                          ),
+                          productCategory != FLAP
+                              ? Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: TextFormField(
+                                    initialValue: length != null
+                                        ? length.toString()
+                                        : zeroValue,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    style: textStyle1,
+                                    decoration: textInputDecoration.copyWith(
+                                        labelText: PRODUCT_LENGHT),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        length = double.parse(val);
+                                      });
+                                    },
+                                  ),
+                                )
+                              : Container(),
                           SizedBox(
                             width: 6.0,
                           ),
-                          productCategory != FLAP ? Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              alignment: Alignment.bottomLeft,
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: extensionType,
-                                hint: Text(EXTENSION_TYPE),
-                                onChanged: (String val) {
-                                  setState(() {
-                                    extensionType = val;
-                                  });
-                                },
-                                selectedItemBuilder: (BuildContext context) {
-                                  return _runnersExtension
-                                      .map((item) => Text(
-                                            item,
-                                            style: textStyle1,
-                                          ))
-                                      .toList();
-                                },
-                                items: _runnersExtension
-                                    .map((item) => DropdownMenuItem(
-                                          child: Text(item),
-                                          value: item,
-                                        ))
-                                    .toList(),
-                              ),
-                            ),
-                          ) :
-                          //Flap strenght mechanism
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.loose,
-                            child: Container(
-                              alignment: Alignment.bottomLeft,
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: flapStrenght,
-                                hint: Text(FLAP_STENGTH),
-                                onChanged: (String val) {
-                                  setState(() {
-                                    flapStrenght = val;
-                                  });
-                                },
-                                selectedItemBuilder: (BuildContext context) {
-                                  return _flapStrength
-                                      .map((item) => Text(
-                                            item,
-                                            style: textStyle1,
-                                          ))
-                                      .toList();
-                                },
-                                items: _flapStrength
-                                    .map((item) => DropdownMenuItem(
-                                          child: Text(item),
-                                          value: item,
-                                        ))
-                                    .toList(),
-                              ),
-                            ),
-                          )
-                          ,
+                          productCategory != FLAP
+                              ? Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.tight,
+                                  child: Container(
+                                    alignment: Alignment.bottomLeft,
+                                    child: DropdownButton<String>(
+                                      isExpanded: true,
+                                      value: extensionType,
+                                      hint: Text(EXTENSION_TYPE),
+                                      onChanged: (String val) {
+                                        setState(() {
+                                          extensionType = val;
+                                        });
+                                      },
+                                      selectedItemBuilder:
+                                          (BuildContext context) {
+                                        return _runnersExtension
+                                            .map((item) => Text(
+                                                  item,
+                                                  style: textStyle1,
+                                                ))
+                                            .toList();
+                                      },
+                                      items: _runnersExtension
+                                          .map((item) => DropdownMenuItem(
+                                                child: Text(item),
+                                                value: item,
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ),
+                                )
+                              :
+                              //Flap strenght mechanism
+                              Flexible(
+                                  flex: 1,
+                                  fit: FlexFit.loose,
+                                  child: Container(
+                                    alignment: Alignment.bottomLeft,
+                                    child: DropdownButton<String>(
+                                      isExpanded: true,
+                                      value: flapStrength,
+                                      hint: Text(FLAP_STENGTH),
+                                      onChanged: (String val) {
+                                        setState(() {
+                                          flapStrength = val;
+                                        });
+                                      },
+                                      selectedItemBuilder:
+                                          (BuildContext context) {
+                                        return _flapStrength
+                                            .map((item) => Text(
+                                                  item,
+                                                  style: textStyle1,
+                                                ))
+                                            .toList();
+                                      },
+                                      items: _flapStrength
+                                          .map((item) => DropdownMenuItem(
+                                                child: Text(item),
+                                                value: item,
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ),
+                                ),
                           SizedBox(
                             width: 6.0,
                           ),
@@ -2725,22 +2718,54 @@ class _ProductFormState extends State<ProductForm> {
                 SizedBox(
                   height: 15.0,
                 ),
-                //Product Colour
-                Container(
-                  child: TextFormField(
-                    initialValue: productColor != null ? productColor : '',
-                    textCapitalization: TextCapitalization.characters,
-                    decoration:
-                        textInputDecoration.copyWith(labelText: PRODUCT_COLOUR),
-                    validator: (val) =>
-                        val.isEmpty ? PRODUCT_COLOUR_VALIDATION : null,
-                    onChanged: (val) {
-                      setState(() {
-                        productColor = val;
-                      });
-                    },
-                  ),
-                ),
+                productCategory == HINGES
+                    ?
+                    //Product Colour
+                    Container(
+                        child: TextFormField(
+                          initialValue:
+                              productColor != null ? productColor : '',
+                          textCapitalization: TextCapitalization.characters,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_COLOUR),
+                          validator: (val) =>
+                              val.isEmpty ? PRODUCT_COLOUR_VALIDATION : null,
+                          onChanged: (val) {
+                            setState(() {
+                              productColor = val;
+                            });
+                          },
+                        ),
+                      )
+                    :
+                    //Product Side
+                    Container(
+                        alignment: Alignment.bottomLeft,
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: itemSide,
+                          hint: Text(ITEM_SIDE),
+                          onChanged: (String val) {
+                            setState(() {
+                              itemSide = val;
+                            });
+                          },
+                          selectedItemBuilder: (BuildContext context) {
+                            return _itemSide
+                                .map((item) => Text(
+                                      item,
+                                      style: textStyle1,
+                                    ))
+                                .toList();
+                          },
+                          items: _itemSide
+                              .map((item) => DropdownMenuItem(
+                                    child: Text(item),
+                                    value: item,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
                 SizedBox(
                   height: 15.0,
                 ),
