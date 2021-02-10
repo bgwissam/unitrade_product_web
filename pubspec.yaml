@@ -37,6 +37,7 @@ dependencies:
   flutter_pdfview:
   image_whisperer:
   flutter_spinkit:
+  url_strategy:
 
 dev_dependencies:
   flutter_test:

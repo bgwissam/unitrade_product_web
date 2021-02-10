@@ -617,8 +617,6 @@ class _ProductFormState extends State<ProductForm> {
                   setState(() {
                     loading = true;
                   });
-                  print(extensionType);
-
                   if (widget.paintProducts == null &&
                       widget.woodProduct == null &&
                       widget.lightProduct == null &&

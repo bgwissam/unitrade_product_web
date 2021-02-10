@@ -67,6 +67,7 @@ class CategoryList {
             EXT_BUTTON,
             SPECIAL_PRODUCT,
             THINNER,
+            STAIN,
           ];
           break;
         case TAB_WOOD_TEXT:
@@ -83,6 +84,7 @@ class CategoryList {
             COR_BUTTON,
             MON_BUTTON,
             SS_ADHESIVE_BUTTON,
+            COR_SINKS,
           ];
           break;
         case TAB_ACCESSORIES_TEXT:

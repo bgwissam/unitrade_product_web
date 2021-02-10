@@ -88,18 +88,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         actions: [
           ButtonTheme(
             minWidth: 150.0,
-            child: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                padding: EdgeInsets.fromLTRB(0, 0, 25.0, 0),
-                onPressed: () async {
-                  onBackPressed();
-                },
-                child: Center(
-                    child: Text(
-                  SIGN_OUT,
-                  style: buttonStyle2,
-                ))),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 25.0, 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: TextButton(
+                    onPressed: () async {
+                      onBackPressed();
+                    },
+                    child: Center(
+                        child: Text(
+                      SIGN_OUT,
+                      style: buttonStyle2,
+                    ))),
+              ),
+            ),
           )
         ],
       ),
@@ -171,7 +176,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         SizedBox(
                           width: 15.0,
                         ),
-                       Container(
+                        Container(
                           height: MediaQuery.of(context).size.height / 4,
                           width: MediaQuery.of(context).size.width / 4,
                           child: RaisedButton(
@@ -188,7 +193,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             disabledColor: Colors.grey[600],
                             disabledElevation: 0.0,
                             elevation: 5.0,
-                            onPressed:  roles.contains('isSuperAdmin')
+                            onPressed: roles.contains('isSuperAdmin')
                                 ? () async {
                                     addBrand();
                                   }

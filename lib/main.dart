@@ -7,12 +7,13 @@ import 'package:unitrade_web_v2/screens/authentication/wrapper.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
-
+import 'package:url_strategy/url_strategy.dart';
 import 'models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  setPathUrlStrategy();
   runApp(MyApp());
 }
 

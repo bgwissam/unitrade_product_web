@@ -345,8 +345,8 @@ class DatabaseService {
       String pdfUrl}) async {
     try {
       paintCollection.add({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'productPackUnit': productPackUnit,
@@ -386,8 +386,8 @@ class DatabaseService {
       String pdfUrl}) async {
     try {
       return paintCollection.doc(uid).set({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'productPackUnit': productPackUnit,
@@ -501,9 +501,9 @@ class DatabaseService {
       String productName,
       String productBrand,
       String productType,
-      var length,
-      var width,
-      var thickness,
+      double length,
+      double width,
+      double thickness,
       String productCategory,
       String color,
       String description,
@@ -514,8 +514,8 @@ class DatabaseService {
       String pdfUrl}) async {
     try {
       woodCollection.add({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,
@@ -542,9 +542,9 @@ class DatabaseService {
       String productName,
       String productBrand,
       String productType,
-      var length,
-      var width,
-      var thickness,
+      double length,
+      double width,
+      double thickness,
       String productCategory,
       String color,
       String description,
@@ -555,8 +555,8 @@ class DatabaseService {
       String pdfUrl}) async {
     try {
       woodCollection.doc(uid).set({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,
@@ -682,8 +682,8 @@ class DatabaseService {
       String pdfUrl}) async {
     try {
       solidCollection.add({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,
@@ -726,8 +726,8 @@ class DatabaseService {
     try {
       print(productPack);
       solidCollection.doc(uid).set({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,
@@ -951,8 +951,8 @@ class DatabaseService {
       List<dynamic> imageListUrls}) async {
     try {
       accessoriesCollection.add({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,
@@ -996,8 +996,8 @@ class DatabaseService {
       List<dynamic> imageListUrls}) async {
     try {
       accessoriesCollection.doc(uid).set({
-        'itemCode': itemCode,
-        'productName': productName,
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
         'productBrand': productBrand,
         'productType': productType,
         'length': length,

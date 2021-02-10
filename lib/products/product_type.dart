@@ -558,6 +558,38 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
+        //Sinks
+        widget.productType == SOLID_SURFACE
+            ? Container(
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductsGrid(
+                                user: widget.user,
+                                roles: widget.roles,
+                                brandName: widget.brandName,
+                                productType: TAB_SS_TEXT,
+                                categoryType: COR_SINKS,
+                              ))),
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(color: Colors.grey[500]),
+                        borderRadius: BorderRadius.circular(25.0)),
+                    width: MediaQuery.of(context).size.width,
+                    height: 120.0,
+                    child: Center(
+                        child: Text(
+                      COR_SINKS,
+                      style: inkWellText,
+                    )),
+                  ),
+                ),
+              )
+            : Container(),
+
         //Adhesives
         widget.productType == SOLID_SURFACE
             ? Container(
@@ -630,7 +662,6 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
-            
             //Runners
             widget.productType == ACCESSORIES
             ? Container(
@@ -660,6 +691,36 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
+            //Flap Mechanism
+            widget.productType == ACCESSORIES
+            ? Container(
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductsGrid(
+                                user: widget.user,
+                                roles: widget.roles,
+                                brandName: widget.brandName,
+                                productType: TAB_ACCESSORIES_TEXT,
+                                categoryType: FLAP,
+                              ))),
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(color: Colors.grey[500]),
+                        borderRadius: BorderRadius.circular(25.0)),
+                    child: Center(
+                        child: Text(
+                      FLAP,
+                      style: inkWellText,
+                    )),
+                  ),
+                ),
+              )
+            : Container(),
+
 
 
       ],
