@@ -50,6 +50,7 @@ class Type {
       TAB_WOOD_TEXT,
       TAB_SS_TEXT,
       TAB_ACCESSORIES_TEXT,
+      TAB_MACHINE_TEXT,
     ];
   }
 }
@@ -92,6 +93,12 @@ class CategoryList {
             HINGES,
             RUNNERS,
             FLAP,
+          ];
+          break;
+        case TAB_MACHINE_TEXT:
+          return [
+            SPRAY_MACHINES,
+            SPARE_PARTS,
           ];
           break;
       }

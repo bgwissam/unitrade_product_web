@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:unitrade_web_v2/models/client.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/models/products.dart';
+import 'package:unitrade_web_v2/models/brand.dart' as brand;
 import '../models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -168,9 +169,10 @@ class DatabaseService {
 
   //Brand data from snapshot for product drop downlist
   Future<List<Brands>> brandDataForDropdownMenu() async {
+    List<Brands> brands = [];
     try {
       QuerySnapshot brandDoc = await brandCollection.get();
-      List<Brands> brands = brandDoc.docs.map((doc) {
+      brandDoc.docs.map((doc) {
         Brands(
             uid: doc.id,
             brand: doc.data()['brandName'] ?? '',
@@ -178,7 +180,8 @@ class DatabaseService {
             division: doc.data()['division'] ?? '',
             category: doc.data()['category'],
             image: doc.data()['imageUrl'] ?? '');
-      }).toList();
+      });
+      print(brands);
       return brands;
     } catch (e) {
       print('Could not retreive the brand list data $e');
@@ -193,6 +196,27 @@ class DatabaseService {
       await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('could not delete due to: $e');
+    }
+  }
+
+  //get all brands
+  Future<List<brand.Brand>> getAllBrands() async {
+    try {
+      List<brand.Brand> brands = [];
+      QuerySnapshot brandDoc = await brandCollection.get();
+
+      brandDoc.docs.map((doc) {
+        brands.add(brand.Brand(
+            id: doc.id,
+            brandName: doc.data()['brandName'],
+            brandDivision: doc.data()['division'],
+            brandCategories: doc.data()['brandCategory'],
+            countryOfOrigin: doc.data()['countryOfOrigin'],
+            brandImageUrl: doc.data()['imageUrl']));
+      }).toList();
+      return brands;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -418,9 +442,7 @@ class DatabaseService {
     try {
       await paintCollection.doc(uid).delete();
       for (var imageUid in imageUids)
-        await FirebaseStorage.instance
-            .ref(imageUid)
-            .delete();
+        await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('Product could not be deleted $e');
     }
@@ -581,9 +603,7 @@ class DatabaseService {
     try {
       await woodCollection.doc(uid).delete();
       for (var imageUid in imageUids)
-        await FirebaseStorage.instance
-            .ref(imageUid)
-            .delete();
+        await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('Product could not be deleted $e');
     }
@@ -618,7 +638,7 @@ class DatabaseService {
       String productType,
       String productCategory,
       String productTags}) {
-      print('Brand: $brandName');
+    print('Brand: $brandName');
     return woodCollection
         .where('productBrand', isEqualTo: brandName)
         .where('productType', isEqualTo: productType)
@@ -754,9 +774,7 @@ class DatabaseService {
     try {
       await solidCollection.doc(uid).delete();
       for (var imageUid in imageUids)
-        await FirebaseStorage.instance
-            .ref(imageUid)
-            .delete();
+        await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('Product could not be deleted $e');
     }
@@ -880,9 +898,7 @@ class DatabaseService {
     try {
       await lightsCollection.doc(uid).delete();
       for (var imageUid in imageUids)
-        await FirebaseStorage.instance
-            .ref(imageUid)
-            .delete();
+        await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('Product could not be deleted $e');
     }
@@ -1024,9 +1040,7 @@ class DatabaseService {
     try {
       await accessoriesCollection.doc(uid).delete();
       for (var imageUid in imageUids)
-        await FirebaseStorage.instance
-            .ref(imageUid)
-            .delete();
+        await FirebaseStorage.instance.ref(imageUid).delete();
     } catch (e) {
       print('Product could not be deleted $e');
     }

@@ -59,6 +59,7 @@ class _BrandFormState extends State<BrandForm> {
     }
 
     divisionType = Type.typeList();
+    
   }
 
   @override
@@ -325,6 +326,7 @@ class _BrandFormState extends State<BrandForm> {
                   child: Text(SAVE_BRAND, style: buttonStyle),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
+                    
                       var result;
                       DatabaseService databaseService = new DatabaseService();
                       if (widget.brand == null) {
@@ -332,7 +334,7 @@ class _BrandFormState extends State<BrandForm> {
                           loading = true;
                         });
                         await uploadImage(image);
-
+                       
                         result = await databaseService.addBrandData(
                             brandName: brandName,
                             countryOfOrigin: countryOfOrigin,
@@ -344,6 +346,25 @@ class _BrandFormState extends State<BrandForm> {
                           loading = false;
                         }
                         Navigator.pop(context);
+                      } else {
+                      setState(() {
+                          loading = true;
+                        });
+                        await uploadImage(image);
+                       
+                        result = await databaseService.updateBrandData(
+                            uid: widget.brand.id,
+                            brandName: brandName,
+                            countryOfOrigin: countryOfOrigin,
+                            category: brandCategories,
+                            division: brandDivision,
+                            imageUrl: imageUrl);
+                        print('the current result is: $result');
+                        if (result != null) {
+                          loading = false;
+                        }
+                        Navigator.pop(context);
+
                       }
                     }
                   },

@@ -1,4 +1,5 @@
 class Brand {
+  String id;
   String brandName;
   String countryOfOrigin;
   String brandImageUrl;
@@ -6,6 +7,7 @@ class Brand {
   String brandDivision;
 
   Brand({
+    this.id,
     this.brandName,
     this.countryOfOrigin,
     this.brandImageUrl,

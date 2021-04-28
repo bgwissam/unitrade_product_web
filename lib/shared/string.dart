@@ -29,6 +29,7 @@ const String TAB_WOOD_TEXT = 'Wood';
 const String TAB_SS_TEXT = 'Surface';
 const String TAB_LIGHT_TEXT = 'Lighting';
 const String TAB_ACCESSORIES_TEXT = 'Accessories';
+const String TAB_MACHINE_TEXT = 'Machines';
 
 //Product Type
 const String PRODUCT_TYPE = 'Product Type';
@@ -134,6 +135,10 @@ const String FLAP = 'Flap Mechanism';
 const String HAFELE_BUTTON = 'Lights';
 const String INDAUX_BUTTON = 'Fit Out';
 
+//Constant strings for Machines
+const String SPRAY_MACHINES = 'Spray Pump';
+const String SPARE_PARTS = 'Spare Parts';
+
 //Product Brands
 const String SAYERLACK_BRAND = 'SAYERLACK';
 const String EVI_BRAND = 'EVI';
@@ -156,6 +161,8 @@ const String SAVE_BRAND = 'Save Brand';
 
 //Add Brands Page
 const String ADD_BRAND = 'Add a new Brand';
+const String VIEW_BRANDS = 'View Brands';
+const String BRAND_GRID = 'Brand Grid';
 const String BRAND_NAME = 'Brand Name';
 const String BRAND_NAME_VALIDATION_EMPTY = 'Brand name cannot be empty';
 const String BRAND_COUNTRY = 'Country of Origin';

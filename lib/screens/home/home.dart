@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unitrade_web_v2/brands/brand_grid.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
@@ -122,7 +123,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       children: [
                         Container(
                           height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 4,
+                          width: MediaQuery.of(context).size.width / 5,
                           child: RaisedButton(
                             child: Text(
                               PRODUCTS,
@@ -151,7 +152,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ),
                         Container(
                           height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 4,
+                          width: MediaQuery.of(context).size.width / 5,
                           child: RaisedButton(
                             child: Text(
                               ADD_PRODUCT,
@@ -178,7 +179,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ),
                         Container(
                           height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 4,
+                          width: MediaQuery.of(context).size.width / 5,
                           child: RaisedButton(
                             child: Text(
                               ADD_BRAND,
@@ -198,6 +199,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     addBrand();
                                   }
                                 : null,
+                          ),
+                        ),
+                         SizedBox(
+                          width: 15.0,
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          width: MediaQuery.of(context).size.width / 5,
+                          child: ElevatedButton(
+                            child: Text(VIEW_BRANDS, style: textStyle2,),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                side: BorderSide(color: Colors.black),
+                                ),
+                                primary: Colors.deepOrange[500],
+                            ),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BrandGrid(roles: roles,)));
+                            },
                           ),
                         )
                       ]),
