@@ -26,6 +26,7 @@ class ProductForm extends StatefulWidget {
   final WoodProduct woodProduct;
   final Lights lightProduct;
   final Accessories accessoriesProduct;
+  final Machines machineProduct;
   final Brands brands;
   final List<dynamic> roles;
 
@@ -35,6 +36,7 @@ class ProductForm extends StatefulWidget {
     this.woodProduct,
     this.lightProduct,
     this.accessoriesProduct,
+    this.machineProduct,
     this.roles,
     // this.isAdmin,
     // this.isPriceAdmin,
@@ -68,6 +70,8 @@ class _ProductFormState extends State<ProductForm> {
   String closingType;
   String productColor;
   String productImageUrl;
+  var pressure;
+  var nozzle;
   //Option for the accessories
   String extensionType;
   String flapStrength;
@@ -294,19 +298,6 @@ class _ProductFormState extends State<ProductForm> {
       //if we are editing a product
       productTypeSelected = true;
       productCategorySelected = true;
-    } else if (widget.lightProduct != null) {
-      productName = widget.lightProduct.productName;
-      productBrand = widget.lightProduct.productBrand;
-      productType = widget.lightProduct.productType;
-      productCategory = widget.lightProduct.productCategory;
-      dimensions = widget.lightProduct.dimensions;
-      watt = widget.lightProduct.watt;
-      voltage = widget.lightProduct.voltage;
-      productColor = widget.lightProduct.color;
-      widget.lightProduct.imageListUrls == null
-          ? imageListUrls = []
-          : imageListUrls =
-              new List<dynamic>.from(widget.lightProduct.imageListUrls);
     } else if (widget.accessoriesProduct != null) {
       itemCode = widget.accessoriesProduct.itemCode;
       productName = widget.accessoriesProduct.productName;
@@ -330,6 +321,29 @@ class _ProductFormState extends State<ProductForm> {
           : imageListUrls =
               new List<dynamic>.from(widget.accessoriesProduct.imageListUrls);
 
+      //Assign category if we are editing a product
+      category = CategoryList.categoryList(productType);
+      _getBrands();
+      //if we are editing a product
+      productTypeSelected = true;
+      productCategorySelected = true;
+    } else if (widget.machineProduct != null) {
+      itemCode = widget.machineProduct.itemCode;
+      productName = widget.machineProduct.productName;
+      productBrand = widget.machineProduct.productBrand;
+      productType = widget.machineProduct.productType;
+      productCategory = widget.machineProduct.productCategory;
+      pressure = widget.machineProduct.pressure;
+      nozzle = widget.machineProduct.nozzle;
+      productDescription = widget.machineProduct.description;
+      productPrice = widget.machineProduct.productPrice ?? null;
+      productCost = widget.machineProduct.productCost ?? null;
+      _pdfUrl = widget.machineProduct.pdfUrl ?? null;
+      //productTags = widget.woodProduct.productTags ?? null;
+      widget.machineProduct.imageListUrls.isEmpty
+          ? imageListUrls = []
+          : imageListUrls =
+              new List<dynamic>.from(widget.machineProduct.imageListUrls);
       //Assign category if we are editing a product
       category = CategoryList.categoryList(productType);
       _getBrands();
@@ -620,7 +634,8 @@ class _ProductFormState extends State<ProductForm> {
                   if (widget.paintProducts == null &&
                       widget.woodProduct == null &&
                       widget.lightProduct == null &&
-                      widget.accessoriesProduct == null) {
+                      widget.accessoriesProduct == null &&
+                      widget.machineProduct == null) {
                     //convert the tags string buffer to list
                     if (tagsListChanged) tagsList = _convertTagsToList();
                     //upload the image
@@ -692,6 +707,19 @@ class _ProductFormState extends State<ProductForm> {
                           productPrice: productPrice,
                           productCost: productCost,
                           imageListUrls: imageListUrls);
+                    else if(productType == TAB_MACHINE_TEXT)
+                      result = await databaseService.addMachineProduct(
+                          itemCode: itemCode,
+                          productName: productName,
+                          productBrand: productBrand,
+                          productType: productType,
+                          pressure: pressure,
+                          nozzle: nozzle,
+                          productCategory: productCategory,
+                          productCost: productCost,
+                          productPrice: productPrice,
+                          imageListUrls: imageListUrls
+                      );
                     print('Adding a new product result: $result');
                     if (result == null) {
                       setState(() {
@@ -776,7 +804,20 @@ class _ProductFormState extends State<ProductForm> {
                           productTags: productTags,
                           color: productColor,
                           imageListUrls: imageListUrls);
-
+                    else if(productType == TAB_MACHINE_TEXT)
+                      result = await databaseService.updateMachineProduct(
+                          uid: widget.machineProduct.uid,
+                          itemCode: itemCode,
+                          productName: productName,
+                          productBrand: productBrand,
+                          productType: productType,
+                          pressure: pressure,
+                          nozzle: nozzle,
+                          productCategory: productCategory,
+                          productCost: productCost,
+                          productPrice: productPrice,
+                          imageListUrls: imageListUrls
+                      );
                     print('The result is: $result');
                     if (result == null) {
                       setState(() {
@@ -909,6 +950,10 @@ class _ProductFormState extends State<ProductForm> {
         folderNameImages = 'accessories_image';
         folderNameTDS = 'accessories_TDS';
         break;
+      case TAB_MACHINE_TEXT:
+        folderNameImages = 'machine_image';
+        folderNameTDS = 'machine_TDS';
+        break;
       default:
         folderNameImages = 'unknown_image';
         folderNameTDS = 'unknown_TDS';
@@ -993,6 +1038,9 @@ class _ProductFormState extends State<ProductForm> {
         break;
       case TAB_ACCESSORIES_TEXT:
         return _buildAccessoriesWidget();
+        break;
+      case TAB_MACHINE_TEXT:
+        return _buildMachineWidget();
         break;
       default:
         return null;
@@ -3034,6 +3082,340 @@ class _ProductFormState extends State<ProductForm> {
                           builder: (context) => PDFFileViewer(
                             pdfUrl: _pdfUrl,
                             productName: productName,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          );
+  }
+
+//build the machine widget product details
+  Widget _buildMachineWidget() {
+    return widget.roles.contains('isAdmin')
+        ? Container(
+            width: MediaQuery.of(context).size.width / 2,
+            child: Column(
+              children: <Widget>[
+                //Product Name
+                Container(
+                  child: TextFormField(
+                    initialValue: productName != null ? productName : '',
+                    textCapitalization: TextCapitalization.characters,
+                    style: textStyle1,
+                    decoration:
+                        textInputDecoration.copyWith(labelText: PRODUCT_NAME),
+                    validator: (val) =>
+                        val.isEmpty ? PRODUCT_NAME_VALIDATION : null,
+                    onChanged: (val) {
+                      setState(() {
+                        productName = val;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //Item Code field
+                Container(
+                  child: TextFormField(
+                    initialValue: itemCode != null ? itemCode : '',
+                    textCapitalization: TextCapitalization.characters,
+                    style: textStyle1,
+                    decoration:
+                        textInputDecoration.copyWith(labelText: PRODUCT_CODE),
+                    validator: (val) =>
+                        val.isEmpty ? PRODUCT_CODE_VALIDATION : null,
+                    onChanged: (val) {
+                      setState(() {
+                        itemCode = val;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //Product Pressure
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          initialValue: pressure != null
+                              ? pressure.toString()
+                              : zeroValue,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(regExp)
+                          ],
+                          style: textStyle1,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_PRESSURE),
+                       
+                          onChanged: (val) {
+                            setState(() {
+                              pressure = val;
+                            });
+                          },
+                        ),
+                      ),
+                      //Product Nozzle
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          initialValue:
+                              nozzle != null ? nozzle.toString() : zeroValue,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(regExp)
+                          ],
+                          style: textStyle1,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_NOZZLE),
+                          onChanged: (val) {
+                            setState(() {
+                              nozzle = double.parse(val);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15.0,),
+                //Price field
+                Container(
+                  child: TextFormField(
+                    initialValue: productPrice != null
+                        ? productPrice.toString()
+                        : zeroValue,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(regExp),
+                    ],
+                    style: textStyle1,
+                    decoration:
+                        textInputDecoration.copyWith(labelText: PRODUCT_PRICE),
+                    validator: (val) =>
+                        productValidators.productPriceValidator(val),
+                    onChanged: (val) {
+                      setState(() {
+                        productPrice = double.parse(val);
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //Item Cost field
+                Container(
+                  child: TextFormField(
+                    initialValue: productCost != null
+                        ? productCost.toString()
+                        : zeroValue,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(regExp),
+                    ],
+                    style: textStyle1,
+                    decoration:
+                        textInputDecoration.copyWith(labelText: PRODUCT_COST),
+                    onChanged: (val) {
+                      setState(() {
+                        productCost = double.parse(val);
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //Drop down button for brands list
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  child: new DropdownButton<String>(
+                    isExpanded: true,
+                    isDense: true,
+                    value: productBrand,
+                    hint: Text(SELECT_PRODUCT_BRAND),
+                    onChanged: (String val) {
+                      setState(() {
+                        productBrand = val;
+                      });
+                    },
+                    selectedItemBuilder: (BuildContext context) {
+                      return _brandList.map<Widget>((String item) {
+                        return Text(item, style: textStyle1);
+                      }).toList();
+                    },
+                    items: _brandList.map((String item) {
+                      return DropdownMenuItem<String>(
+                          child: Text(item), value: item);
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Column(
+            children: <Widget>[
+              widget.machineProduct.imageListUrls != null
+                  ? Container(
+                      height: 270,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.machineProduct.imageListUrls.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey[200])),
+                            child: Image(
+                              fit: BoxFit.contain,
+                              image: NetworkImage(
+                                  widget.machineProduct.imageListUrls[index]),
+                              height: 260.0,
+                              width: 260.0,
+                            ),
+                          );
+                        },
+                      ))
+                  : noImageContainer(),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(PRODUCT_NAME),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(productName != null ? productName : '',
+                        style: textStyle1),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              Row(
+                children: [
+                  Expanded(flex: 2, child: Text(PRODUCT_PRESSURE)),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      pressure != null ? pressure.toString() : '',
+                      style: textStyle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              //Product Nozzle
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(PRODUCT_NOZZLE),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      nozzle != null ? nozzle : '',
+                      style: textStyle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              //Product Brand
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(PRODUCT_BRAND),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      productBrand != null ? productBrand : '',
+                      style: textStyle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              //product price
+              Row(
+                children: [
+                  Expanded(flex: 2, child: Text(PRODUCT_PRICE)),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      productPrice != null ? '$productPrice SR' : '',
+                      style: textStyle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Text(PRODUCT_DESC),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      productDescription != null ? productDescription : '',
+                      style: textStyle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              //Show current PDF File Data sheet
+              _pdfUrl != null
+                  ? Container(
+                      padding: EdgeInsets.all(15.0),
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.black)),
+                      color: Colors.red[200],
+                      child: TextButton(
+                        child: Text(TDS),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PDFFileViewer(
+                              pdfUrl: _pdfUrl,
+                              productName: productName,
+                            ),
                           ),
                         ),
                       ),

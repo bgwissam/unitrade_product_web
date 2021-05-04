@@ -83,6 +83,9 @@ const String EXTENSION_TYPE = 'Extension Type';
 const String CLOSING_TYPE = 'Closing Type';
 const String FLAP_STENGTH = 'Flap Strength';
 const String ITEM_SIDE = 'Side';
+const String PRODUCT_PRESSURE = 'Pressure';
+const String PRODUCT_NOZZLE = 'Nozzle';
+
 //Product Form validation
 const String PRODUCT_LENGTH_VAL_ZERO = 'Product length should be greater than zero';
 const String PRODUCT_LENGTH_VAL_EMPTY = 'Product length should not be empty';
@@ -100,7 +103,7 @@ const String ADHESIVE = 'ADHESIVE';
 const String WOOD = 'WOOD';
 const String SOLID_SURFACE = 'Surface';
 const String ACCESSORIES = 'ACCESSORIES';
-
+const String MACHINES = 'Machines';
 //Constant strings for coatings and adhesives
 const String PU_BUTTON = 'Polyurethane';
 const String NC_BUTTON = 'Nitrocellulose';
@@ -151,6 +154,8 @@ const String CORIAN_BRAND = 'CORIAN';
 const String MONTELLI_BRAND = 'MONTELLI';
 const String SALICE_BRAND = 'SALICE';
 const String INDAUX_BRAND = 'INDAUX';
+const String LARIUS_BRAND = 'Larius';
+const String LINEX_BRAND = 'LINEX';
 
 //Sign out page
 const String SIGNED_OUT_USER_PAGE = 'Signed Out';

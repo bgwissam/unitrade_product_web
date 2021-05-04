@@ -53,6 +53,9 @@ class _ProductListState extends State<ProductList> {
       case TAB_ACCESSORIES_TEXT:
         products = Provider.of<List<Accessories>>(context) ?? [];
         break;
+      case TAB_MACHINE_TEXT:
+        products = Provider.of<List<Machines>>(context) ?? [];
+        break;
     }
 
     final user = Provider.of<UserData>(context) ?? [];
@@ -119,6 +122,14 @@ class _ProductListState extends State<ProductList> {
                         roles: widget.roles,
                       );
                       break;
+                    case TAB_MACHINE_TEXT:
+                      return ProductTile(
+                        machineProduct: products[index],
+                        productBrand: widget.productBrand,
+                        productType: widget.productType,
+                        user: user,
+                        roles: widget.roles,
+                      );
                     default:
                       {
                         return Container(

@@ -8,7 +8,6 @@ import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
 class ProductsGrid extends StatefulWidget {
-
   final String productType;
   final String brandName;
   final String categoryType;
@@ -16,8 +15,7 @@ class ProductsGrid extends StatefulWidget {
   final UserData user;
   final List<dynamic> roles;
   ProductsGrid(
-      {
-      this.productType,
+      {this.productType,
       this.brandName,
       this.categoryType,
       this.callBackUpdate,
@@ -30,13 +28,12 @@ class ProductsGrid extends StatefulWidget {
 class _ProductGridState extends State<ProductsGrid> {
   List<String> paintProduct = [];
   List<String> woodProduct = [];
-  
+
   var result;
   String productColorMain = 'clear';
   @override
   void initState() {
     super.initState();
-    
   }
 
   void productColorCallback(String productColor) {
@@ -185,143 +182,156 @@ class _ProductGridState extends State<ProductsGrid> {
           );
         }
         break;
+      case SPRAY_MACHINES:
+        {
+          return StreamProvider<List<Machines>>.value(
+            value: DatabaseService().machineProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
+      case SPARE_PARTS:
+        {
+          return StreamProvider<List<Machines>>.value(
+            value: DatabaseService().machineProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case MDF_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().woodProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
-       case FIRE_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().woodProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().woodProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
+      case FIRE_BUTTON:
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().woodProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case HPL_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().woodProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().woodProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case CHIP_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().woodProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().woodProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case COR_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().solidSurfaceProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().solidSurfaceProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case MON_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().solidSurfaceProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().solidSurfaceProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case COR_SINKS:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().solidSurfaceProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().solidSurfaceProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case SS_ADHESIVE_BUTTON:
-      {
-        return StreamProvider<List<WoodProduct>>.value(
-          value: DatabaseService().solidSurfaceProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<WoodProduct>>.value(
+            value: DatabaseService().solidSurfaceProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case HINGES:
-      {
-        return StreamProvider<List<Accessories>>.value(
-          value: DatabaseService().accessoriesProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<Accessories>>.value(
+            value: DatabaseService().accessoriesProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case RUNNERS:
-      {
-        return StreamProvider<List<Accessories>>.value(
-          value: DatabaseService().accessoriesProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
+        {
+          return StreamProvider<List<Accessories>>.value(
+            value: DatabaseService().accessoriesProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
       case FLAP:
-      {
-        return StreamProvider<List<Accessories>>.value(
-          value: DatabaseService().accessoriesProducts(
-            brandName: widget.brandName,
-            productType: widget.productType,
-            productCategory: widget.categoryType
-          ),
-          child: productBuild(),
-        );
-      }
-      break;
-      
+        {
+          return StreamProvider<List<Accessories>>.value(
+            value: DatabaseService().accessoriesProducts(
+                brandName: widget.brandName,
+                productType: widget.productType,
+                productCategory: widget.categoryType),
+            child: productBuild(),
+          );
+        }
+        break;
+
       default:
         {
           return Container(
-            child: Center(child: Text('An unexpected Error occured in productGrid occurred')),
+            child: Center(
+                child: Text(
+                    'An unexpected Error occured in productGrid occurred')),
           );
         }
     }

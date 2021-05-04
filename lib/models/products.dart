@@ -175,6 +175,37 @@ class Accessories {
   });
 }
 
+class Machines {
+  String uid;
+  String itemCode;
+  String productName;
+  String productType;
+  String productCategory;
+  String productBrand;
+  var pressure;
+  var nozzle;
+  String description;
+  var productPrice;
+  var productCost;
+  List<dynamic> imageListUrls;
+  String pdfUrl;
+
+  Machines(
+      {this.uid,
+      this.itemCode,
+      this.productName,
+      this.productType,
+      this.productCategory,
+      this.productBrand,
+      this.pressure,
+      this.nozzle,
+      this.description,
+      this.productCost,
+      this.productPrice,
+      this.imageListUrls,
+      this.pdfUrl});
+}
+
 class Orders {
   String orderId;
   String userId;

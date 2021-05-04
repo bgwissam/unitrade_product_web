@@ -20,8 +20,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('wood');
   final CollectionReference solidCollection =
       FirebaseFirestore.instance.collection('solid');
-  final CollectionReference cartCollection =
-      FirebaseFirestore.instance.collection('cart');
+        final CollectionReference machineCollection =
+      FirebaseFirestore.instance.collection('machines');
   final CollectionReference lightsCollection =
       FirebaseFirestore.instance.collection('lights');
   final CollectionReference accessoriesCollection =
@@ -1092,5 +1092,107 @@ class DatabaseService {
         .where('uid', isEqualTo: uid)
         .snapshots()
         .map(_accessoriesProductDataFromSnapShot);
+  }
+
+  //Section for Spray machines
+  //Add new product (machines)
+  Future addMachineProduct({
+    String itemCode,
+    String productName,
+    String productType,
+    String productCategory,
+    String productBrand,
+    var pressure,
+    var nozzle,
+    String description,
+    var productPrice,
+    var productCost,
+    List<dynamic> imageListUrls,
+    String pdfUrl,
+  }) async {
+    try {
+      machineCollection.add({
+        'itemCode': itemCode,
+        'productName': productName,
+        'productType': productType,
+        'productCategory': productCategory,
+        'productBrand': productBrand,
+        'pressure': pressure,
+        'nozzle': nozzle,
+        'description': description,
+        'productPrice': productPrice,
+        'productCost': productCost,
+        'imageListUrls': imageListUrls,
+        'pdfUrl': pdfUrl,
+      });
+    } catch (e) {
+      print('Could not add machine item to database: $e');
+    }
+  }
+
+  //Update current machine product
+  Future updateMachineProduct({
+    String uid,
+    String itemCode,
+    String productName,
+    String productType,
+    String productCategory,
+    String productBrand,
+    var pressure,
+    var nozzle,
+    String description,
+    var productPrice,
+    var productCost,
+    List<dynamic> imageListUrls,
+    String pdfUrl,
+  }) async {
+    try {
+      machineCollection.doc(uid).set({
+        'itemCode': itemCode,
+        'productName': productName,
+        'productType': productType,
+        'productCategory': productCategory,
+        'productBrand': productBrand,
+        'pressure': pressure,
+        'nozzle': nozzle,
+        'description': description,
+        'productPrice': productPrice,
+        'productCost': productCost,
+        'imageListUrls': imageListUrls,
+        'pdfUrl': pdfUrl,
+      });
+    } catch (e) {
+      print('Could not update machine database: $e');
+    }
+  }
+
+  //Stream machine data
+  List<Machines> _machineDataProductsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Machines(
+          uid: doc.id,
+          itemCode: doc.data()['itemCode'],
+          productName: doc.data()['productName'],
+          productBrand: doc.data()['productBrand'],
+          productType: doc.data()['productType'],
+          productCategory: doc.data()['productCategory'],
+          productPrice: doc.data()['productPrice'],
+          productCost: doc.data()['productCost'],
+          pressure: doc.data()['pressure'],
+          nozzle: doc.data()['nozzle'],
+          imageListUrls: doc.data()['imageListUrls']
+          );
+    }).toList();
+  }
+
+  Stream<List<Machines>> machineProducts(
+      {String brandName, String productType, String productCategory}) {
+        print('$brandName $productType $productCategory');
+    return machineCollection
+        .where('productBrand', isEqualTo: brandName)
+        .where('productType', isEqualTo: productType)
+        .where('productCategory', isEqualTo: productCategory)
+        .snapshots()
+        .map(_machineDataProductsFromSnapshot);
   }
 }

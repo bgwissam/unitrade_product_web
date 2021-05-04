@@ -176,9 +176,34 @@ class _ProductStreamerState extends State<ProductStreamer>
                 ),
               ),
             ),
-
             SizedBox(
               height: distanceBetweenInkWells,
+            ),
+            //Larius
+            Container(
+              height: inkWellHeight,
+              child: InkWell(
+                onTap: () {
+                  if (widget.roles.isNotEmpty)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductType(
+                                productType: MACHINES,
+                                brandName: LARIUS_BRAND,
+                                user: user,
+                                roles: roles)));
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[500]),
+                      borderRadius: BorderRadius.circular(25.0)),
+                  width: MediaQuery.of(context).size.width/4,
+                  height: inkWellHeight,
+                  child: Image.asset('images/brands/larius-logo.jpg'),
+                ),
+              ),
             ),
           ],
         ),
@@ -274,6 +299,35 @@ class _ProductStreamerState extends State<ProductStreamer>
                   width: MediaQuery.of(context).size.width/4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/sonae.jpg'),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: distanceBetweenInkWells,
+            ),
+            //Linex
+            Container(
+              height: 120.0,
+              child: InkWell(
+                onTap: () {
+                  if (widget.roles.isNotEmpty)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductType(
+                                productType: 'WOOD',
+                                brandName: LINEX_BRAND,
+                                user: user,
+                                roles: roles)));
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[500]),
+                      borderRadius: BorderRadius.circular(25.0)),
+                  width: MediaQuery.of(context).size.width/4,
+                  height: inkWellHeight,
+                  child: Image.asset('images/brands/linex-logo.jpg'),
                 ),
               ),
             ),

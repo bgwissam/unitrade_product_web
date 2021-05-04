@@ -13,6 +13,7 @@ class ProductTile extends StatefulWidget {
   final WoodProduct woodProduct;
   final Lights lightProduct;
   final Accessories accessoriesProduct;
+  final Machines machineProduct;
   final UserData user;
   final String productBrand;
   final String productType;
@@ -33,6 +34,7 @@ class ProductTile extends StatefulWidget {
       this.woodProduct,
       this.lightProduct,
       this.accessoriesProduct,
+      this.machineProduct,
       this.user,
       this.productBrand,
       this.productType,
@@ -119,6 +121,8 @@ class _ProductTileState extends State<ProductTile> {
                         case TAB_ACCESSORIES_TEXT:
                           return _buildAccessoriesList();
                           break;
+                        case TAB_MACHINE_TEXT:
+                          return _buildMachineList();
                         default:
                           return Container();
                           break;
@@ -537,6 +541,100 @@ class _ProductTileState extends State<ProductTile> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: new Text(
                   '${widget.accessoriesProduct.productPrice.toString()} SR',
+                  style: textStyle1,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            widget.roles.contains('isSuperAdmin')
+                ? Expanded(child: _buildUpdateDeleteButton(context))
+                : SizedBox()
+          ],
+        ),
+      ),
+    );
+  }
+
+  //return container accessories
+  Widget _buildMachineList() {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductForm(
+                    machineProduct: widget.machineProduct,
+                    roles: widget.roles)));
+      },
+      child: Container(
+        child: new Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: widget.machineProduct.imageListUrls.isNotEmpty
+                  ? Container(
+                      child: FadeInImage(
+                        fit: BoxFit.contain,
+                        image: NetworkImage(
+                            widget.machineProduct.imageListUrls[0] ?? ''),
+                        placeholder: AssetImage(placeHolderImage),
+                        height: 150,
+                        width: 150,
+                      ),
+                    )
+                  : Container(
+                      child: Text('No Image'),
+                    ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Divider(
+              color: Colors.black,
+              indent: 10.0,
+              endIndent: 10.0,
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                  width: 140.0,
+                  child: Text(
+                    widget.machineProduct.productName,
+                    style: textStyle1,
+                    textAlign: TextAlign.center,
+                  )),
+            ),
+            Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    widget.machineProduct.pressure != null
+                        ? Container(
+                            child: Text(
+                              '${widget.machineProduct.pressure} bar',
+                              style: textStyle1,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : Container(),
+                    widget.machineProduct.nozzle != null
+                        ? Container(
+                            child: Text(
+                              '${widget.machineProduct.nozzle} ml',
+                              style: textStyle1,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : Container(),
+                  ],
+                )),
+            //Price field
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: new Text(
+                  '${widget.machineProduct.productPrice.toString()} SR',
                   style: textStyle1,
                   textAlign: TextAlign.center,
                 ),

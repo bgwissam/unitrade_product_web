@@ -67,6 +67,14 @@ class _ProductTypeState extends State<ProductType> {
           child: _buildAccessoriesListType(),
         ),
       );
+    else if(widget.productType == MACHINES) {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
+          child: _buildSprayMachineUnit(),
+        ),
+      );
+    }
     else {
       return Container(
         child: Text('An Error occured, check with Admin'),
@@ -726,4 +734,80 @@ class _ProductTypeState extends State<ProductType> {
       ],
     );
   }
+
+  Widget _buildSprayMachineUnit() {
+    print(widget.productType);
+    return GridView.count(
+      mainAxisSpacing: 40.0,
+      crossAxisSpacing: 40.0,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      crossAxisCount: 5,
+      children: [
+        //Spray Machine
+        widget.productType == MACHINES
+            ? Container(
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductsGrid(
+                                user: widget.user,
+                                roles: widget.roles,
+                                productType: TAB_MACHINE_TEXT,
+                                brandName: widget.brandName,
+                                categoryType: SPRAY_MACHINES,
+                              ))),
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(color: Colors.grey[500]),
+                        borderRadius: BorderRadius.circular(25.0)),
+                    width: inkWellWidth,
+                    height: inkWellHeight,
+                    child: Center(
+                        child: Text(
+                      SPRAY_MACHINES,
+                      style: inkWellText,
+                    )),
+                  ),
+                ),
+              )
+            : Container(),
+            //Spare Parts
+             widget.productType == MACHINES
+            ? Container(
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductsGrid(
+                                user: widget.user,
+                                roles: widget.roles,
+                                productType: TAB_MACHINE_TEXT,
+                                brandName: widget.brandName,
+                                categoryType: SPARE_PARTS,
+                              ))),
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(color: Colors.grey[500]),
+                        borderRadius: BorderRadius.circular(25.0)),
+                    width: inkWellWidth,
+                    height: inkWellHeight,
+                    child: Center(
+                        child: Text(
+                      SPARE_PARTS,
+                      style: inkWellText,
+                    )),
+                  ),
+                ),
+              )
+            : Container(),
+      ],
+    );
+  }
+
 }
