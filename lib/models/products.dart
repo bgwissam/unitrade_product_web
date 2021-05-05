@@ -182,8 +182,11 @@ class Machines {
   String productType;
   String productCategory;
   String productBrand;
-  var pressure;
+  String pressure;
   var nozzle;
+  var length;
+  String type;
+  String ratio;
   String description;
   var productPrice;
   var productCost;
@@ -199,6 +202,9 @@ class Machines {
       this.productBrand,
       this.pressure,
       this.nozzle,
+      this.length,
+      this.type,
+      this.ratio,
       this.description,
       this.productCost,
       this.productPrice,

@@ -85,7 +85,7 @@ const String FLAP_STENGTH = 'Flap Strength';
 const String ITEM_SIDE = 'Side';
 const String PRODUCT_PRESSURE = 'Pressure';
 const String PRODUCT_NOZZLE = 'Nozzle';
-
+const String PRODUCT_RATIO = 'Ratio';
 //Product Form validation
 const String PRODUCT_LENGTH_VAL_ZERO = 'Product length should be greater than zero';
 const String PRODUCT_LENGTH_VAL_EMPTY = 'Product length should not be empty';

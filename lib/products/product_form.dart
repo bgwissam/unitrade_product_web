@@ -70,8 +70,10 @@ class _ProductFormState extends State<ProductForm> {
   String closingType;
   String productColor;
   String productImageUrl;
-  var pressure;
+  String pressure;
   var nozzle;
+  String ratio;
+  String sparePartType;
   //Option for the accessories
   String extensionType;
   String flapStrength;
@@ -335,6 +337,9 @@ class _ProductFormState extends State<ProductForm> {
       productCategory = widget.machineProduct.productCategory;
       pressure = widget.machineProduct.pressure;
       nozzle = widget.machineProduct.nozzle;
+      length = widget.machineProduct.length;
+      sparePartType = widget.machineProduct.type;
+      ratio = widget.machineProduct.ratio;
       productDescription = widget.machineProduct.description;
       productPrice = widget.machineProduct.productPrice ?? null;
       productCost = widget.machineProduct.productCost ?? null;
@@ -707,7 +712,7 @@ class _ProductFormState extends State<ProductForm> {
                           productPrice: productPrice,
                           productCost: productCost,
                           imageListUrls: imageListUrls);
-                    else if(productType == TAB_MACHINE_TEXT)
+                    else if (productType == TAB_MACHINE_TEXT)
                       result = await databaseService.addMachineProduct(
                           itemCode: itemCode,
                           productName: productName,
@@ -715,11 +720,13 @@ class _ProductFormState extends State<ProductForm> {
                           productType: productType,
                           pressure: pressure,
                           nozzle: nozzle,
+                          length: length,
+                          type: sparePartType,
+                          ratio: ratio,
                           productCategory: productCategory,
                           productCost: productCost,
                           productPrice: productPrice,
-                          imageListUrls: imageListUrls
-                      );
+                          imageListUrls: imageListUrls);
                     print('Adding a new product result: $result');
                     if (result == null) {
                       setState(() {
@@ -732,7 +739,6 @@ class _ProductFormState extends State<ProductForm> {
                     if (tagsListChanged) tagsList = _convertTagsToList();
                     //check if the image picker was selected
                     await uploadFileImage(images, pdfFile);
-                    print(productType);
                     if (productType == TAB_PAINT_TEXT) {
                       result = await DatabaseService().updatePaintProduct(
                           uid: widget.paintProducts.uid,
@@ -804,7 +810,7 @@ class _ProductFormState extends State<ProductForm> {
                           productTags: productTags,
                           color: productColor,
                           imageListUrls: imageListUrls);
-                    else if(productType == TAB_MACHINE_TEXT)
+                    else if (productType == TAB_MACHINE_TEXT)
                       result = await databaseService.updateMachineProduct(
                           uid: widget.machineProduct.uid,
                           itemCode: itemCode,
@@ -813,11 +819,13 @@ class _ProductFormState extends State<ProductForm> {
                           productType: productType,
                           pressure: pressure,
                           nozzle: nozzle,
+                          length: length,
+                          type: sparePartType,
+                          ratio: ratio,
                           productCategory: productCategory,
                           productCost: productCost,
                           productPrice: productPrice,
-                          imageListUrls: imageListUrls
-                      );
+                          imageListUrls: imageListUrls);
                     print('The result is: $result');
                     if (result == null) {
                       setState(() {
@@ -3157,7 +3165,6 @@ class _ProductFormState extends State<ProductForm> {
                           style: textStyle1,
                           decoration: textInputDecoration.copyWith(
                               labelText: PRODUCT_PRESSURE),
-                       
                           onChanged: (val) {
                             setState(() {
                               pressure = val;
@@ -3189,7 +3196,75 @@ class _ProductFormState extends State<ProductForm> {
                     ],
                   ),
                 ),
-                SizedBox(height: 15.0,),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //Column to type and lenght
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: <Widget>[
+                      //Product lenght
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          initialValue:
+                              length != null ? length.toString() : zeroValue,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(regExp)
+                          ],
+                          style: textStyle1,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_LENGHT),
+                          onChanged: (val) {
+                            setState(() {
+                              length = double.parse(val);
+                            });
+                          },
+                        ),
+                      ),
+                      //Product Type
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          initialValue: sparePartType != null
+                              ? sparePartType.toString()
+                              : '',
+                          style: textStyle1,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_TYPE),
+                          onChanged: (val) {
+                            setState(() {
+                              sparePartType = val;
+                            });
+                          },
+                        ),
+                      ),
+                      //Ratio
+                         Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          initialValue: ratio != null
+                              ? ratio.toString()
+                              : '',
+                          style: textStyle1,
+                          decoration: textInputDecoration.copyWith(
+                              labelText: PRODUCT_RATIO),
+                          onChanged: (val) {
+                            setState(() {
+                              ratio = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
                 //Price field
                 Container(
                   child: TextFormField(

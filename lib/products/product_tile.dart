@@ -605,27 +605,24 @@ class _ProductTileState extends State<ProductTile> {
                   )),
             ),
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: Column(
                   children: [
                     widget.machineProduct.pressure != null
-                        ? Container(
-                            child: Text(
-                              '${widget.machineProduct.pressure} bar',
-                              style: textStyle1,
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Container(),
+                        ? Text('${widget.machineProduct.pressure} bar')
+                        : Text(''),
+                    widget.machineProduct.ratio != null
+                        ? Text(widget.machineProduct.ratio)
+                        : Text(''),
                     widget.machineProduct.nozzle != null
-                        ? Container(
-                            child: Text(
-                              '${widget.machineProduct.nozzle} ml',
-                              style: textStyle1,
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Container(),
+                        ? Text('${widget.machineProduct.nozzle} ml')
+                        : Text(''),
+                    widget.machineProduct.length != null
+                        ? Text('${widget.machineProduct.length} cm')
+                        : Text(''),
+                    widget.machineProduct.type != null
+                        ? Text(widget.machineProduct.type)
+                        : Text(''),
                   ],
                 )),
             //Price field
