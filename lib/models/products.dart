@@ -152,27 +152,26 @@ class Accessories {
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;
-  Accessories({
-    this.uid,
-    this.itemCode,
-    this.productName,
-    this.productType,
-    this.productCategory,
-    this.productBrand,
-    this.length,
-    this.angle,
-    this.closingType,
-    this.itemSide,
-    this.extensionType,
-    this.flapStrength,
-    this.color,
-    this.description,
-    this.productPrice,
-    this.productCost,
-    this.productTags,
-    this.imageListUrls,
-    this.pdfUrl
-  });
+  Accessories(
+      {this.uid,
+      this.itemCode,
+      this.productName,
+      this.productType,
+      this.productCategory,
+      this.productBrand,
+      this.length,
+      this.angle,
+      this.closingType,
+      this.itemSide,
+      this.extensionType,
+      this.flapStrength,
+      this.color,
+      this.description,
+      this.productPrice,
+      this.productCost,
+      this.productTags,
+      this.imageListUrls,
+      this.pdfUrl});
 }
 
 class Machines {
@@ -218,7 +217,8 @@ class Orders {
   List<dynamic> orderProducts;
   String status;
   Timestamp date;
-  Orders({this.orderId, this.userId, this.orderProducts, this.date, this.status});
+  Orders(
+      {this.orderId, this.userId, this.orderProducts, this.date, this.status});
 }
 
 class QuoteItems {
@@ -227,12 +227,6 @@ class QuoteItems {
   double quantity;
   double price;
   double tax;
-  QuoteItems({
-    this.itemCode,
-    this.itemPack,
-    this.quantity,
-    this.price,
-    this.tax
-  });
-
+  QuoteItems(
+      {this.itemCode, this.itemPack, this.quantity, this.price, this.tax});
 }

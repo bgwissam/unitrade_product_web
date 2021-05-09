@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:typed_data';
@@ -3246,12 +3247,10 @@ class _ProductFormState extends State<ProductForm> {
                         ),
                       ),
                       //Ratio
-                         Expanded(
+                      Expanded(
                         flex: 1,
                         child: TextFormField(
-                          initialValue: ratio != null
-                              ? ratio.toString()
-                              : '',
+                          initialValue: ratio != null ? ratio.toString() : '',
                           style: textStyle1,
                           decoration: textInputDecoration.copyWith(
                               labelText: PRODUCT_RATIO),

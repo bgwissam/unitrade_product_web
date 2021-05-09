@@ -20,7 +20,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('wood');
   final CollectionReference solidCollection =
       FirebaseFirestore.instance.collection('solid');
-        final CollectionReference machineCollection =
+  final CollectionReference machineCollection =
       FirebaseFirestore.instance.collection('machines');
   final CollectionReference lightsCollection =
       FirebaseFirestore.instance.collection('lights');
@@ -1195,19 +1195,29 @@ class DatabaseService {
           type: doc.data()['type'],
           ratio: doc.data()['ratio'],
           nozzle: doc.data()['nozzle'],
-          imageListUrls: doc.data()['imageListUrls']
-          );
+          imageListUrls: doc.data()['imageListUrls']);
     }).toList();
   }
 
   Stream<List<Machines>> machineProducts(
       {String brandName, String productType, String productCategory}) {
-        print('$brandName $productType $productCategory');
+    print('$brandName $productType $productCategory');
     return machineCollection
         .where('productBrand', isEqualTo: brandName)
         .where('productType', isEqualTo: productType)
         .where('productCategory', isEqualTo: productCategory)
         .snapshots()
         .map(_machineDataProductsFromSnapshot);
+  }
+
+  //Delete current accessory product
+  Future deleteMachineProduct({String uid, List<dynamic> imageUids}) async {
+    try {
+      await machineCollection.doc(uid).delete();
+      for (var imageUid in imageUids)
+        await FirebaseStorage.instance.ref(imageUid).delete();
+    } catch (e) {
+      print('Product could not be deleted $e');
+    }
   }
 }

@@ -689,7 +689,12 @@ class _ProductTileState extends State<ProductTile> {
                                 uid: widget.accessoriesProduct.uid,
                                 imageUids:
                                     widget.accessoriesProduct.imageListUrls);
-
+                          else if (widget.productType == TAB_MACHINE_TEXT) {
+                            await DatabaseService().deleteMachineProduct(
+                              uid: widget.machineProduct.uid,
+                              imageUids: widget.machineProduct.imageListUrls,
+                            );
+                          }
                           Navigator.of(context).pop();
                         },
                         child: Text(ALERT_YES))
