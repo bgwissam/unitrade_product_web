@@ -1114,8 +1114,11 @@ class _ProductFormState extends State<ProductForm> {
                       initialValue: productPack != null
                           ? productPack.toString()
                           : zeroValue,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                     keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                            FilteringTextInputFormatter.deny(regExp)
+                          ],
                       style: textStyle1,
                       decoration: textInputDecoration.copyWith(
                           labelText: PRODUCT_PACKAGE),
