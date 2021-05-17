@@ -38,6 +38,7 @@ dependencies:
   image_whisperer:
   flutter_spinkit:
   url_strategy:
+  email_validator: 1.0.5
 
 dev_dependencies:
   flutter_test:

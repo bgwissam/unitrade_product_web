@@ -4,6 +4,7 @@ import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
 import 'package:unitrade_web_v2/screens/home/product_streamer.dart';
+import 'package:unitrade_web_v2/screens/home/register.dart';
 import 'package:unitrade_web_v2/screens/home/sign_out.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/services/database.dart';
@@ -38,6 +39,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String cityOfResidence;
   UserData user;
   bool adminUser = false;
+  double height = 75;
+  double width = 300;
   String addProductButton = 'Add New Product';
   void initState() {
     super.initState();
@@ -118,12 +121,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             child: Column(
               children: [
                 Center(
-                  child: Row(
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        //viewing current products
                         Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 5,
+                          height: height,
+                          width: width,
                           child: RaisedButton(
                             child: Text(
                               PRODUCTS,
@@ -148,11 +152,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(
-                          width: 15.0,
+                          height: 15.0,
                         ),
+                        //Adding a product
                         Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 5,
+                          height: height,
+                          width: width,
                           child: RaisedButton(
                             child: Text(
                               ADD_PRODUCT,
@@ -175,11 +180,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(
-                          width: 15.0,
+                          height: 15.0,
                         ),
+                        //Adding a brand
                         Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 5,
+                          height: height,
+                          width: width,
                           child: RaisedButton(
                             child: Text(
                               ADD_BRAND,
@@ -201,23 +207,59 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 : null,
                           ),
                         ),
-                         SizedBox(
-                          width: 15.0,
+                        SizedBox(
+                          height: 15.0,
                         ),
+                        //Viewing current brands
                         Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width / 5,
+                          height: height,
+                          width: width,
                           child: ElevatedButton(
-                            child: Text(VIEW_BRANDS, style: textStyle2,),
+                            child: Text(
+                              VIEW_BRANDS,
+                              style: textStyle2,
+                            ),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                                 side: BorderSide(color: Colors.black),
-                                ),
-                                primary: Colors.deepOrange[500],
+                              ),
+                              primary: Colors.deepOrange[500],
                             ),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => BrandGrid(roles: roles,)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BrandGrid(
+                                            roles: roles,
+                                          )));
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        //Register new users
+                        Container(
+                          height: height,
+                          width: width,
+                          child: ElevatedButton(
+                            child: Text(
+                              REGISTER_USER,
+                              style: textStyle2,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                side: BorderSide(color: Colors.black),
+                              ),
+                              primary: Colors.deepOrange[500],
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RegisterUser()));
                             },
                           ),
                         )

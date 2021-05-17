@@ -1,4 +1,4 @@
-//Main page 
+//Main page
 const String MAIN_TITLE = 'Product Application Unitrade';
 const String HOME_PAGE = 'Home';
 
@@ -9,7 +9,26 @@ const String USER_NAME_EMPTY = 'Username cannot be empty';
 const String PASSWORD = 'Password';
 const String PASSWORD_EMPTY = 'Password cannot be empty';
 const String SUBMIT = 'Submit';
+const String REGISTER_USER = 'Register User';
 
+//Register Page
+const String FIRST_NAME = 'First Name';
+const String FIRST_NAME_VALIDATION = 'First name is required';
+const String LAST_NAME = 'Last Name';
+const String LAST_NAME_VALIDATION = 'Last name is required';
+const String NATIONALITY = 'Nationality';
+const String COMPANY = 'Employer';
+const String PHONE_NUMBER = 'Phone Number';
+const String PHONE_NUMBER_VALIDATION = 'Phone number is required';
+const String PHONE_NUMBER_PATTERN_VALIDATION = 'Phone number is wrong';
+const String EMAIL_ADDRESS = 'Email';
+const String EMAIL_ADDRESS_EMPTY = 'Email address is required';
+const String EMAIL_ADDRESS_VALIDATION = 'Email address is of wrong syntax';
+const String CONFIRM_EMAIL = 'Confirm Email';
+const String CONFIRM_EMAIL_MATCHING = 'Emails are not matching';
+const String PASSWORD_EMPTY_VALIDATION = 'Password cannot be empty';
+const String PASSWORD_LENGTH_VALIDATION =
+    'Password should be at least 6 characters';
 //Dialog box
 const String ALERT_YES = 'Yes';
 const String ALERT_NO = 'No';
@@ -17,7 +36,8 @@ const String OK_BUTTON = 'Ok';
 const String EXIT_APP_TITLE = 'Exit Unitrade';
 const String EXIT_APP_CONTENT = 'Are you sure you want to leave?';
 const String ALERT_DELETE_PRODUCT = 'Delete product';
-const String ALERT_DELETE_PRODUCT_CONTENT = 'Are you sure you want to delete this?';
+const String ALERT_DELETE_PRODUCT_CONTENT =
+    'Are you sure you want to delete this?';
 const String ALERT_PRODUCT = ' product';
 
 //Home Page
@@ -87,17 +107,22 @@ const String PRODUCT_PRESSURE = 'Pressure';
 const String PRODUCT_NOZZLE = 'Nozzle';
 const String PRODUCT_RATIO = 'Ratio';
 //Product Form validation
-const String PRODUCT_LENGTH_VAL_ZERO = 'Product length should be greater than zero';
+const String PRODUCT_LENGTH_VAL_ZERO =
+    'Product length should be greater than zero';
 const String PRODUCT_LENGTH_VAL_EMPTY = 'Product length should not be empty';
-const String PRODUCT_WIDTH_VAL_ZERO = 'Product width should be greater than zero';
+const String PRODUCT_WIDTH_VAL_ZERO =
+    'Product width should be greater than zero';
 const String PRODUCT_WIDTH_VAL_EMPTY = 'Product width should not be empty';
-const String PRODUCT_THICKNESS_VAL_ZERO = 'Product thickness should be greater than zero';
-const String PRODUCT_THICKNESS_VAL_EMPTY = 'Product thickness should not be empty';
-const String PRODUCT_PRICE_VAL_ZERO = 'Product price should be greater than zero';
+const String PRODUCT_THICKNESS_VAL_ZERO =
+    'Product thickness should be greater than zero';
+const String PRODUCT_THICKNESS_VAL_EMPTY =
+    'Product thickness should not be empty';
+const String PRODUCT_PRICE_VAL_ZERO =
+    'Product price should be greater than zero';
 const String PRODUCT_PRICE_VAL_EMPTY = 'Product price should not be empty';
 const String PRODUCT_PACKAGE_VAL_EMPTY = 'Packing cannot be empty';
 
-//Constant type string 
+//Constant type string
 const String COATINGS = 'COATING';
 const String ADHESIVE = 'ADHESIVE';
 const String WOOD = 'WOOD';
@@ -121,7 +146,7 @@ const String CHIP_BUTTON = 'Chip Board';
 const String FIRE_BUTTON = 'Fire Resistant';
 const String HPL_BUTTON = 'HPL';
 
-//Empty lists 
+//Empty lists
 const String EMPTY_BRAND_LIST = 'No brands were found in this category';
 const String EMPTY_PRODUCT_LIST = 'No products were found in this brand';
 
@@ -171,10 +196,12 @@ const String BRAND_GRID = 'Brand Grid';
 const String BRAND_NAME = 'Brand Name';
 const String BRAND_NAME_VALIDATION_EMPTY = 'Brand name cannot be empty';
 const String BRAND_COUNTRY = 'Country of Origin';
-const String BRAND_COUNTRY_VALIDATION_EMPTY = 'Country of origin cannot be empty';
+const String BRAND_COUNTRY_VALIDATION_EMPTY =
+    'Country of origin cannot be empty';
 const String BRAND_DIVISION = 'Division';
 const String BRAND_LOGO = 'Brand Logo';
 const String BRAND_CATEGORIES = 'Brand Categories';
 
 //No Authorization messages
-const String NOT_AUTHORIZED = 'This user is not authorized to access this section';
+const String NOT_AUTHORIZED =
+    'This user is not authorized to access this section';
