@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
+import 'package:unitrade_web_v2/shared/country_drop_down.dart';
 import 'package:unitrade_web_v2/shared/loading.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
+import 'package:email_validator/email_validator.dart';
 
 class RegisterUser extends StatefulWidget {
   @override
