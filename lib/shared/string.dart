@@ -50,6 +50,7 @@ const String TAB_SS_TEXT = 'Surface';
 const String TAB_LIGHT_TEXT = 'Lighting';
 const String TAB_ACCESSORIES_TEXT = 'Accessories';
 const String TAB_MACHINE_TEXT = 'Machines';
+const String UPDATE_STOCK = 'Update Stock';
 
 //Product Type
 const String PRODUCT_TYPE = 'Product Type';

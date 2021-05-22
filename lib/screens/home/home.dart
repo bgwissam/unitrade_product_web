@@ -1,3 +1,5 @@
+import 'dart:html';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
 import 'package:unitrade_web_v2/models/products.dart';
@@ -9,6 +11,7 @@ import 'package:unitrade_web_v2/screens/home/sign_out.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
+import 'package:unitrade_web_v2/shared/csv_file_converter.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 import 'package:unitrade_web_v2/shared/functions.dart';
 import 'package:unitrade_web_v2/brands/brand_form.dart';
@@ -42,6 +45,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   double height = 75;
   double width = 300;
   String addProductButton = 'Add New Product';
+  File csvFile;
+  String csvFileName;
+  String csvFilePath;
+  String errorText;
+  Uint8List uploadedFile;
   void initState() {
     super.initState();
     _getUserData();
@@ -262,6 +270,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       builder: (context) => RegisterUser()));
                             },
                           ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        //Update stock levels
+                        Container(
+                          height: height,
+                          width: width,
+                          child: ElevatedButton(
+                            child: Text(
+                              UPDATE_STOCK,
+                              style: textStyle2,
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                side: BorderSide(color: Colors.black),
+                              ),
+                              primary: Colors.deepOrange[500],
+                            ),
+                            onPressed: () async {
+                              loadCSVFromStorage();
+                            },
+                          ),
                         )
                       ]),
                 ),
@@ -271,6 +304,52 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  //Picking a csv file from storage
+  loadCSVFromStorage() async {
+    InputElement uploadInput = FileUploadInputElement();
+    uploadInput.click();
+    uploadInput.onChange.listen((event) async {
+      //Read file content as dataUrl
+      final files = uploadInput.files;
+      if (files.length == 1) {
+        csvFile = files[0];
+        FileReader reader = FileReader();
+        print('The files: ${csvFile.size}');
+        reader.onLoadEnd.listen((event) {
+          setState(() {
+            uploadedFile = reader.result;
+          });
+        });
+        reader.onError.listen((error) {
+          setState(() {
+            errorText = 'The following error occured: $error';
+          });
+        });
+        reader.readAsArrayBuffer(csvFile);
+        csvFileName = csvFile.name;
+        csvFilePath = csvFile.relativePath;
+
+        print('Name: $csvFileName Path: $csvFilePath');
+        print('Uploaded file: $uploadedFile');
+      }
+    });
+
+    if (csvFilePath != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (builder) {
+            return LoadCsvDataScreen(
+              path: csvFilePath,
+            );
+          },
+        ),
+      );
+    } else {
+      print('The file picker returned null');
+    }
   }
 
   //Dailog box for exiting the website

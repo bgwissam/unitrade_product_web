@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:typed_data';
@@ -1115,11 +1114,11 @@ class _ProductFormState extends State<ProductForm> {
                       initialValue: productPack != null
                           ? productPack.toString()
                           : zeroValue,
-                     keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
-                            FilteringTextInputFormatter.deny(regExp)
-                          ],
+                        FilteringTextInputFormatter.deny(regExp)
+                      ],
                       style: textStyle1,
                       decoration: textInputDecoration.copyWith(
                           labelText: PRODUCT_PACKAGE),
