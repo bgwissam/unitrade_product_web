@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
 import 'package:unitrade_web_v2/models/products.dart';
@@ -45,11 +47,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   double height = 75;
   double width = 300;
   String addProductButton = 'Add New Product';
+  PlatformFile csvPlatformFile;
   File csvFile;
   String csvFileName;
   String csvFilePath;
   String errorText;
   Uint8List uploadedFile;
+  List csvFileContentList = [];
+  List csvFileModuleList = [];
   void initState() {
     super.initState();
     _getUserData();
@@ -292,7 +297,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               primary: Colors.deepOrange[500],
                             ),
                             onPressed: () async {
-                              loadCSVFromStorage();
+                              await loadCSVFromStorage();
                             },
                           ),
                         )
@@ -308,47 +313,108 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //Picking a csv file from storage
   loadCSVFromStorage() async {
-    InputElement uploadInput = FileUploadInputElement();
-    uploadInput.click();
-    uploadInput.onChange.listen((event) async {
-      //Read file content as dataUrl
-      final files = uploadInput.files;
-      if (files.length == 1) {
-        csvFile = files[0];
-        FileReader reader = FileReader();
-        print('The files: ${csvFile.size}');
-        reader.onLoadEnd.listen((event) {
-          setState(() {
-            uploadedFile = reader.result;
-          });
-        });
-        reader.onError.listen((error) {
-          setState(() {
-            errorText = 'The following error occured: $error';
-          });
-        });
-        reader.readAsArrayBuffer(csvFile);
-        csvFileName = csvFile.name;
-        csvFilePath = csvFile.relativePath;
+    // InputElement uploadInput = FileUploadInputElement();
+    // uploadInput.click();
+    // uploadInput.onChange.listen((event) async {
+    //   //Read file content as dataUrl
+    //   final files = uploadInput.files;
+    //   if (files.length == 1) {
+    //     csvFile = files[0];
+    //     FileReader reader = FileReader();
+    //     reader.onLoadEnd.listen((event) {
+    //       setState(() {
+    //         uploadedFile = reader.result;
+    //       });
+    //     });
+    //     reader.onError.listen((error) {
+    //       setState(() {
+    //         errorText = 'The following error occured: $error';
+    //       });
+    //     });
+    //     reader.readAsArrayBuffer(csvFile);
+    //     setState(() {
+    //       csvFileName = csvFile.name;
+    //       csvFilePath = csvFile.relativePath;
+    //     });
+    //   }
+    // });
 
-        print('Name: $csvFileName Path: $csvFilePath');
-        print('Uploaded file: $uploadedFile');
-      }
-    });
+    // if (csvFileName != null) {
+    //   print('The file path: $csvFilePath');
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (builder) {
+    //         return LoadCsvDataScreen(
+    //           file: csvFile,
+    //         );
+    //       },
+    //     ),
+    //   );
+    // } else {
+    //   print('The file name: $csvFileName');
+    //   print('The file picker returned null');
+    // }
 
-    if (csvFilePath != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (builder) {
-            return LoadCsvDataScreen(
-              path: csvFilePath,
-            );
-          },
-        ),
-      );
+    String csvFileHeaders =
+        'Import Status,Import Code,Import Message,Company,Warehouse Code,Item,,Description,Inventory on Hand,City,Product Category,Product Type,Product ' +
+            'Class,Business Line,Inventory Unit,Length,Width,Thickness,Slow Moving,Vendor,Packaging Unit,PCS/Packaging Unit,Inventory on Hand in SU,Inventory ' +
+            'Transfers & SO,Inventory in Transit,On Hand & In Transit,Item Long Description';
+
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      allowedExtensions: ['csv'],
+      withData: true,
+      type: FileType.custom,
+    );
+
+    if (result == null) {
+      csvPlatformFile = null;
+      print('No csv file');
     } else {
-      print('The file picker returned null');
+      csvPlatformFile = result.files.first;
+      print('The files is: $csvPlatformFile');
+      try {
+        String csvString = new String.fromCharCodes(csvPlatformFile.bytes);
+        //get the UTF8 decode as Uint8List
+        var outputAsUintList = new Uint8List.fromList(csvString.codeUnits);
+        //Split the Uint8List by newlines and characters to get csv file rows
+        csvFileContentList = utf8.decode(outputAsUintList).split('\n');
+        //Check if the column titles are in sequence
+        if (csvFileContentList[0].toString().trim().hashCode !=
+            csvFileHeaders.hashCode) {
+          print('Sorry, you don\'t have the right format');
+          print(csvFileContentList[0].toString().trim());
+          print(csvFileHeaders);
+        }
+        //Check if csv file has any content
+        if (csvFileContentList.length == 0 ||
+            csvFileContentList[1].length == 0) {
+          print('The selected file has no content');
+        }
+        List csvList = [];
+        //remove headers
+        csvFileContentList.remove(0);
+        //Remove duplicates
+        csvList = csvFileContentList.toSet().toList();
+
+        //Array class module
+        csvList.forEach((csvRow) {
+          if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
+            csvFileModuleList.add(csvRow.split(','));
+          }
+        });
+
+        //Print data
+        csvFileModuleList.forEach((data) {
+          print(data.toList());
+          //print(data.toJson());
+        });
+      } catch (e) {
+        print('An error occured trying to read file:');
+        print(e.toString());
+        return e.toString();
+      }
     }
   }
 

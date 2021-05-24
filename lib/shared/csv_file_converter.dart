@@ -1,14 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:html';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:unitrade_web_v2/shared/loading.dart';
 
 class LoadCsvDataScreen extends StatelessWidget {
-  final String path;
+  final File file;
 
-  const LoadCsvDataScreen({Key key, this.path}) : super(key: key);
+  const LoadCsvDataScreen({Key key, this.file}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class LoadCsvDataScreen extends StatelessWidget {
         backgroundColor: Colors.amberAccent,
       ),
       body: FutureBuilder(
-        future: loadingCsvData(path),
+        future: loadingCsvData(file),
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             return Padding(
@@ -69,11 +69,7 @@ class LoadCsvDataScreen extends StatelessWidget {
     );
   }
 
-  Future<List<List<dynamic>>> loadingCsvData(String path) async {
-    final csvFile = new File(path).openRead();
-    return await csvFile
-        .transform(utf8.decoder)
-        .transform(CsvToListConverter())
-        .toList();
+  Future<List<List<dynamic>>> loadingCsvData(File file) async {
+    //return CsvToListConverter().convert(file);
   }
 }
