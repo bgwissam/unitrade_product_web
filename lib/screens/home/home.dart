@@ -297,6 +297,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               primary: Colors.deepOrange[500],
                             ),
                             onPressed: () async {
+                              csvFileContentList.clear();
+                              csvFileModuleList.clear();
                               await loadCSVFromStorage();
                             },
                           ),
@@ -313,49 +315,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //Picking a csv file from storage
   loadCSVFromStorage() async {
-    // InputElement uploadInput = FileUploadInputElement();
-    // uploadInput.click();
-    // uploadInput.onChange.listen((event) async {
-    //   //Read file content as dataUrl
-    //   final files = uploadInput.files;
-    //   if (files.length == 1) {
-    //     csvFile = files[0];
-    //     FileReader reader = FileReader();
-    //     reader.onLoadEnd.listen((event) {
-    //       setState(() {
-    //         uploadedFile = reader.result;
-    //       });
-    //     });
-    //     reader.onError.listen((error) {
-    //       setState(() {
-    //         errorText = 'The following error occured: $error';
-    //       });
-    //     });
-    //     reader.readAsArrayBuffer(csvFile);
-    //     setState(() {
-    //       csvFileName = csvFile.name;
-    //       csvFilePath = csvFile.relativePath;
-    //     });
-    //   }
-    // });
-
-    // if (csvFileName != null) {
-    //   print('The file path: $csvFilePath');
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (builder) {
-    //         return LoadCsvDataScreen(
-    //           file: csvFile,
-    //         );
-    //       },
-    //     ),
-    //   );
-    // } else {
-    //   print('The file name: $csvFileName');
-    //   print('The file picker returned null');
-    // }
-
     String csvFileHeaders =
         'Import Status,Import Code,Import Message,Company,Warehouse Code,Item,,Description,Inventory on Hand,City,Product Category,Product Type,Product ' +
             'Class,Business Line,Inventory Unit,Length,Width,Thickness,Slow Moving,Vendor,Packaging Unit,PCS/Packaging Unit,Inventory on Hand in SU,Inventory ' +
@@ -373,7 +332,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       print('No csv file');
     } else {
       csvPlatformFile = result.files.first;
-      print('The files is: $csvPlatformFile');
       try {
         String csvString = new String.fromCharCodes(csvPlatformFile.bytes);
         //get the UTF8 decode as Uint8List
@@ -384,8 +342,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         if (csvFileContentList[0].toString().trim().hashCode !=
             csvFileHeaders.hashCode) {
           print('Sorry, you don\'t have the right format');
-          print(csvFileContentList[0].toString().trim());
-          print(csvFileHeaders);
         }
         //Check if csv file has any content
         if (csvFileContentList.length == 0 ||
@@ -401,15 +357,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         //Array class module
         csvList.forEach((csvRow) {
           if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
-            csvFileModuleList.add(csvRow.split(','));
+            List<String> shortRow = [];
+            List<String> splitedRow = csvRow.toString().split(',');
+            for (var col in splitedRow) {
+              shortRow.add(col);
+            }
+
+            csvFileModuleList.add(shortRow);
           }
         });
 
-        //Print data
-        csvFileModuleList.forEach((data) {
-          print(data.toList());
-          //print(data.toJson());
-        });
+        if (csvFileModuleList != null || csvFileModuleList.isNotEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (builder) {
+                return LoadCsvDataScreen(
+                  file: csvFileModuleList,
+                );
+              },
+            ),
+          );
+        }
       } catch (e) {
         print('An error occured trying to read file:');
         print(e.toString());
