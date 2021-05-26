@@ -55,6 +55,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Uint8List uploadedFile;
   List csvFileContentList = [];
   List csvFileModuleList = [];
+  List<Map<String, dynamic>> csvMapList = [];
   void initState() {
     super.initState();
     _getUserData();
@@ -315,10 +316,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   //Picking a csv file from storage
   loadCSVFromStorage() async {
-    String csvFileHeaders =
-        'Import Status,Import Code,Import Message,Company,Warehouse Code,Item,,Description,Inventory on Hand,City,Product Category,Product Type,Product ' +
-            'Class,Business Line,Inventory Unit,Length,Width,Thickness,Slow Moving,Vendor,Packaging Unit,PCS/Packaging Unit,Inventory on Hand in SU,Inventory ' +
-            'Transfers & SO,Inventory in Transit,On Hand & In Transit,Item Long Description';
+    String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
+        'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
+        'Transfers & SO,Inventory in Transit,On Hand & In Transit';
 
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -338,6 +338,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         var outputAsUintList = new Uint8List.fromList(csvString.codeUnits);
         //Split the Uint8List by newlines and characters to get csv file rows
         csvFileContentList = utf8.decode(outputAsUintList).split('\n');
+
         //Check if the column titles are in sequence
         if (csvFileContentList[0].toString().trim().hashCode !=
             csvFileHeaders.hashCode) {
@@ -349,8 +350,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           print('The selected file has no content');
         }
         List csvList = [];
-        //remove headers
-        csvFileContentList.remove(0);
+        List<String> headerRow = csvFileContentList[0].toString().split(',');
+        //Add the headers
+        csvFileModuleList.add(headerRow);
+        //remove headers so it won't be mapped
+        csvFileContentList.removeAt(0);
         //Remove duplicates
         csvList = csvFileContentList.toSet().toList();
 
@@ -358,11 +362,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         csvList.forEach((csvRow) {
           if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
             List<String> shortRow = [];
+            Map<String, dynamic> mappedList = new Map();
             List<String> splitedRow = csvRow.toString().split(',');
-            for (var col in splitedRow) {
-              shortRow.add(col);
+
+            for (var i = 0; i < splitedRow.length; i++) {
+              shortRow.add(splitedRow[i]);
+              mappedList.addAll({headerRow[i]: splitedRow[i]});
             }
 
+            csvMapList.add(mappedList);
             csvFileModuleList.add(shortRow);
           }
         });
@@ -374,14 +382,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               builder: (builder) {
                 return LoadCsvDataScreen(
                   file: csvFileModuleList,
+                  mapList: csvMapList,
                 );
               },
             ),
           );
         }
       } catch (e) {
-        print('An error occured trying to read file:');
-        print(e.toString());
+        String errorTitle, errorContent;
+        if (e.toString().contains('RangeError')) {
+          errorTitle = 'Range Error (Index)';
+          errorContent =
+              'There seems to be a comma in one of the cells, please remove then upload';
+        }
+
+        showDialog(
+            context: context,
+            builder: (builder) => AlertDialog(
+                  title: Text(errorTitle),
+                  content: Text(errorContent),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(OK_BUTTON))
+                  ],
+                ));
         return e.toString();
       }
     }
@@ -396,13 +421,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             title: Text(EXIT_APP_TITLE),
             content: Text(EXIT_APP_CONTENT),
             actions: [
-              new FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: Text(ALERT_NO),
               ),
-              new FlatButton(
+              TextButton(
                 onPressed: () {
                   if (this.mounted) {
                     _auth.signOut();

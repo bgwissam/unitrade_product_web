@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class LoadCsvDataScreen extends StatelessWidget {
   final List<dynamic> file;
+  final List<Map<String, dynamic>> mapList;
 
-  const LoadCsvDataScreen({Key key, this.file}) : super(key: key);
+  const LoadCsvDataScreen({Key key, this.file, this.mapList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('The map list: ${mapList[0]}');
     return Scaffold(
         appBar: AppBar(
           title: Text('CSV Data'),
@@ -17,25 +19,31 @@ class LoadCsvDataScreen extends StatelessWidget {
 
   //Build data in the file as a Table view
   _buildDataDetails() {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(),
-      ),
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount: file.length,
-          itemBuilder: (context, index) {
-            return Table(
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              border: TableBorder.all(width: 1.0),
-              children: [
-                TableRow(
-                  children: _buildRow(file[index]),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemCount: file.length,
+            itemBuilder: (context, index) {
+              return Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                border: TableBorder.symmetric(
+                  inside: BorderSide(width: 2),
                 ),
-              ],
-            );
-          }),
+                children: [
+                  TableRow(
+                    children: _buildRow(file[index]),
+                  ),
+                ],
+              );
+            }),
+      ),
     );
   }
 
