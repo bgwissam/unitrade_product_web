@@ -628,6 +628,7 @@ class DatabaseService {
           productCost: doc.data()['productCost'],
           productTags: doc.data()['tags'],
           imageListUrls: doc.data()['imageListUrls'],
+          inventoryOnHand: doc.data()['inventoryOnHand'],
           pdfUrl: doc.data()['pdfUrl']);
     }).toList();
   }

@@ -79,6 +79,7 @@ class WoodProduct {
   String description;
   double productPrice;
   double productCost;
+  int inventoryOnHand;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;
@@ -98,6 +99,7 @@ class WoodProduct {
       this.description,
       this.productPrice,
       this.productCost,
+      this.inventoryOnHand,
       this.productTags,
       this.imageListUrls,
       this.pdfUrl});

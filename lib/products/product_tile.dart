@@ -305,6 +305,18 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
+            //Stock field
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  'Available Stock: ${widget.woodProduct.inventoryOnHand} pcs',
+                  style: textStyle1,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()

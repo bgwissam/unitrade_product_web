@@ -182,7 +182,7 @@ const String MONTELLI_BRAND = 'MONTELLI';
 const String SALICE_BRAND = 'SALICE';
 const String INDAUX_BRAND = 'INDAUX';
 const String LARIUS_BRAND = 'Larius';
-const String LINEX_BRAND = 'LINEX';
+const String LINEX_BRAND = 'Linex';
 
 //Sign out page
 const String SIGNED_OUT_USER_PAGE = 'Signed Out';
