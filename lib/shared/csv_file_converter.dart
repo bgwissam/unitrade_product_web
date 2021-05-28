@@ -115,9 +115,9 @@ class LoadCsvDataScreen extends StatelessWidget {
             return e;
           });
           result.forEach((element) {
-            print('Element: ${element.data().length}');
             if (element.data().isNotEmpty || element.data() != null)
-              print('The result entities: ${element.data()}');
+              _updateData(element.id, businessUnit,
+                  int.parse(row['Inventory on Hand']));
           });
           return result;
         }
