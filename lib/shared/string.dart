@@ -207,3 +207,7 @@ const String BRAND_CATEGORIES = 'Brand Categories';
 //No Authorization messages
 const String NOT_AUTHORIZED =
     'This user is not authorized to access this section';
+
+//CSV converter
+const String UPDATE_DETAILS = 'Update Result';
+const String DOWNLOAD_FILE = 'Download';
