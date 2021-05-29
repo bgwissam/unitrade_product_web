@@ -1,8 +1,6 @@
 import 'dart:html' as html;
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
@@ -19,6 +17,15 @@ class LoadCsvDataScreen extends StatefulWidget {
 class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
   bool _isUpdating = false;
   int _itemsUpdated = 0;
+  int _itemsInFile = 0;
+  int totalRecords = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    totalRecords = widget.mapList.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +65,15 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
             ),
             SizedBox(
               height: 35.0,
+            ),
+            Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Center(
+                  child: Text(
+                      'File items: $_itemsInFile/$totalRecords | Items updated: $_itemsUpdated')),
+            ),
+            SizedBox(
+              height: 20.0,
             ),
             Padding(
               padding: EdgeInsets.all(15.0),
@@ -109,7 +125,10 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       widgetList.add(
         TableCell(
           verticalAlignment: TableCellVerticalAlignment.middle,
-          child: Center(child: Text(data)),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Center(child: Text(data)),
+          ),
         ),
       );
 
@@ -125,9 +144,14 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
     List<List<String>> csvConversionFile = [];
     //loop over the maplist
     for (var row in widget.mapList) {
+      setState(() {
+        _itemsInFile++;
+      });
       String businessLine = row['Business Line'];
       String itemCode = row['Item Code'];
-
+      String brandName = row['Vendor'];
+      String city = row['City'];
+      String inv = row['Inventory on Hand'];
       switch (businessLine) {
         case '212003':
           businessUnit = 'wood';
@@ -160,10 +184,30 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
             return e;
           });
           result.forEach((element) {
-            if (element.data().isNotEmpty || element.data() != null) {
-              _itemsUpdated++;
-              _updateData(element.id, businessUnit,
-                  int.parse(row['Inventory on Hand']));
+            var invMap = new Map();
+            if (element.data()['inventory'] != null) {
+              invMap = element.data()['inventory'];
+
+              //check if map contains key
+              if (invMap.containsKey(city)) {
+                //If the current inventory doesn't match the one in the database
+                if (inv != invMap[city].toString()) {
+                  setState(() {
+                    _itemsUpdated++;
+                  });
+                  _updateData(element.id, businessUnit, int.parse(inv), city);
+                }
+              }
+              //If current key doesn't match any key in our database
+              else {
+                setState(() {
+                  _itemsUpdated++;
+                });
+                _updateData(element.id, businessUnit, int.parse(inv), city);
+              }
+            } else {
+              //Add the field to the current item code
+              _updateData(element.id, businessUnit, int.parse(inv), city);
             }
           });
           return result;
@@ -172,7 +216,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
         print('An error occured with item ($itemCode): $error, $stackTrace');
         return error;
       }).catchError((error) {
-        print('An error occured obtained data for item: $itemCode');
+        print('An error occured obtaining data for item: $itemCode');
       });
     }
     //will end the loading window once the whole file is updated
@@ -186,10 +230,13 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
           return AlertDialog(
             title: Text(UPDATE_DETAILS),
             content: Text(
-                'You have updated the stock of $_itemsUpdated fields.\nThe following items aren\'t available in the database:\n$missingCodes'),
+                'Items updated: $_itemsUpdated fields.\n${missingCodes.length} items are missing from your database!'),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
                 child: Text(OK_BUTTON),
               ),
               TextButton(
@@ -203,11 +250,12 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
   }
 
   //Will update the database as per collection and item code
-  _updateData(String id, String businessUnit, int inventory) async {
+  _updateData(
+      String id, String businessUnit, int inventory, String city) async {
     await FirebaseFirestore.instance
         .collection(businessUnit)
         .doc(id)
-        .update({'inventoryOnHand': inventory}).onError((error, stackTrace) {
+        .update({'inventory.$city': inventory}).onError((error, stackTrace) {
       print('Could not update data due to: $error: $stackTrace');
     });
   }

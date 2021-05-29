@@ -152,6 +152,7 @@ class Accessories {
   String itemSide;
   String flapStrength;
   int inventoryOnHand;
+  Map<String, int> inventory;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;
@@ -169,6 +170,7 @@ class Accessories {
       this.extensionType,
       this.flapStrength,
       this.inventoryOnHand,
+      this.inventory,
       this.color,
       this.description,
       this.productPrice,
