@@ -149,6 +149,13 @@ class _ProductTileState extends State<ProductTile> {
 
   //return container paint
   Widget _buildPaintList() {
+    Map<String, dynamic> itemStock = new Map();
+    if (widget.product.inventory != null)
+      widget.product.inventory.forEach((key, value) {
+        if (value != 0) {
+          itemStock = {key: value};
+        }
+      });
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -226,6 +233,22 @@ class _ProductTileState extends State<ProductTile> {
                 ),
               ),
             ),
+            //Stock field
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(children: [
+                  if (itemStock.isNotEmpty)
+                    for (var i in itemStock.entries)
+                      Text(
+                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                ]),
+              ),
+            ),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(flex: 1, child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -237,6 +260,14 @@ class _ProductTileState extends State<ProductTile> {
 
   //return container wood
   Widget _buildWoodList() {
+    Map<String, dynamic> itemStock = new Map();
+    if (widget.woodProduct.inventory != null)
+      widget.woodProduct.inventory.forEach((key, value) {
+        if (value != 0) {
+          itemStock = {key: value};
+        }
+      });
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -310,11 +341,15 @@ class _ProductTileState extends State<ProductTile> {
               flex: 1,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  'Available Stock: ${widget.woodProduct.inventoryOnHand} pcs',
-                  style: textStyle1,
-                  textAlign: TextAlign.center,
-                ),
+                child: Column(children: [
+                  if (itemStock.isNotEmpty)
+                    for (var i in itemStock.entries)
+                      Text(
+                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                ]),
               ),
             ),
             widget.roles.contains('isSuperAdmin')
@@ -328,6 +363,13 @@ class _ProductTileState extends State<ProductTile> {
 
   //return container solid surface
   Widget _buildSolidSurfaceList() {
+    Map<String, dynamic> itemStock = new Map();
+    if (widget.woodProduct.inventory != null)
+      widget.woodProduct.inventory.forEach((key, value) {
+        if (value != 0) {
+          itemStock = {key: value};
+        }
+      });
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -400,6 +442,22 @@ class _ProductTileState extends State<ProductTile> {
                   style: textStyle1,
                   textAlign: TextAlign.center,
                 ),
+              ),
+            ),
+            //Stock field
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(children: [
+                  if (itemStock.isNotEmpty)
+                    for (var i in itemStock.entries)
+                      Text(
+                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                ]),
               ),
             ),
             widget.roles.contains('isSuperAdmin')
@@ -475,6 +533,14 @@ class _ProductTileState extends State<ProductTile> {
 
   //return container accessories
   Widget _buildAccessoriesList() {
+    Map<String, dynamic> itemStock = new Map();
+    if (widget.accessoriesProduct.inventory != null)
+      widget.accessoriesProduct.inventory.forEach((key, value) {
+        if (value != 0) {
+          itemStock = {key: value};
+        }
+      });
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -560,15 +626,20 @@ class _ProductTileState extends State<ProductTile> {
             ),
             //Stock field
             Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    'Available Stock: ${widget.accessoriesProduct.inventoryOnHand} pcs',
-                    style: textStyle1,
-                    textAlign: TextAlign.center,
-                  ),
-                )),
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(children: [
+                  if (itemStock.isNotEmpty)
+                    for (var i in itemStock.entries)
+                      Text(
+                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                ]),
+              ),
+            ),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -580,6 +651,14 @@ class _ProductTileState extends State<ProductTile> {
 
   //return container accessories
   Widget _buildMachineList() {
+    Map<String, dynamic> itemStock = new Map();
+    if (widget.machineProduct.inventory != null)
+      widget.machineProduct.inventory.forEach((key, value) {
+        if (value != 0) {
+          itemStock = {key: value};
+        }
+      });
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -658,6 +737,22 @@ class _ProductTileState extends State<ProductTile> {
                   style: textStyle1,
                   textAlign: TextAlign.center,
                 ),
+              ),
+            ),
+            //Stock field
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(children: [
+                  if (itemStock.isNotEmpty)
+                    for (var i in itemStock.entries)
+                      Text(
+                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
+                        style: textStyle1,
+                        textAlign: TextAlign.center,
+                      )
+                ]),
               ),
             ),
             widget.roles.contains('isSuperAdmin')

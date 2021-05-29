@@ -149,7 +149,6 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       });
       String businessLine = row['Business Line'];
       String itemCode = row['Item Code'];
-      String brandName = row['Vendor'];
       String city = row['City'];
       String inv = row['Inventory on Hand'];
       switch (businessLine) {

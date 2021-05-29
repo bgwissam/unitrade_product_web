@@ -467,6 +467,7 @@ class DatabaseService {
           productTags: doc.data()['tags'],
           imageListUrls: doc.data()['imageListUrls'],
           imageLocalUrl: doc.data()['imageLocalUrl'],
+          inventory: doc.data()['inventory'],
           pdfUrl: doc.data()['pdfUrl']);
     }).toList();
   }
@@ -628,7 +629,7 @@ class DatabaseService {
           productCost: doc.data()['productCost'],
           productTags: doc.data()['tags'],
           imageListUrls: doc.data()['imageListUrls'],
-          inventoryOnHand: doc.data()['inventoryOnHand'],
+          inventory: doc.data()['inventory'],
           pdfUrl: doc.data()['pdfUrl']);
     }).toList();
   }
@@ -802,6 +803,7 @@ class DatabaseService {
           productCost: doc.data()['productCost'],
           productTags: doc.data()['tags'],
           imageListUrls: doc.data()['imageListUrls'],
+          inventory: doc.data()['inventory'],
           pdfUrl: doc.data()['pdfUrl']);
     }).toList();
   }
@@ -1069,7 +1071,6 @@ class DatabaseService {
           productPrice: doc.data()['productPrice'],
           productCost: doc.data()['productCost'],
           productTags: doc.data()['tags'],
-          inventoryOnHand: doc.data()['inventoryOnHand'],
           inventory: doc.data()['inventory'],
           imageListUrls: doc.data()['imageListUrls']);
     }).toList();
@@ -1198,6 +1199,7 @@ class DatabaseService {
           type: doc.data()['type'],
           ratio: doc.data()['ratio'],
           nozzle: doc.data()['nozzle'],
+          inventory: doc.data()['inventory'],
           imageListUrls: doc.data()['imageListUrls']);
     }).toList();
   }

@@ -43,6 +43,7 @@ class PaintMaterial {
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String imageLocalUrl;
+  Map<String, dynamic> inventory;
   String pdfUrl;
 
   PaintMaterial(
@@ -61,6 +62,7 @@ class PaintMaterial {
       this.productTags,
       this.imageListUrls,
       this.imageLocalUrl,
+      this.inventory,
       this.pdfUrl});
 }
 
@@ -79,7 +81,7 @@ class WoodProduct {
   String description;
   double productPrice;
   double productCost;
-  int inventoryOnHand;
+  Map<String, dynamic> inventory;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;
@@ -99,7 +101,7 @@ class WoodProduct {
       this.description,
       this.productPrice,
       this.productCost,
-      this.inventoryOnHand,
+      this.inventory,
       this.productTags,
       this.imageListUrls,
       this.pdfUrl});
@@ -151,7 +153,6 @@ class Accessories {
   String extensionType;
   String itemSide;
   String flapStrength;
-  int inventoryOnHand;
   Map<String, int> inventory;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
@@ -169,7 +170,6 @@ class Accessories {
       this.itemSide,
       this.extensionType,
       this.flapStrength,
-      this.inventoryOnHand,
       this.inventory,
       this.color,
       this.description,
@@ -195,6 +195,7 @@ class Machines {
   String description;
   var productPrice;
   var productCost;
+  Map<String, dynamic> inventory;
   List<dynamic> imageListUrls;
   String pdfUrl;
 
@@ -213,6 +214,7 @@ class Machines {
       this.description,
       this.productCost,
       this.productPrice,
+      this.inventory,
       this.imageListUrls,
       this.pdfUrl});
 }
