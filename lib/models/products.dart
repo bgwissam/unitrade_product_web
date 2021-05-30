@@ -153,7 +153,7 @@ class Accessories {
   String extensionType;
   String itemSide;
   String flapStrength;
-  Map<String, int> inventory;
+  Map<String, dynamic> inventory;
   List<dynamic> productTags;
   List<dynamic> imageListUrls;
   String pdfUrl;

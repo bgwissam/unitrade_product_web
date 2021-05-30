@@ -61,6 +61,7 @@ class _ProductTileState extends State<ProductTile> {
   String imageUrl;
   List<String> paintList = [];
   List<String> woodList = [];
+  var stockChildren = <Widget>[];
   String placeHolderImage = 'images/placeholder.png';
   @override
   void initState() {
@@ -154,6 +155,7 @@ class _ProductTileState extends State<ProductTile> {
       widget.product.inventory.forEach((key, value) {
         if (value != 0) {
           itemStock = {key: value};
+          stockChildren.add(Text('$key: $value'));
         }
       });
     return InkWell(
@@ -234,21 +236,15 @@ class _ProductTileState extends State<ProductTile> {
               ),
             ),
             //Stock field
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  if (itemStock.isNotEmpty)
-                    for (var i in itemStock.entries)
-                      Text(
-                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
-                        style: textStyle1,
-                        textAlign: TextAlign.center,
-                      )
-                ]),
-              ),
-            ),
+            itemStock.isNotEmpty
+                ? Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(children: stockChildren),
+                    ),
+                  )
+                : SizedBox.shrink(),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(flex: 1, child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -265,6 +261,7 @@ class _ProductTileState extends State<ProductTile> {
       widget.woodProduct.inventory.forEach((key, value) {
         if (value != 0) {
           itemStock = {key: value};
+          stockChildren.add(Text('$key: $value'));
         }
       });
 
@@ -337,21 +334,15 @@ class _ProductTileState extends State<ProductTile> {
               ),
             ),
             //Stock field
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  if (itemStock.isNotEmpty)
-                    for (var i in itemStock.entries)
-                      Text(
-                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
-                        style: textStyle1,
-                        textAlign: TextAlign.center,
-                      )
-                ]),
-              ),
-            ),
+            itemStock.isNotEmpty
+                ? Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(children: stockChildren),
+                    ),
+                  )
+                : SizedBox.shrink(),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -368,6 +359,7 @@ class _ProductTileState extends State<ProductTile> {
       widget.woodProduct.inventory.forEach((key, value) {
         if (value != 0) {
           itemStock = {key: value};
+          stockChildren.add(Text('$key: $value'));
         }
       });
     return InkWell(
@@ -445,21 +437,15 @@ class _ProductTileState extends State<ProductTile> {
               ),
             ),
             //Stock field
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  if (itemStock.isNotEmpty)
-                    for (var i in itemStock.entries)
-                      Text(
-                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
-                        style: textStyle1,
-                        textAlign: TextAlign.center,
-                      )
-                ]),
-              ),
-            ),
+            itemStock.isNotEmpty
+                ? Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(children: stockChildren),
+                    ),
+                  )
+                : SizedBox.shrink(),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -538,6 +524,7 @@ class _ProductTileState extends State<ProductTile> {
       widget.accessoriesProduct.inventory.forEach((key, value) {
         if (value != 0) {
           itemStock = {key: value};
+          stockChildren.add(Text('$key: $value'));
         }
       });
 
@@ -625,21 +612,15 @@ class _ProductTileState extends State<ProductTile> {
               ),
             ),
             //Stock field
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  if (itemStock.isNotEmpty)
-                    for (var i in itemStock.entries)
-                      Text(
-                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
-                        style: textStyle1,
-                        textAlign: TextAlign.center,
-                      )
-                ]),
-              ),
-            ),
+            itemStock.isNotEmpty
+                ? Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(children: stockChildren),
+                    ),
+                  )
+                : SizedBox.shrink(),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()
@@ -656,6 +637,7 @@ class _ProductTileState extends State<ProductTile> {
       widget.machineProduct.inventory.forEach((key, value) {
         if (value != 0) {
           itemStock = {key: value};
+          stockChildren.add(Text('$key: $value'));
         }
       });
 
@@ -740,21 +722,15 @@ class _ProductTileState extends State<ProductTile> {
               ),
             ),
             //Stock field
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  if (itemStock.isNotEmpty)
-                    for (var i in itemStock.entries)
-                      Text(
-                        i.value != 0 ? '${i.key} Stock: ${i.value}' : '',
-                        style: textStyle1,
-                        textAlign: TextAlign.center,
-                      )
-                ]),
-              ),
-            ),
+            itemStock.isNotEmpty
+                ? Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(children: stockChildren),
+                    ),
+                  )
+                : SizedBox.shrink(),
             widget.roles.contains('isSuperAdmin')
                 ? Expanded(child: _buildUpdateDeleteButton(context))
                 : SizedBox()

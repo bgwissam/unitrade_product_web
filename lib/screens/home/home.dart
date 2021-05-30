@@ -269,12 +269,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                               primary: Colors.deepOrange[500],
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterUser()));
-                            },
+                            onPressed: adminUser
+                                ? () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RegisterUser()));
+                                  }
+                                : null,
                           ),
                         ),
                         SizedBox(
@@ -297,11 +300,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                               primary: Colors.deepOrange[500],
                             ),
-                            onPressed: () async {
-                              csvFileContentList.clear();
-                              csvFileModuleList.clear();
-                              await loadCSVFromStorage();
-                            },
+                            onPressed: adminUser
+                                ? () async {
+                                    csvFileContentList.clear();
+                                    csvFileModuleList.clear();
+                                    await loadCSVFromStorage();
+                                  }
+                                : null,
                           ),
                         )
                       ]),

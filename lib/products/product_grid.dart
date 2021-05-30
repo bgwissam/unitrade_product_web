@@ -102,7 +102,11 @@ class _ProductGridState extends State<ProductsGrid> {
                   productType: widget.productType,
                   productCategory: widget.categoryType,
                   productColor: productColorMain),
-              child: productBuild());
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case NC_BUTTON:
@@ -113,7 +117,11 @@ class _ProductGridState extends State<ProductsGrid> {
                   productType: widget.productType,
                   productCategory: widget.categoryType,
                   productColor: productColorMain),
-              child: productBuild());
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case STAIN:
@@ -123,7 +131,11 @@ class _ProductGridState extends State<ProductsGrid> {
                   brandName: widget.brandName,
                   productType: widget.productType,
                   productCategory: widget.categoryType),
-              child: productBuild());
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case AC_BUTTON:
@@ -134,7 +146,11 @@ class _ProductGridState extends State<ProductsGrid> {
                   productType: widget.productType,
                   productCategory: widget.categoryType,
                   productColor: productColorMain),
-              child: productBuild());
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case THINNER:
@@ -145,184 +161,236 @@ class _ProductGridState extends State<ProductsGrid> {
                 productType: widget.productType,
                 productCategory: widget.categoryType,
               ),
-              child: productBuild());
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case EXT_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
-            value: DatabaseService().paintProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType,
-                productColor: productColorMain),
-            child: productBuild(),
-          );
+              value: DatabaseService().paintProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType,
+                  productColor: productColorMain),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case SPECIAL_PRODUCT:
         {
           return StreamProvider<List<PaintMaterial>>.value(
-            value: DatabaseService().paintProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().paintProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case GLUE_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
-            value: DatabaseService().paintProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().paintProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case SPRAY_MACHINES:
         {
           return StreamProvider<List<Machines>>.value(
-            value: DatabaseService().machineProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().machineProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case SPARE_PARTS:
         {
           return StreamProvider<List<Machines>>.value(
-            value: DatabaseService().machineProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().machineProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case MDF_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().woodProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().woodProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case FIRE_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().woodProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().woodProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case HPL_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().woodProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().woodProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case CHIP_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().woodProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().woodProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case COR_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().solidSurfaceProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().solidSurfaceProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case MON_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().solidSurfaceProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().solidSurfaceProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case COR_SINKS:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().solidSurfaceProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().solidSurfaceProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case SS_ADHESIVE_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
-            value: DatabaseService().solidSurfaceProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().solidSurfaceProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case HINGES:
         {
           return StreamProvider<List<Accessories>>.value(
-            value: DatabaseService().accessoriesProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().accessoriesProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case RUNNERS:
         {
           return StreamProvider<List<Accessories>>.value(
-            value: DatabaseService().accessoriesProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().accessoriesProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
       case FLAP:
         {
           return StreamProvider<List<Accessories>>.value(
-            value: DatabaseService().accessoriesProducts(
-                brandName: widget.brandName,
-                productType: widget.productType,
-                productCategory: widget.categoryType),
-            child: productBuild(),
-          );
+              value: DatabaseService().accessoriesProducts(
+                  brandName: widget.brandName,
+                  productType: widget.productType,
+                  productCategory: widget.categoryType),
+              child: productBuild(),
+              catchError: (error, stackTrace) {
+                print('Error ($error): $stackTrace');
+                throw error;
+              });
         }
         break;
 

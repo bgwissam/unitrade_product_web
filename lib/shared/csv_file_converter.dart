@@ -150,73 +150,81 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       String businessLine = row['Business Line'];
       String itemCode = row['Item Code'];
       String city = row['City'];
+      String brand = row['Vendor'];
       String inv = row['Inventory on Hand'];
       switch (businessLine) {
         case '212003':
           businessUnit = 'wood';
           break;
         case '212004':
-          businessUnit = 'paint';
+          if (brand != 'LARIUS')
+            businessUnit = 'paint';
+          else
+            businessUnit = 'machines';
           break;
         case '212005':
           businessUnit = 'accessories';
           break;
-        case '2120006':
+        case '212006':
           businessUnit = 'solid';
           break;
+        default:
+          businessUnit = null;
       }
-      //get the item from the database
-      await FirebaseFirestore.instance
-          .collection(businessUnit)
-          .where('itemCode', isEqualTo: itemCode)
-          .get()
-          .then((value) {
-        if (value.docs.length == 0) {
-          //Will add the codes that are missing in our database to add them later
-          if (!missingCodes.contains(itemCode)) {
-            missingCodes.add(itemCode);
-            csvConversionFile.add(missingCodes);
-          }
-        } else {
-          //_updateData(e.id, businessUnit, row['Inventory on Hand']);
-          var result = value.docs.map((e) {
-            return e;
-          });
-          result.forEach((element) {
-            var invMap = new Map();
-            if (element.data()['inventory'] != null) {
-              invMap = element.data()['inventory'];
+      if (businessUnit != null) {
+        //get the item from the database
+        await FirebaseFirestore.instance
+            .collection(businessUnit)
+            .where('itemCode', isEqualTo: itemCode)
+            .get()
+            .then((value) {
+          if (value.docs.length == 0) {
+            //Will add the codes that are missing in our database to add them later
+            if (!missingCodes.contains(itemCode)) {
+              missingCodes.add(itemCode);
+              csvConversionFile.add(missingCodes);
+            }
+          } else {
+            //_updateData(e.id, businessUnit, row['Inventory on Hand']);
+            var result = value.docs.map((e) {
+              return e;
+            });
+            result.forEach((element) {
+              var invMap = new Map();
+              if (element.data()['inventory'] != null) {
+                invMap = element.data()['inventory'];
 
-              //check if map contains key
-              if (invMap.containsKey(city)) {
-                //If the current inventory doesn't match the one in the database
-                if (inv != invMap[city].toString()) {
+                //check if map contains key
+                if (invMap.containsKey(city)) {
+                  //If the current inventory doesn't match the one in the database
+                  if (inv != invMap[city].toString()) {
+                    setState(() {
+                      _itemsUpdated++;
+                    });
+                    _updateData(element.id, businessUnit, int.parse(inv), city);
+                  }
+                }
+                //If current key doesn't match any key in our database
+                else {
                   setState(() {
                     _itemsUpdated++;
                   });
                   _updateData(element.id, businessUnit, int.parse(inv), city);
                 }
-              }
-              //If current key doesn't match any key in our database
-              else {
-                setState(() {
-                  _itemsUpdated++;
-                });
+              } else {
+                //Add the field to the current item code
                 _updateData(element.id, businessUnit, int.parse(inv), city);
               }
-            } else {
-              //Add the field to the current item code
-              _updateData(element.id, businessUnit, int.parse(inv), city);
-            }
-          });
-          return result;
-        }
-      }).onError((error, stackTrace) {
-        print('An error occured with item ($itemCode): $error, $stackTrace');
-        return error;
-      }).catchError((error) {
-        print('An error occured obtaining data for item: $itemCode');
-      });
+            });
+            return result;
+          }
+        }).onError((error, stackTrace) {
+          print('An error occured with item ($itemCode): $error, $stackTrace');
+          return error;
+        }).catchError((error) {
+          print('An error occured obtaining data for item: $itemCode');
+        });
+      }
     }
     //will end the loading window once the whole file is updated
     setState(() {
@@ -265,7 +273,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
     final url = html.Url.createObjectUrlFromBlob(blob);
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
-      ..style.display = 'none'
+      ..style.display = 'table'
       ..download = 'missing_items.csv';
 
     html.document.body.children.add(anchor);
