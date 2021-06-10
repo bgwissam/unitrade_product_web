@@ -175,7 +175,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
         //get the item from the database
         await FirebaseFirestore.instance
             .collection(businessUnit)
-            .where('itemCode', isEqualTo: itemCode)
+            .where('itemCode', isEqualTo: itemCode.trim())
             .get()
             .then((value) {
           if (value.docs.length == 0) {

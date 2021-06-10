@@ -399,6 +399,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           errorTitle = 'Range Error (Index)';
           errorContent =
               'There seems to be a comma in one of the cells, please remove then upload';
+        } else {
+          errorTitle = 'Unknown error';
+          errorContent = 'Please check with admin: $e';
         }
 
         showDialog(

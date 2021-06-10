@@ -12,6 +12,7 @@ class AuthService {
   localUser.UserData _userFromFirebaseUser(User user) {
     return user != null ? localUser.UserData(uid: user.uid) : null;
   }
+
   //Verify user account
   userFromFirebaseVerification(String emailAddress) async {
     User user = _auth.currentUser;
@@ -21,7 +22,6 @@ class AuthService {
     } catch (e) {
       print('${this.runtimeType} sending verification failed: $e');
     }
-
   }
 
   //auth change user screen
@@ -35,14 +35,15 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password);
       User user = result.user;
-      
-      if (user.emailVerified) {
-        print('${this.runtimeType} current user is verified ${user.uid}');
-        return 'User is verified';
-      } else {
-        print('${this.runtimeType} current user is not verified ${user.uid}');
-        return 'User not verified';
-      }
+
+      // if (user.emailVerified) {
+      //   print('${this.runtimeType} current user is verified ${user.uid}');
+      //   return 'User is verified';
+      // } else {
+      //   print('${this.runtimeType} current user is not verified ${user.uid}');
+      //   return 'User not verified';
+      // }
+      return 'User is verified';
     } catch (e) {
       return e.toString();
     }
