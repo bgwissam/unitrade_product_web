@@ -211,3 +211,6 @@ const String NOT_AUTHORIZED =
 //CSV converter
 const String UPDATE_DETAILS = 'Update Result';
 const String DOWNLOAD_FILE = 'Download';
+
+//Google map section
+const String CLIENT_MAP = 'Client Map';

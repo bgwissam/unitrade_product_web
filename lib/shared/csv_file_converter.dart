@@ -181,7 +181,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
           if (value.docs.length == 0) {
             //Will add the codes that are missing in our database to add them later
             if (!missingCodes.contains(itemCode)) {
-              missingCodes.add(itemCode);
+              missingCodes.add('$itemCode, $businessLine, $inv \n');
               csvConversionFile.add(missingCodes);
             }
           } else {

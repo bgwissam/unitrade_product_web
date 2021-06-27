@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
+import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
@@ -305,6 +306,37 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     csvFileContentList.clear();
                                     csvFileModuleList.clear();
                                     await loadCSVFromStorage();
+                                  }
+                                : null,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        //View location on google map
+                        Container(
+                          height: height,
+                          width: width,
+                          child: ElevatedButton(
+                            child: Text(
+                              CLIENT_MAP,
+                              style: textStyle2,
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                side: BorderSide(color: Colors.black),
+                              ),
+                              primary: Colors.deepOrange[500],
+                            ),
+                            onPressed: adminUser
+                                ? () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                GoogleMapLocation()));
                                   }
                                 : null,
                           ),
