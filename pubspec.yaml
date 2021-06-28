@@ -42,9 +42,10 @@ dependencies:
   country_pickers: 
   csv: 
   json_serializable:
-  google_maps_flutter:
-  google_maps_flutter_web:
-  google_maps:
+  google_maps_flutter: any
+  geolocator: any
+  google_maps_place_picker: any
+  google_maps_webservice:
   
 dev_dependencies:
   flutter_test:

@@ -97,6 +97,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case PU_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -112,6 +113,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case NC_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -127,6 +129,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case STAIN:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -141,6 +144,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case AC_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -156,6 +160,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case THINNER:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                 brandName: widget.brandName,
                 productType: widget.productType,
@@ -171,6 +176,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case EXT_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -186,6 +192,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case SPECIAL_PRODUCT:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -200,6 +207,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case GLUE_BUTTON:
         {
           return StreamProvider<List<PaintMaterial>>.value(
+              initialData: null,
               value: DatabaseService().paintProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -214,6 +222,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case SPRAY_MACHINES:
         {
           return StreamProvider<List<Machines>>.value(
+              initialData: null,
               value: DatabaseService().machineProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -228,6 +237,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case SPARE_PARTS:
         {
           return StreamProvider<List<Machines>>.value(
+              initialData: null,
               value: DatabaseService().machineProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -242,6 +252,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case MDF_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().woodProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -256,6 +267,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case FIRE_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().woodProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -270,6 +282,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case HPL_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().woodProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -284,6 +297,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case CHIP_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().woodProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -298,6 +312,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case COR_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().solidSurfaceProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -312,6 +327,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case MON_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().solidSurfaceProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -326,6 +342,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case COR_SINKS:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().solidSurfaceProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -340,6 +357,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case SS_ADHESIVE_BUTTON:
         {
           return StreamProvider<List<WoodProduct>>.value(
+              initialData: null,
               value: DatabaseService().solidSurfaceProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -354,6 +372,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case HINGES:
         {
           return StreamProvider<List<Accessories>>.value(
+              initialData: null,
               value: DatabaseService().accessoriesProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -368,6 +387,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case RUNNERS:
         {
           return StreamProvider<List<Accessories>>.value(
+              initialData: null,
               value: DatabaseService().accessoriesProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
@@ -382,6 +402,7 @@ class _ProductGridState extends State<ProductsGrid> {
       case FLAP:
         {
           return StreamProvider<List<Accessories>>.value(
+              initialData: null,
               value: DatabaseService().accessoriesProducts(
                   brandName: widget.brandName,
                   productType: widget.productType,
