@@ -32,7 +32,7 @@ const textStyle2 = TextStyle(
     fontSize: 36.0,
     fontFamily: 'San Francisco',
     fontWeight: FontWeight.bold,
-    color: Colors.white);
+    color: Colors.black);
 
 const textStyle3 = TextStyle(
     fontSize: 20.0,

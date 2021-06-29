@@ -142,6 +142,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
     String businessUnit;
     List<String> missingCodes = [];
     List<List<String>> csvConversionFile = [];
+    missingCodes.add('Item Code, Business Line, Inventory on Hand\n');
     //loop over the maplist
     for (var row in widget.mapList) {
       setState(() {
@@ -152,78 +153,87 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       String city = row['City'];
       String brand = row['Vendor'];
       String inv = row['Inventory on Hand'];
-      switch (businessLine) {
-        case '212003':
-          businessUnit = 'wood';
-          break;
-        case '212004':
-          if (brand != 'LARIUS')
-            businessUnit = 'paint';
-          else
-            businessUnit = 'machines';
-          break;
-        case '212005':
-          businessUnit = 'accessories';
-          break;
-        case '212006':
-          businessUnit = 'solid';
-          break;
-        default:
-          businessUnit = null;
-      }
-      if (businessUnit != null) {
-        //get the item from the database
-        await FirebaseFirestore.instance
-            .collection(businessUnit)
-            .where('itemCode', isEqualTo: itemCode.trim())
-            .get()
-            .then((value) {
-          if (value.docs.length == 0) {
-            //Will add the codes that are missing in our database to add them later
-            if (!missingCodes.contains(itemCode)) {
-              missingCodes.add('$itemCode, $businessLine, $inv \n');
-              csvConversionFile.add(missingCodes);
-            }
-          } else {
-            //_updateData(e.id, businessUnit, row['Inventory on Hand']);
-            var result = value.docs.map((e) {
-              return e;
-            });
-            result.forEach((element) {
-              var invMap = new Map();
-              if (element.data()['inventory'] != null) {
-                invMap = element.data()['inventory'];
+      print('the city is: $city');
+      if (city == 'RIYADH' || city == 'KHO' || city == 'JED') {
+        switch (businessLine) {
+          case '212003':
+            businessUnit = 'wood';
+            break;
+          case '212004':
+            if (brand != 'LARIUS')
+              businessUnit = 'paint';
+            else
+              businessUnit = 'machines';
+            break;
+          case '212005':
+            businessUnit = 'accessories';
+            break;
+          case '212006':
+            businessUnit = 'solid';
+            break;
+          default:
+            businessUnit = null;
+        }
+        if (businessUnit != null) {
+          //get the item from the database
+          await FirebaseFirestore.instance
+              .collection(businessUnit)
+              .where('itemCode', isEqualTo: itemCode.trim())
+              .get()
+              .then((value) {
+            if (value.docs.length == 0) {
+              //Will add the codes that are missing in our database to add them later
+              if (!missingCodes.contains(itemCode)) {
+                missingCodes.add('$itemCode, $businessLine, $inv\n');
+                csvConversionFile.add(missingCodes);
+              }
+            } else {
+              //_updateData(e.id, businessUnit, row['Inventory on Hand']);
+              var result = value.docs.map((e) {
+                return e;
+              });
+              result.forEach((element) {
+                var invMap = new Map();
+                if (element.data()['inventory'] != null) {
+                  invMap = element.data()['inventory'];
 
-                //check if map contains key
-                if (invMap.containsKey(city)) {
-                  //If the current inventory doesn't match the one in the database
-                  if (inv != invMap[city].toString()) {
+                  //check if map contains key
+                  if (invMap.containsKey(city)) {
+                    //If the current inventory doesn't match the one in the database
+                    if (inv != invMap[city].toString()) {
+                      setState(() {
+                        _itemsUpdated++;
+                      });
+                      _updateData(
+                          element.id, businessUnit, int.parse(inv), city);
+                    }
+                  }
+                  //If current key doesn't match any key in our database
+                  else {
                     setState(() {
                       _itemsUpdated++;
                     });
                     _updateData(element.id, businessUnit, int.parse(inv), city);
                   }
-                }
-                //If current key doesn't match any key in our database
-                else {
-                  setState(() {
-                    _itemsUpdated++;
-                  });
+                } else {
+                  //Add the field to the current item code
                   _updateData(element.id, businessUnit, int.parse(inv), city);
                 }
-              } else {
-                //Add the field to the current item code
-                _updateData(element.id, businessUnit, int.parse(inv), city);
-              }
-            });
-            return result;
-          }
-        }).onError((error, stackTrace) {
-          print('An error occured with item ($itemCode): $error, $stackTrace');
-          return error;
-        }).catchError((error) {
-          print('An error occured obtaining data for item: $itemCode');
-        });
+              });
+              return result;
+            }
+          }).onError((error, stackTrace) {
+            print(
+                'An error occured with item ($itemCode): $error, $stackTrace');
+            return error;
+          }).catchError((error) {
+            print('An error occured obtaining data for item: $itemCode');
+          });
+        }
+      } //end if city check if else statement
+      else {
+        _showDialogPlatform('City Field Issue',
+            'The city field should contain either RIYADH, KHO, or JED. Any other value will not be accepted');
       }
     }
     //will end the loading window once the whole file is updated
@@ -283,5 +293,25 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
     //clean up
     html.document.body.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
+  }
+
+  Widget _showDialogPlatform(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text(OK_BUTTON),
+              ),
+            ],
+          );
+        });
   }
 }
