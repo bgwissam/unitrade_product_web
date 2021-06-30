@@ -89,19 +89,17 @@ class _ProductStreamerState extends State<ProductStreamer>
   }
 
   _getProductCategories(String brandName) async {
-    await db.brandCollection
+    var result = await db.brandCollection
         .where('brandName', isEqualTo: brandName)
         .get()
-        .then((value) {
-      value.docs.map((e) {
-        print(e.data()['category']);
-        categories = e.data()['category'];
-        return categories;
-      });
+        .then(
+          (value) => value.docs.map((e) {
+            categories = e.data()['category'];
+            return e.data()['category'];
+          }).toList(),
+        );
 
-      print(categories);
-      return categories;
-    });
+    return result;
   }
 
   Widget _buildPaintWidget() {
@@ -117,19 +115,23 @@ class _ProductStreamerState extends State<ProductStreamer>
               child: InkWell(
                 onTap: () async {
                   if (widget.roles.isNotEmpty) {
-                    await _getProductCategories(SAYERLACK_BRAND);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductType(
-                          productType: 'COATING',
-                          brandName: SAYERLACK_BRAND,
-                          user: user,
-                          roles: roles,
-                          category: categories,
+                    var result = await _getProductCategories(SAYERLACK_BRAND);
+                    print(
+                        'the future result: ${result.runtimeType} result: $categories}');
+                    if (result != null) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductType(
+                            productType: 'COATING',
+                            brandName: SAYERLACK_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }
                 },
                 child: Container(

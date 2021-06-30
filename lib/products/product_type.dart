@@ -9,7 +9,7 @@ class ProductType extends StatefulWidget {
   final String brandName;
   final UserData user;
   final List<dynamic> roles;
-  final List<String> category;
+  final List<dynamic> category;
   ProductType(
       {this.productType, this.brandName, this.user, this.roles, this.category});
   @override
@@ -32,6 +32,8 @@ class _ProductTypeState extends State<ProductType> {
   }
 
   Widget _buildProductType() {
+    print(
+        'The category: ${widget.category} productType: ${widget.productType}');
     if (widget.productType == COATINGS && widget.category.isNotEmpty)
       return SingleChildScrollView(
         child: Padding(
@@ -102,7 +104,7 @@ class _ProductTypeState extends State<ProductType> {
                               roles: widget.roles,
                               brandName: widget.brandName,
                               productType: TAB_PAINT_TEXT,
-                              categoryType: widget.category[index],
+                              categoryType: widget.category[index].toString(),
                             ))),
                 child: Container(
                   padding: EdgeInsets.all(5.0),
