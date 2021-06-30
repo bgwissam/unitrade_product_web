@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_type.dart';
+import 'package:unitrade_web_v2/services/database.dart';
+import 'package:unitrade_web_v2/shared/dropdownLists.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
 class ProductStreamer extends StatefulWidget {
@@ -31,8 +33,9 @@ class _ProductStreamerState extends State<ProductStreamer>
   UserData user;
   double distanceBetweenInkWells = 10.0;
   TabController _tabController;
-
+  DatabaseService db = DatabaseService();
   double inkWellHeight = 120.0;
+  var categories = [];
   void initState() {
     super.initState();
     _tabController = new TabController(length: 4, vsync: this);
@@ -85,6 +88,22 @@ class _ProductStreamerState extends State<ProductStreamer>
     );
   }
 
+  _getProductCategories(String brandName) async {
+    await db.brandCollection
+        .where('brandName', isEqualTo: brandName)
+        .get()
+        .then((value) {
+      value.docs.map((e) {
+        print(e.data()['category']);
+        categories = e.data()['category'];
+        return categories;
+      });
+
+      print(categories);
+      return categories;
+    });
+  }
+
   Widget _buildPaintWidget() {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
@@ -96,23 +115,29 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    await _getProductCategories(SAYERLACK_BRAND);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'COATING',
-                                brandName: SAYERLACK_BRAND,
-                                user: user,
-                                roles: roles)));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductType(
+                          productType: 'COATING',
+                          brandName: SAYERLACK_BRAND,
+                          user: user,
+                          roles: roles,
+                          category: categories,
+                        ),
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/sayerlack_logo.jpg'),
                 ),
@@ -128,20 +153,24 @@ class _ProductStreamerState extends State<ProductStreamer>
                 onTap: () {
                   if (widget.roles.isNotEmpty)
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'COATING',
-                                brandName: EVI_BRAND,
-                                user: user,
-                                roles: roles)));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductType(
+                          productType: 'COATING',
+                          brandName: EVI_BRAND,
+                          user: user,
+                          roles: roles,
+                          category: categories,
+                        ),
+                      ),
+                    );
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/evi_logo.jpg'),
                 ),
@@ -170,7 +199,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/unicol_logo.png'),
                 ),
@@ -199,7 +228,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/larius-logo.jpg'),
                 ),
@@ -238,7 +267,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/halspan.jpg'),
                 ),
@@ -267,7 +296,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/finsa.jpg'),
                 ),
@@ -296,7 +325,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/sonae.jpg'),
                 ),
@@ -325,7 +354,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/linex-logo.jpg'),
                 ),
@@ -354,7 +383,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/formica.jpg'),
                 ),
@@ -393,7 +422,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/corian.jpg'),
                 ),
@@ -422,7 +451,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/montelli.jpg'),
                 ),
@@ -464,7 +493,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/salice.jpg'),
                 ),
@@ -493,7 +522,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[500]),
                       borderRadius: BorderRadius.circular(25.0)),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/indaux.jpg'),
                 ),

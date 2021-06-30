@@ -39,3 +39,10 @@ const textStyle3 = TextStyle(
     fontFamily: 'Lato',
     fontWeight: FontWeight.bold,
     color: Colors.orange);
+
+const textStyle4 = TextStyle(
+  fontSize: 22.0,
+  fontFamily: 'Lato',
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+);

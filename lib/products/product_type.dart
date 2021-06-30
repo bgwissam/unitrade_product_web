@@ -9,16 +9,14 @@ class ProductType extends StatefulWidget {
   final String brandName;
   final UserData user;
   final List<dynamic> roles;
-  ProductType({this.productType, this.brandName, this.user, this.roles});
+  final List<String> category;
+  ProductType(
+      {this.productType, this.brandName, this.user, this.roles, this.category});
   @override
   _ProductTypeState createState() => _ProductTypeState();
 }
 
 class _ProductTypeState extends State<ProductType> {
-  void initState() {
-    super.initState();
-  }
-
   double inkWellWidth = 50.0;
   double inkWellHeight = 50.0;
   double sizedBoxDistance = 25.0;
@@ -34,7 +32,7 @@ class _ProductTypeState extends State<ProductType> {
   }
 
   Widget _buildProductType() {
-    if (widget.productType == COATINGS)
+    if (widget.productType == COATINGS && widget.category.isNotEmpty)
       return SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
@@ -67,15 +65,14 @@ class _ProductTypeState extends State<ProductType> {
           child: _buildAccessoriesListType(),
         ),
       );
-    else if(widget.productType == MACHINES) {
+    else if (widget.productType == MACHINES) {
       return SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
           child: _buildSprayMachineUnit(),
         ),
       );
-    }
-    else {
+    } else {
       return Container(
         child: Text('An Error occured, check with Admin'),
       );
@@ -83,238 +80,280 @@ class _ProductTypeState extends State<ProductType> {
   }
 
   Widget _buildPaintListType() {
-    return GridView.count(
-      mainAxisSpacing: 40.0,
-      crossAxisSpacing: 40.0,
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      crossAxisCount: 5,
-      children: [
-        //PU Paint
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                brandName: widget.brandName,
-                                productType: TAB_PAINT_TEXT,
-                                categoryType: PU_BUTTON,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      PU_BUTTON,
-                      style: inkWellText,
-                    )),
-                  ),
+    return Container(
+      height: MediaQuery.of(context).size.height - 100,
+      width: MediaQuery.of(context).size.width,
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 1,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          itemCount: widget.category.length,
+          itemBuilder: (context, index) {
+            return Container(
+              child: InkWell(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductsGrid(
+                              user: widget.user,
+                              roles: widget.roles,
+                              brandName: widget.brandName,
+                              productType: TAB_PAINT_TEXT,
+                              categoryType: widget.category[index],
+                            ))),
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      border: Border.all(color: Colors.grey[500]),
+                      borderRadius: BorderRadius.circular(25.0)),
+                  width: inkWellWidth,
+                  height: inkWellHeight,
+                  child: Center(
+                      child: Text(
+                    widget.category[index],
+                    style: inkWellText,
+                  )),
                 ),
-              )
-            : Container(),
-
-        //NC Paint
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                brandName: widget.brandName,
-                                productType: TAB_PAINT_TEXT,
-                                categoryType: NC_BUTTON,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      NC_BUTTON,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-
-        //Stain
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                productType: TAB_PAINT_TEXT,
-                                brandName: widget.brandName,
-                                categoryType: STAIN,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      STAIN,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-
-        //Thinner
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                productType: TAB_PAINT_TEXT,
-                                brandName: widget.brandName,
-                                categoryType: THINNER,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      THINNER,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-
-        //Exterior Paint
-        widget.productType == 'COATING'
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                productType: TAB_PAINT_TEXT,
-                                brandName: widget.brandName,
-                                categoryType: EXT_BUTTON,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      EXT_BUTTON,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-
-        //Acrylic Paint
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                productType: TAB_PAINT_TEXT,
-                                brandName: widget.brandName,
-                                categoryType: AC_BUTTON,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      AC_BUTTON,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-
-        //Special Paint
-        widget.productType == COATINGS
-            ? Container(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductsGrid(
-                                user: widget.user,
-                                roles: widget.roles,
-                                productType: TAB_PAINT_TEXT,
-                                brandName: widget.brandName,
-                                categoryType: SPECIAL_PRODUCT,
-                              ))),
-                  child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        border: Border.all(color: Colors.grey[500]),
-                        borderRadius: BorderRadius.circular(25.0)),
-                    width: inkWellWidth,
-                    height: inkWellHeight,
-                    child: Center(
-                        child: Text(
-                      SPECIAL_PRODUCT,
-                      style: inkWellText,
-                    )),
-                  ),
-                ),
-              )
-            : Container(),
-      ],
+              ),
+            );
+          }),
     );
+    // return GridView.count(
+    //   mainAxisSpacing: 40.0,
+    //   crossAxisSpacing: 40.0,
+    //   scrollDirection: Axis.vertical,
+    //   shrinkWrap: true,
+    //   crossAxisCount: 5,
+    //   children: [
+    //     //PU Paint
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             brandName: widget.brandName,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             categoryType: PU_BUTTON,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   PU_BUTTON,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //NC Paint
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             brandName: widget.brandName,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             categoryType: NC_BUTTON,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   NC_BUTTON,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //Stain
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             brandName: widget.brandName,
+    //                             categoryType: STAIN,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   STAIN,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //Thinner
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             brandName: widget.brandName,
+    //                             categoryType: THINNER,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   THINNER,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //Exterior Paint
+    //     widget.productType == 'COATING'
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             brandName: widget.brandName,
+    //                             categoryType: EXT_BUTTON,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   EXT_BUTTON,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //Acrylic Paint
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             brandName: widget.brandName,
+    //                             categoryType: AC_BUTTON,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   AC_BUTTON,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+
+    //     //Special Paint
+    //     widget.productType == COATINGS
+    //         ? Container(
+    //             child: InkWell(
+    //               onTap: () => Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                       builder: (context) => ProductsGrid(
+    //                             user: widget.user,
+    //                             roles: widget.roles,
+    //                             productType: TAB_PAINT_TEXT,
+    //                             brandName: widget.brandName,
+    //                             categoryType: SPECIAL_PRODUCT,
+    //                           ))),
+    //               child: Container(
+    //                 padding: EdgeInsets.all(5.0),
+    //                 decoration: BoxDecoration(
+    //                     color: Colors.grey[300],
+    //                     border: Border.all(color: Colors.grey[500]),
+    //                     borderRadius: BorderRadius.circular(25.0)),
+    //                 width: inkWellWidth,
+    //                 height: inkWellHeight,
+    //                 child: Center(
+    //                     child: Text(
+    //                   SPECIAL_PRODUCT,
+    //                   style: inkWellText,
+    //                 )),
+    //               ),
+    //             ),
+    //           )
+    //         : Container(),
+    //   ],
+    // );
   }
 
   Widget _buildAdhesiveListType() {
@@ -670,8 +709,8 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
-            //Runners
-            widget.productType == ACCESSORIES
+        //Runners
+        widget.productType == ACCESSORIES
             ? Container(
                 child: InkWell(
                   onTap: () => Navigator.push(
@@ -699,8 +738,8 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
-            //Flap Mechanism
-            widget.productType == ACCESSORIES
+        //Flap Mechanism
+        widget.productType == ACCESSORIES
             ? Container(
                 child: InkWell(
                   onTap: () => Navigator.push(
@@ -728,9 +767,6 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
-
-
-
       ],
     );
   }
@@ -775,8 +811,8 @@ class _ProductTypeState extends State<ProductType> {
                 ),
               )
             : Container(),
-            //Spare Parts
-             widget.productType == MACHINES
+        //Spare Parts
+        widget.productType == MACHINES
             ? Container(
                 child: InkWell(
                   onTap: () => Navigator.push(
@@ -809,5 +845,4 @@ class _ProductTypeState extends State<ProductType> {
       ],
     );
   }
-
 }

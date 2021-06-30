@@ -133,217 +133,377 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
         child: Center(
           child: Container(
-            decoration: BoxDecoration(border: Border.all()),
             width: MediaQuery.of(context).size.width - 200,
-            child: GridView.count(
-                primary: false,
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                mainAxisSpacing: 50,
-                crossAxisSpacing: 70,
-                children: [
-                  //viewing current products
-                  Container(
-                    height: height,
-                    width: width,
-                    child: Card(
-                      color: Colors.grey[300],
-                      elevation: _elevation,
-                      child: InkWell(
-                        child: Column(children: [
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              alignment: Alignment.bottomLeft,
-                              color: Colors.amberAccent,
-                              child: Text(PRODUCTS,
-                                  style: textStyle2,
-                                  textAlign: TextAlign.start),
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 8,
+                  child: Text(
+                    'The following page presents the options under which you can view, add, and change the database concerning the Uni Products apps for Unitrade Company.',
+                    style: textStyle4,
+                  ),
+                ),
+                Divider(
+                  thickness: 3.0,
+                  height: 10.0,
+                  color: Colors.black,
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height - 210,
+                  child: GridView.count(
+                      primary: false,
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.85,
+                      mainAxisSpacing: 50,
+                      crossAxisSpacing: 110,
+                      shrinkWrap: true,
+                      children: [
+                        //viewing current products
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            color: Colors.grey[300],
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 10),
+                                    alignment: Alignment.bottomLeft,
+                                    color: Colors.amberAccent,
+                                    child: Text(PRODUCTS,
+                                        style: textStyle2,
+                                        textAlign: TextAlign.start),
+                                  ),
+                                ),
+                                Divider(
+                                  height: 3.0,
+                                  thickness: 3.0,
+                                  color: Colors.black,
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    color: Colors.white,
+                                    alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                        'Products section will present all the products available at our company.',
+                                        textAlign: TextAlign.start),
+                                  ),
+                                ),
+                              ]),
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductStreamer(roles: roles)));
+                              },
                             ),
                           ),
-                          Divider(
-                            thickness: 1.0,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              color: Colors.white,
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  'Products section will present all the products available at our company.',
-                                  textAlign: TextAlign.center),
+                        ),
+
+                        //Adding a product
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              onTap: adminUser
+                                  ? () async {
+                                      addProduct();
+                                    }
+                                  : null,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(ADD_PRODUCT,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'This section will allow you to add in a new product for any category and brand you specify.',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ]),
-                        onTap: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductStreamer(roles: roles)));
-                        },
-                      ),
-                    ),
-                  ),
-
-                  //Adding a product
-                  Container(
-                    height: height,
-                    width: width,
-                    child: ElevatedButton(
-                      child: Text(ADD_PRODUCT,
-                          style: textStyle2, textAlign: TextAlign.center),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black),
                         ),
-                        primary: Colors.deepOrange[500],
-                      ),
-                      onPressed: adminUser
-                          ? () async {
-                              addProduct();
-                            }
-                          : null,
-                    ),
-                  ),
 
-                  //Adding a brand
-                  Container(
-                    height: height,
-                    width: width,
-                    child: RaisedButton(
-                      child: Text(
-                        ADD_BRAND,
-                        style: textStyle2,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black)),
-                      textColor: Colors.black,
-                      color: Colors.deepOrange[500],
-                      padding: EdgeInsets.all(15.0),
-                      disabledColor: Colors.grey[600],
-                      disabledElevation: 0.0,
-                      elevation: 5.0,
-                      onPressed: roles.contains('isSuperAdmin')
-                          ? () async {
-                              addBrand();
-                            }
-                          : null,
-                    ),
-                  ),
-
-                  //Viewing current brands
-                  Container(
-                    height: height,
-                    width: width,
-                    child: ElevatedButton(
-                      child: Text(
-                        VIEW_BRANDS,
-                        style: textStyle2,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black),
+                        //Adding a brand
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(ADD_BRAND,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'This section will allow you to add in a new brand, and specify the categories under which the brand will occupy',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: roles.contains('isSuperAdmin')
+                                  ? () async {
+                                      addBrand();
+                                    }
+                                  : null,
+                            ),
+                          ),
                         ),
-                        primary: Colors.deepOrange[500],
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BrandGrid(
-                                      roles: roles,
-                                    )));
-                      },
-                    ),
-                  ),
 
-                  //Register new users
-                  Container(
-                    height: height,
-                    width: width,
-                    child: ElevatedButton(
-                      child: Text(
-                        REGISTER_USER,
-                        style: textStyle2,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black),
+                        //Viewing current brands
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(VIEW_BRANDS,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'From here you can view the brands as well as edit them',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BrandGrid(
+                                              roles: roles,
+                                            )));
+                              },
+                            ),
+                          ),
                         ),
-                        primary: Colors.deepOrange[500],
-                      ),
-                      onPressed: adminUser
-                          ? () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterUser()));
-                            }
-                          : null,
-                    ),
-                  ),
 
-                  //Update stock levels
-                  Container(
-                    height: height,
-                    width: width,
-                    child: ElevatedButton(
-                      child: Text(
-                        UPDATE_STOCK,
-                        style: textStyle2,
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black),
+                        //Register new users
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(REGISTER_USER,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'Register a new user by defining the roles features in order to access the web page and the mobile app.',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: adminUser
+                                  ? () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegisterUser()));
+                                    }
+                                  : null,
+                            ),
+                          ),
                         ),
-                        primary: Colors.deepOrange[500],
-                      ),
-                      onPressed: adminUser
-                          ? () async {
-                              csvFileContentList.clear();
-                              csvFileModuleList.clear();
-                              await loadCSVFromStorage();
-                            }
-                          : null,
-                    ),
-                  ),
 
-                  //View location on google map
-                  Container(
-                    height: height,
-                    width: width,
-                    child: ElevatedButton(
-                      child: Text(
-                        CLIENT_MAP,
-                        style: textStyle2,
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.black),
+                        //Update stock levels
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(UPDATE_STOCK,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'Allows to update the stock levels for items entered in the database, however great caution should be considered by following the instractions the follow.',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: adminUser
+                                  ? () async {
+                                      csvFileContentList.clear();
+                                      csvFileModuleList.clear();
+                                      await loadCSVFromStorage();
+                                    }
+                                  : null,
+                            ),
+                          ),
                         ),
-                        primary: Colors.deepOrange[500],
-                      ),
-                      onPressed: adminUser
-                          ? () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          GoogleMapLocation()));
-                            }
-                          : null,
-                    ),
-                  )
-                ]),
+
+                        //View location on google map
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(CLIENT_MAP,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'The map will allow to view all the clients assigned to UniTrade by the sales team',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: adminUser
+                                  ? () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GoogleMapLocation()));
+                                    }
+                                  : null,
+                            ),
+                          ),
+                        )
+                      ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),
