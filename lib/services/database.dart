@@ -28,6 +28,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('accessories');
   final CollectionReference clientCollection =
       FirebaseFirestore.instance.collection('clients');
+  final CollectionReference salesPipeline =
+      FirebaseFirestore.instance.collection('sales_pipeline');
 
   //Add a new user to the users database
   Future<String> addUserData(
@@ -1224,5 +1226,40 @@ class DatabaseService {
     } catch (e) {
       print('Product could not be deleted $e');
     }
+  }
+
+  //This section will cover the sales pipeline collection
+  List<SalesPipeline> _salespiplineDataFromSnaptshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return SalesPipeline(
+        uid: doc.id,
+        clientId: doc.data()['clientId'],
+        clientName: doc.data()['clientName'],
+        visitDate: doc.data()['currentDate'],
+        salesId: doc.data()['userId'],
+        visitDetails: doc.data()['visitDetails'],
+        visitPurpose: doc.data()['visitPurpose'],
+        purposeLabel: doc.data()['purposeLabel'],
+        purposeValue: doc.data()['purposeValue'],
+        managerComments: doc.data()['managerComment'],
+      );
+    }).toList();
+  }
+
+  //Stream data per user
+  Stream<List<SalesPipeline>> userDataById({String userId}) {
+    return salesPipeline
+        .where('userId', isEqualTo: userId)
+        .orderBy('currentDate', descending: false)
+        .snapshots()
+        .map(_salespiplineDataFromSnaptshot);
+  }
+
+  //Stream data for all users
+  Stream<List<SalesPipeline>> allUsersData() {
+    return salesPipeline
+        .orderBy('currentDate', descending: false)
+        .snapshots()
+        .map(_salespiplineDataFromSnaptshot);
   }
 }
