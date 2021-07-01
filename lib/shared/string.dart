@@ -215,3 +215,6 @@ const String DOWNLOAD_FILE = 'Download';
 
 //Google map section
 const String CLIENT_MAP = 'Client Map';
+
+//Sales Pipeline
+const String SALES_PIPELINE = 'Sales Pipeline';

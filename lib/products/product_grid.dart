@@ -93,8 +93,6 @@ class _ProductGridState extends State<ProductsGrid> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'the category type: ${widget.categoryType} productType: ${widget.productType}');
     switch (widget.categoryType) {
       case PU_BUTTON:
         {
@@ -238,7 +236,6 @@ class _ProductGridState extends State<ProductsGrid> {
         break;
       case SPARE_PARTS:
         {
-          print('we are here at spare parts');
           return StreamProvider<List<Machines>>.value(
               initialData: null,
               value: DatabaseService().machineProducts(

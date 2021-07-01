@@ -9,6 +9,7 @@ import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
+import 'package:unitrade_web_v2/sales_pipeline/pipeline_grid.dart';
 import 'package:unitrade_web_v2/screens/home/product_streamer.dart';
 import 'package:unitrade_web_v2/screens/home/register.dart';
 import 'package:unitrade_web_v2/screens/home/sign_out.dart';
@@ -444,6 +445,58 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       csvFileContentList.clear();
                                       csvFileModuleList.clear();
                                       await loadCSVFromStorage();
+                                    }
+                                  : null,
+                            ),
+                          ),
+                        ),
+
+                        //Sales pipline view
+                        Container(
+                          height: height,
+                          width: width,
+                          child: Card(
+                            elevation: _elevation,
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      alignment: Alignment.bottomLeft,
+                                      color: Colors.amberAccent,
+                                      child: Text(SALES_PIPELINE,
+                                          style: textStyle2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 3.0,
+                                    thickness: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      color: Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          'Sales pipeline monitures the activity of the sales team on a daily basis',
+                                          textAlign: TextAlign.start),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: adminUser
+                                  ? () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (builder) => PipelineGrid(),
+                                        ),
+                                      );
                                     }
                                   : null,
                             ),
