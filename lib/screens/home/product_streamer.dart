@@ -89,6 +89,7 @@ class _ProductStreamerState extends State<ProductStreamer>
   }
 
   _getProductCategories(String brandName) async {
+    categories = [];
     var result = await db.brandCollection
         .where('brandName', isEqualTo: brandName)
         .get()
@@ -116,8 +117,6 @@ class _ProductStreamerState extends State<ProductStreamer>
                 onTap: () async {
                   if (widget.roles.isNotEmpty) {
                     var result = await _getProductCategories(SAYERLACK_BRAND);
-                    print(
-                        'the future result: ${result.runtimeType} result: $categories}');
                     if (result != null) {
                       await Navigator.push(
                         context,
@@ -152,20 +151,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductType(
-                          productType: 'COATING',
-                          brandName: EVI_BRAND,
-                          user: user,
-                          roles: roles,
-                          category: categories,
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(EVI_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductType(
+                            productType: 'COATING',
+                            brandName: EVI_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -185,16 +188,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(UNICOL_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'ADHESIVE',
-                                brandName: UNICOL_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: 'ADHESIVE',
+                            brandName: UNICOL_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -214,16 +225,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(LARIUS_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: MACHINES,
-                                brandName: LARIUS_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: MACHINES,
+                            brandName: LARIUS_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -253,16 +272,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: 120.0,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(HALSPAN_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'WOOD',
-                                brandName: HALSPAN_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: TAB_WOOD_TEXT,
+                            brandName: HALSPAN_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -282,16 +309,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(FINSA_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'WOOD',
-                                brandName: FINSA_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: TAB_WOOD_TEXT,
+                            brandName: FINSA_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -311,16 +346,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: 120.0,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(SONAE_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'WOOD',
-                                brandName: SONAE_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: TAB_WOOD_TEXT,
+                            brandName: SONAE_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -340,16 +383,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: 120.0,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(LINEX_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'WOOD',
-                                brandName: LINEX_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: TAB_WOOD_TEXT,
+                            brandName: LINEX_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -369,16 +420,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: 120.0,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(FORMICA_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: 'WOOD',
-                                brandName: FORMICA_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: TAB_WOOD_TEXT,
+                            brandName: FORMICA_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -408,16 +467,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(CORIAN_BRAND);
+                    if (result != null) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: SOLID_SURFACE,
-                                brandName: CORIAN_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: SOLID_SURFACE,
+                            brandName: CORIAN_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -437,16 +504,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(MONTELLI_BRAND);
+                    if (result != null) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: SOLID_SURFACE,
-                                brandName: MONTELLI_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: SOLID_SURFACE,
+                            brandName: MONTELLI_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -479,16 +554,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(SALICE_BRAND);
+                    if (result != null) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: ACCESSORIES,
-                                brandName: SALICE_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: ACCESSORIES,
+                            brandName: SALICE_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),
@@ -508,16 +591,24 @@ class _ProductStreamerState extends State<ProductStreamer>
             Container(
               height: inkWellHeight,
               child: InkWell(
-                onTap: () {
-                  if (widget.roles.isNotEmpty)
-                    Navigator.push(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(INDAUX_BRAND);
+                    if (result != null) {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProductType(
-                                productType: ACCESSORIES,
-                                brandName: INDAUX_BRAND,
-                                user: user,
-                                roles: roles)));
+                          builder: (context) => ProductType(
+                            productType: ACCESSORIES,
+                            brandName: INDAUX_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.0),

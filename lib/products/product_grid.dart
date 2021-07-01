@@ -93,6 +93,8 @@ class _ProductGridState extends State<ProductsGrid> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'the category type: ${widget.categoryType} productType: ${widget.productType}');
     switch (widget.categoryType) {
       case PU_BUTTON:
         {
@@ -236,6 +238,7 @@ class _ProductGridState extends State<ProductsGrid> {
         break;
       case SPARE_PARTS:
         {
+          print('we are here at spare parts');
           return StreamProvider<List<Machines>>.value(
               initialData: null,
               value: DatabaseService().machineProducts(
@@ -417,10 +420,19 @@ class _ProductGridState extends State<ProductsGrid> {
 
       default:
         {
-          return Container(
-            child: Center(
-                child: Text(
-                    'An unexpected Error occured in productGrid occurred')),
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(NO_PRODUCTS),
+            ),
+            body: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Card(
+                elevation: 2,
+                child: Center(
+                    child: Text(
+                        'No Products are found for this brand under this product type.')),
+              ),
+            ),
           );
         }
     }

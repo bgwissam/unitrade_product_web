@@ -55,6 +55,7 @@ const String UPDATE_STOCK = 'Update Stock';
 
 //Product Type
 const String PRODUCT_TYPE = 'Product Type';
+const String NO_PRODUCTS = 'No Products';
 
 //Product Form
 const String SELECT_PRODUCT_TYPE = 'Select product type';
@@ -129,7 +130,7 @@ const String COATINGS = 'COATING';
 const String ADHESIVE = 'ADHESIVE';
 const String WOOD = 'WOOD';
 const String SOLID_SURFACE = 'Surface';
-const String ACCESSORIES = 'ACCESSORIES';
+const String ACCESSORIES = 'Accessories';
 const String MACHINES = 'Machines';
 //Constant strings for coatings and adhesives
 const String PU_BUTTON = 'Polyurethane';
