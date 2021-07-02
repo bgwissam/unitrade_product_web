@@ -46,6 +46,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String countryOfResidence;
   String cityOfResidence;
   UserData user;
+  List<UserData> normalUsers;
   bool adminUser = false;
   double height = 20;
   double width = 10;
@@ -63,11 +64,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _getUserData();
+    _getNormalUser();
     viewProducts = false;
   }
 
   AuthService _auth = new AuthService();
-
+  DatabaseService db = new DatabaseService();
+  List<dynamic> salesTeamId = [];
+  String selectedSalesId;
+  int selectedIndex;
   //Get user details
   //get the first name of the user
   Future _getUserData() async {
@@ -98,6 +103,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         roles.contains('isAdmin') ? adminUser = true : adminUser = false;
       });
     });
+  }
+
+  //Get Normal Users to the sales pipeline
+  Future _getNormalUser() async {
+    var result = await db.unitradeCollection
+        .where('roles', arrayContains: 'isNormalUser')
+        .get()
+        .then((value) {
+      return value.docs
+          .map(
+            (e) => UserData(
+                uid: e.id,
+                firstName: e.data()['firstName'],
+                lastName: e.data()['lastName']),
+          )
+          .toList();
+    });
+    normalUsers = result;
+    return result;
   }
 
   @override
@@ -491,12 +515,94 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                               onTap: adminUser
                                   ? () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (builder) => PipelineGrid(),
-                                        ),
-                                      );
+                                      //will open a dialog to allow selecting a sales person
+                                      //after which you can view their sales activity
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return StatefulBuilder(
+                                              builder: (context, setState) {
+                                                return AlertDialog(
+                                                    title: Text(
+                                                        SELECT_SALES_PERSON),
+                                                    content: Container(
+                                                      height: 200,
+                                                      width: 800,
+                                                      child: Column(
+                                                        children: [
+                                                          Container(
+                                                            child: Text(
+                                                                'Please select a sales person from the folloing list in order to view their pipeline data'),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10.0,
+                                                          ),
+                                                          Container(
+                                                            height: 120,
+                                                            width: 700,
+                                                            decoration: BoxDecoration(
+                                                                border: Border
+                                                                    .all(),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            25)),
+                                                            child: ListView
+                                                                .builder(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    itemCount:
+                                                                        normalUsers
+                                                                            .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                                index) =>
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Container(
+                                                                                color: selectedIndex != null && selectedIndex == index ? Colors.red : Colors.white,
+                                                                                child: InkWell(
+                                                                                  child: Text('${normalUsers[index].firstName} ${normalUsers[index].lastName}'),
+                                                                                  onTap: () {
+                                                                                    setState(() {
+                                                                                      selectedIndex = index;
+                                                                                      selectedSalesId = normalUsers[index].uid;
+                                                                                    });
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            )),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () async {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (builder) =>
+                                                                  PipelineGrid(
+                                                                salesId:
+                                                                    selectedSalesId,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Text(NEXT_PAGE),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () async {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(CLOSE),
+                                                      ),
+                                                    ]);
+                                              },
+                                            );
+                                          });
                                     }
                                   : null,
                             ),

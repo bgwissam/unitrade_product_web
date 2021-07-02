@@ -218,3 +218,6 @@ const String CLIENT_MAP = 'Client Map';
 
 //Sales Pipeline
 const String SALES_PIPELINE = 'Sales Pipeline';
+const String SELECT_SALES_PERSON = 'Select a sales executive';
+const String NEXT_PAGE = 'Next';
+const String CLOSE = 'Close';

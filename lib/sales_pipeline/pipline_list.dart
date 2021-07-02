@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
@@ -41,35 +39,38 @@ class _PipelineListState extends State<PipelineList> {
         title: Text(SALES_PIPELINE),
         backgroundColor: Colors.amberAccent,
       ),
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          decoration: BoxDecoration(border: Border.all()),
-          height: MediaQuery.of(context).size.height - 50,
-          width: MediaQuery.of(context).size.width - 100,
-          child: HorizontalDataTable(
-            leftHandSideColumnWidth: 100,
-            rightHandSideColumnWidth: MediaQuery.of(context).size.width - 100,
-            isFixedHeader: true,
-            headerWidgets: _getTitleWidget(),
-            leftSideItemBuilder: _generateFirstColumn,
-            rightSideItemBuilder: _generateVisitData,
-            itemCount: widget.clientName.length,
-            rowSeparatorWidget: Divider(
-              color: Colors.black,
-              thickness: 1.0,
-            ),
-            leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-            rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-            verticalScrollbarStyle: const ScrollbarStyle(
-              isAlwaysShown: true,
-              thickness: 4.0,
-              radius: Radius.circular(5.0),
-            ),
-            horizontalScrollbarStyle: const ScrollbarStyle(
-              isAlwaysShown: true,
-              thickness: 4.0,
-              radius: Radius.circular(5.0),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(border: Border.all(width: 5.0)),
+            height: MediaQuery.of(context).size.height - 50,
+            //width: MediaQuery.of(context).size.width - 100,
+            child: HorizontalDataTable(
+              leftHandSideColumnWidth: 100,
+              rightHandSideColumnWidth: MediaQuery.of(context).size.width - 50,
+              isFixedHeader: true,
+              headerWidgets: _getTitleWidget(),
+              leftSideItemBuilder: _generateFirstColumn,
+              rightSideItemBuilder: _generateVisitData,
+              itemCount: widget.clientName.length,
+              rowSeparatorWidget: Divider(
+                color: Colors.black,
+                thickness: 1.0,
+              ),
+              leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+              rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+              verticalScrollbarStyle: const ScrollbarStyle(
+                isAlwaysShown: true,
+                thickness: 4.0,
+                radius: Radius.circular(5.0),
+              ),
+              horizontalScrollbarStyle: const ScrollbarStyle(
+                isAlwaysShown: true,
+                thickness: 4.0,
+                radius: Radius.circular(5.0),
+              ),
             ),
           ),
         ),
@@ -89,7 +90,7 @@ class _PipelineListState extends State<PipelineList> {
         Container(
           child: Text('Day $i'),
           height: MediaQuery.of(context).size.height / 10,
-          width: MediaQuery.of(context).size.width / 15,
+          width: MediaQuery.of(context).size.width / 8,
         ),
     ];
   }
@@ -110,26 +111,8 @@ class _PipelineListState extends State<PipelineList> {
         Container(
           child: Text('data of day: $i'),
           height: MediaQuery.of(context).size.height / 10,
-          width: MediaQuery.of(context).size.width / 20,
+          width: MediaQuery.of(context).size.width / 8,
         ),
-      // Container(
-      //   decoration: BoxDecoration(border: Border.all()),
-      //   child: Text('data of day 1'),
-      //   height: MediaQuery.of(context).size.height / 10,
-      //   width: MediaQuery.of(context).size.width / 20,
-      // ),
-      // Container(
-      //   child: Text('data of day 2'),
-      //   decoration: BoxDecoration(border: Border.all()),
-      //   height: MediaQuery.of(context).size.height / 10,
-      //   width: MediaQuery.of(context).size.width / 20,
-      // ),
-      // Container(
-      //   child: Text('data of day 3'),
-      //   decoration: BoxDecoration(border: Border.all()),
-      //   height: MediaQuery.of(context).size.height / 10,
-      //   width: MediaQuery.of(context).size.width / 20,
-      // ),
     ]);
   }
 

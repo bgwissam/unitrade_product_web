@@ -12,7 +12,6 @@ class PipelineGrid extends StatefulWidget {
 }
 
 class _PipelineGridState extends State<PipelineGrid> {
-  String salesId = 'xc4NbLHouwhca1JKImoUjOv1zzr2';
   Future clientList;
   @override
   void initState() {
@@ -70,7 +69,7 @@ class _PipelineGridState extends State<PipelineGrid> {
   Future _buildListViewClients() async {
     var result = await DatabaseService()
         .clientCollection
-        .where('salesInCharge', isEqualTo: salesId)
+        .where('salesInCharge', isEqualTo: widget.salesId)
         .get()
         .then(
             (value) => value.docs.map((e) => e.data()['clientName']).toList());

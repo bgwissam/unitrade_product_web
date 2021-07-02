@@ -114,6 +114,14 @@ class DatabaseService {
     return unitradeCollection.snapshots().map(_userDataFromSnapshot);
   }
 
+  //get normal users only
+  Stream<List<UserData>> getNormalUsers() {
+    return unitradeCollection
+        .where('roles', arrayContains: 'isNormalUser')
+        .snapshots()
+        .map(_userDataFromSnapshot);
+  }
+
   //This section is to manage brand data
   //add a new brand
   Future addBrandData(
