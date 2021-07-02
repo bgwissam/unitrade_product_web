@@ -122,7 +122,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProductType(
-                            productType: 'COATING',
+                            productType: TAB_PAINT_TEXT,
                             brandName: SAYERLACK_BRAND,
                             user: user,
                             roles: roles,
@@ -159,7 +159,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProductType(
-                            productType: 'COATING',
+                            productType: TAB_PAINT_TEXT,
                             brandName: EVI_BRAND,
                             user: user,
                             roles: roles,
@@ -196,7 +196,7 @@ class _ProductStreamerState extends State<ProductStreamer>
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProductType(
-                            productType: 'ADHESIVE',
+                            productType: TAB_PAINT_TEXT,
                             brandName: UNICOL_BRAND,
                             user: user,
                             roles: roles,

@@ -36,7 +36,7 @@ class _ProductTypeState extends State<ProductType> {
       return SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 50.0),
-            child: _buildPaintListType()),
+            child: _buildListType()),
       );
     } else {
       return Container(
@@ -45,7 +45,7 @@ class _ProductTypeState extends State<ProductType> {
     }
   }
 
-  Widget _buildPaintListType() {
+  Widget _buildListType() {
     return Container(
       height: MediaQuery.of(context).size.height - 100,
       width: MediaQuery.of(context).size.width,

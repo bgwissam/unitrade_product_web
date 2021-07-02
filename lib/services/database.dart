@@ -642,7 +642,6 @@ class DatabaseService {
       String productType,
       String productCategory,
       String productTags}) {
-    print('Brand: $brandName');
     return woodCollection
         .where('productBrand', isEqualTo: brandName)
         .where('productType', isEqualTo: productType)
