@@ -35,6 +35,7 @@ dependencies:
   google_maps_place_picker: any
   google_maps_webservice:
   horizontal_data_table:
+  date_util:
   
 dev_dependencies:
   flutter_test:

@@ -46,3 +46,9 @@ const textStyle4 = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
+
+const textStyle5 = TextStyle(
+    fontSize: 18.0,
+    fontFamily: 'Lato',
+    fontWeight: FontWeight.bold,
+    color: Colors.grey);

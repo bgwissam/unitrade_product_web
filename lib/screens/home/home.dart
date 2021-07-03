@@ -2,6 +2,7 @@ import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:date_util/date_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
@@ -65,6 +66,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     _getUserData();
     _getNormalUser();
+    currentYear = DateTime(now.year);
     viewProducts = false;
   }
 
@@ -73,6 +75,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List<dynamic> salesTeamId = [];
   String selectedSalesId;
   int selectedIndex;
+  int monthIndex = 0;
+  int daysInMonth = 0;
+  String selectedYear = '2021';
+  var _sizedBoxHeight = 10.0;
+  var dateUtility = DateUtil();
+  DateTime now = DateTime.now();
+  DateTime currentYear;
+  var months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   //Get user details
   //get the first name of the user
   Future _getUserData() async {
@@ -526,13 +549,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                     title: Text(
                                                         SELECT_SALES_PERSON),
                                                     content: Container(
-                                                      height: 200,
+                                                      height: 320,
                                                       width: 800,
                                                       child: Column(
                                                         children: [
                                                           Container(
                                                             child: Text(
-                                                                'Please select a sales person from the folloing list in order to view their pipeline data'),
+                                                                'Please select a sales person, month, and year from the folloing list in order to view their pipeline data'),
                                                           ),
                                                           SizedBox(
                                                             height: 10.0,
@@ -573,23 +596,143 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                                               ),
                                                                             )),
                                                           ),
+                                                          SizedBox(
+                                                            height:
+                                                                _sizedBoxHeight,
+                                                          ),
+                                                          //Select the month and year you want to view
+                                                          Container(
+                                                            height: 150.0,
+                                                            width: 750.0,
+                                                            child: Column(
+                                                              children: [
+                                                                //Select year
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                      border: Border
+                                                                          .all(),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20)),
+                                                                  height: 60.0,
+                                                                  width: 600.0,
+                                                                  child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              60.0,
+                                                                          child:
+                                                                              Text(
+                                                                            'Year: ',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                textStyle1,
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5.0,
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              60.0,
+                                                                          child:
+                                                                              TextFormField(
+                                                                            initialValue:
+                                                                                currentYear.toString().split('-')[0],
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            maxLength:
+                                                                                4,
+                                                                            onChanged:
+                                                                                (val) {
+                                                                              if (val != null)
+                                                                                selectedYear = val;
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ]),
+                                                                ),
+                                                                SizedBox(
+                                                                  height:
+                                                                      _sizedBoxHeight,
+                                                                ),
+                                                                //Select month of year
+                                                                Container(
+                                                                  height: 60.0,
+                                                                  width: 600.0,
+                                                                  child: Center(
+                                                                    child: ListView.builder(
+                                                                        shrinkWrap: true,
+                                                                        scrollDirection: Axis.horizontal,
+                                                                        itemCount: months.length,
+                                                                        itemBuilder: (context, index) {
+                                                                          return Card(
+                                                                            color: monthIndex == index
+                                                                                ? Colors.red
+                                                                                : Colors.grey,
+                                                                            elevation: monthIndex == index
+                                                                                ? 0.0
+                                                                                : 3.0,
+                                                                            child:
+                                                                                InkWell(
+                                                                              onTap: () {
+                                                                                setState(() {
+                                                                                  monthIndex = index;
+                                                                                  selectedYear != null ? daysInMonth = dateUtility.daysInMonth(index + 1, int.parse(selectedYear)) : daysInMonth = dateUtility.daysInMonth(index + 1, 2021);
+                                                                                });
+                                                                              },
+                                                                              child: Center(
+                                                                                child: Text(
+                                                                                  months[index],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        }),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
                                                     ),
                                                     actions: [
                                                       TextButton(
-                                                        onPressed: () async {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (builder) =>
-                                                                  PipelineGrid(
-                                                                salesId:
-                                                                    selectedSalesId,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
+                                                        onPressed:
+                                                            selectedIndex !=
+                                                                        null &&
+                                                                    monthIndex !=
+                                                                        0
+                                                                ? () async {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (builder) =>
+                                                                                PipelineGrid(
+                                                                          salesId:
+                                                                              selectedSalesId,
+                                                                          selectedMonth:
+                                                                              monthIndex + 1,
+                                                                          selectedYear:
+                                                                              selectedYear,
+                                                                          daysInMonth:
+                                                                              daysInMonth,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                : null,
                                                         child: Text(NEXT_PAGE),
                                                       ),
                                                       TextButton(
