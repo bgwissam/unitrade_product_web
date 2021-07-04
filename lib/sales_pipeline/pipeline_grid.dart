@@ -105,6 +105,7 @@ class _PipelineGridState extends State<PipelineGrid> {
         .then((value) {
       return value.docs.map((e) {
         return SalesPipeline(
+            salesId: e.data()['userId'],
             clientId: e.data()['clientId'],
             clientName: e.data()['clientName'],
             visitPurpose: e.data()['visitPurpose'],

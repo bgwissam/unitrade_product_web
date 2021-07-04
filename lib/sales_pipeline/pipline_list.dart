@@ -18,7 +18,9 @@ class PipelineList extends StatefulWidget {
 
 class _PipelineListState extends State<PipelineList> {
   var tableColumns = [];
-
+  List<int> visitDays = [];
+  List<dynamic> visitIds = [];
+  Widget listWidget;
   @override
   Widget build(BuildContext context) {
     return widget.clientName.isNotEmpty
@@ -37,6 +39,9 @@ class _PipelineListState extends State<PipelineList> {
   void initState() {
     super.initState();
     _populateColumn();
+    visitIds = List.generate(widget.salesData.length,
+        (index) => List.filled(widget.daysInMonth, dynamic),
+        growable: false);
   }
 
   Widget _buildMonthlySalesVisitTable() {
@@ -98,7 +103,7 @@ class _PipelineListState extends State<PipelineList> {
             textAlign: TextAlign.center,
           ),
           height: MediaQuery.of(context).size.height / 10,
-          width: MediaQuery.of(context).size.width / 40,
+          width: MediaQuery.of(context).size.width / 39,
         ),
     ];
   }
@@ -115,47 +120,33 @@ class _PipelineListState extends State<PipelineList> {
   }
 
   Widget _generateVisitData(BuildContext context, int index) {
-    List<int> visitDays = [];
-    print('The data lenght: ${widget.salesData.length}');
-    //transform the date to days
-    for (int k = 0; k < widget.salesData.length; k++) {
-      print('Time stamp: ${widget.salesData[k].visitDate}');
-      var date = DateTime.fromMillisecondsSinceEpoch(
-          widget.salesData[k].visitDate * 1000);
-      print('the date: $date');
-      print('the local date: ${date.toLocal()}');
-      // int day =
-      //     int.parse(date.toLocal().toString().split(' ')[0].split('-')[2]);
-      String client = widget.salesData[k].clientName;
-      if (widget.clientName[index] == client) {
-        //visitDays.add(day);
-        print('yes match found');
-      }
-    }
-    print('the visit days: $visitDays');
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (int i = 1; i <= widget.daysInMonth; i++)
-          InkWell(
-            onTap: () {
-              print('$index - $i');
-            },
-            child: Container(
-              child: Center(
-                child: visitDays.isNotEmpty && visitDays.contains(i)
-                    ? Icon(
-                        Icons.adjust_rounded,
-                        color: Colors.green,
-                      )
-                    : Text(''),
-              ),
-              height: MediaQuery.of(context).size.height / 10,
-              width: MediaQuery.of(context).size.width / 40,
-            ),
+        mainAxisSize: MainAxisSize.min, children: [_getRowVisits(index)]);
+  }
+
+  //Build widget to visit rows
+  Widget _getRowVisits(int index) {
+    var visits = _clientVisitsPerDay(index);
+    for (int i = 0; i <= widget.daysInMonth; i++) {
+      listWidget = InkWell(
+        onTap: () {
+          print('${widget.clientName[index]} - ${visitIds[index]} ');
+        },
+        child: Container(
+          child: Center(
+            child: visits.isNotEmpty && visits.contains(i)
+                ? Icon(
+                    Icons.adjust_rounded,
+                    color: Colors.green,
+                  )
+                : Text(''),
           ),
-      ],
-    );
+          height: MediaQuery.of(context).size.height / 10,
+          width: MediaQuery.of(context).size.width / 39,
+        ),
+      );
+      return listWidget;
+    }
   }
 
   //Fill the column with the required days of the month
@@ -164,5 +155,28 @@ class _PipelineListState extends State<PipelineList> {
     for (int i = 1; i < 30; i++) {
       tableColumns.add('$i');
     }
+  }
+
+  //will spread the client visit as per each day in the table
+  _clientVisitsPerDay(int index) {
+    visitDays = [];
+    String client;
+    //transform the date to days
+    for (int k = 0; k < widget.salesData.length; k++) {
+      if (widget.salesData[k].visitDate != null) {
+        var date =
+            DateTime.parse(widget.salesData[k].visitDate.toDate().toString());
+
+        var day =
+            int.parse(date.toLocal().toString().split(' ')[0].split('-')[2]);
+        client = widget.salesData[k].clientName;
+        if (widget.clientName[index] == client &&
+            widget.salesData[k].salesId != null) {
+          visitDays.add(day);
+          // visitIds[index][index] = widget.salesData[k].salesId;
+        }
+      }
+    }
+    return visitDays;
   }
 }
