@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:unitrade_web_v2/models/client.dart';
+import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
@@ -19,8 +20,12 @@ class PipelineList extends StatefulWidget {
 class _PipelineListState extends State<PipelineList> {
   var tableColumns = [];
   List<int> visitDays = [];
-  List<dynamic> visitIds = [];
+  var _sizedBoxHeight = 10.0;
+  int a;
+  int b;
+  var visitIds;
   Widget listWidget;
+  SalesPipeline selectedVisit;
   @override
   Widget build(BuildContext context) {
     return widget.clientName.isNotEmpty
@@ -39,9 +44,9 @@ class _PipelineListState extends State<PipelineList> {
   void initState() {
     super.initState();
     _populateColumn();
-    visitIds = List.generate(widget.salesData.length,
-        (index) => List.filled(widget.daysInMonth, dynamic),
-        growable: false);
+    a = widget.salesData.length;
+    b = widget.daysInMonth;
+    visitIds = List.generate(a, (index) => List(b), growable: false);
   }
 
   Widget _buildMonthlySalesVisitTable() {
@@ -120,33 +125,110 @@ class _PipelineListState extends State<PipelineList> {
   }
 
   Widget _generateVisitData(BuildContext context, int index) {
+    var visits = _clientVisitsPerDay(index);
     return Row(
-        mainAxisSize: MainAxisSize.min, children: [_getRowVisits(index)]);
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (int i = 0; i <= widget.daysInMonth; i++)
+          listWidget = InkWell(
+            onTap: () async {
+              print(
+                  '${widget.clientName[index]} [$index: $i] - ${visitIds[index][i]} ');
+
+              showDialog(
+                  context: context,
+                  builder: (builder) {
+                    return AlertDialog(
+                      title: Text('${widget.clientName[index]} - $i'),
+                      content: Container(
+                        height: 300.0,
+                        width: 300,
+                        child: FutureBuilder(
+                          future: _generateList(visitIds[index][i]),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return Center(
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          selectedVisit.visitPurpose ??
+                                              'No Record',
+                                          style: textStyle1,
+                                        ),
+                                        SizedBox(
+                                          height: _sizedBoxHeight,
+                                        ),
+                                        Text(
+                                          selectedVisit.purposeValue
+                                                  .toString() ??
+                                              'No Record',
+                                          style: textStyle1,
+                                        ),
+                                        SizedBox(
+                                          height: _sizedBoxHeight,
+                                        ),
+                                        Text(
+                                          selectedVisit.visitDetails
+                                                  .toString() ??
+                                              'Visit details seems not to be entered',
+                                          style: textStyle1,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Container(
+                                  child: Text(snapshot.error.toString()),
+                                ),
+                              );
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                  });
+            },
+            child: Container(
+              child: Center(
+                child: visits.isNotEmpty && visits.contains(i)
+                    ? Icon(
+                        Icons.adjust_rounded,
+                        color: Colors.green,
+                      )
+                    : Text(''),
+              ),
+              height: MediaQuery.of(context).size.height / 10,
+              width: MediaQuery.of(context).size.width / 39,
+            ),
+          )
+      ],
+    );
   }
 
   //Build widget to visit rows
-  Widget _getRowVisits(int index) {
-    var visits = _clientVisitsPerDay(index);
-    for (int i = 0; i <= widget.daysInMonth; i++) {
-      listWidget = InkWell(
-        onTap: () {
-          print('${widget.clientName[index]} - ${visitIds[index]} ');
-        },
-        child: Container(
-          child: Center(
-            child: visits.isNotEmpty && visits.contains(i)
-                ? Icon(
-                    Icons.adjust_rounded,
-                    color: Colors.green,
-                  )
-                : Text(''),
-          ),
-          height: MediaQuery.of(context).size.height / 10,
-          width: MediaQuery.of(context).size.width / 39,
-        ),
-      );
-      return listWidget;
-    }
+  Future _generateList(String salesVisitId) async {
+    DatabaseService db = DatabaseService();
+    await db.salesPipeline.doc(salesVisitId).get().then((value) {
+      selectedVisit = SalesPipeline(
+          visitPurpose: value.data()['visitPurpose'],
+          visitDetails: value.data()['visitDetails'],
+          purposeValue: value.data()['purposeValue']);
+    });
+    return selectedVisit;
   }
 
   //Fill the column with the required days of the month
@@ -167,13 +249,13 @@ class _PipelineListState extends State<PipelineList> {
         var date =
             DateTime.parse(widget.salesData[k].visitDate.toDate().toString());
 
-        var day =
+        int day =
             int.parse(date.toLocal().toString().split(' ')[0].split('-')[2]);
         client = widget.salesData[k].clientName;
         if (widget.clientName[index] == client &&
             widget.salesData[k].salesId != null) {
           visitDays.add(day);
-          // visitIds[index][index] = widget.salesData[k].salesId;
+          visitIds[index][day] = '${widget.salesData[k].uid}';
         }
       }
     }
