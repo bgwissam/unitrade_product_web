@@ -31,7 +31,8 @@ class SalesPipeline {
       this.purposeLabel,
       this.purposeValue,
       this.managerComments,
-      this.error});
+      this.error,
+      this.commentsSent});
   String uid;
   String clientId;
   String clientName;
@@ -43,4 +44,5 @@ class SalesPipeline {
   String purposeValue;
   String managerComments;
   String error;
+  bool commentsSent;
 }

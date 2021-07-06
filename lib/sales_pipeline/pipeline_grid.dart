@@ -113,7 +113,8 @@ class _PipelineGridState extends State<PipelineGrid> {
             visitDate: e.data()['currentDate'],
             purposeLabel: e.data()['purposeLabel'],
             purposeValue: e.data()['purposeValue'],
-            visitDetails: e.data()['visitDetails']);
+            visitDetails: e.data()['visitDetails'],
+            managerComments: e.data()['managerComment']);
       }).toList();
     });
     return result;

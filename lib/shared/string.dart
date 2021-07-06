@@ -221,3 +221,7 @@ const String SALES_PIPELINE = 'Sales Pipeline';
 const String SELECT_SALES_PERSON = 'Select a sales executive';
 const String NEXT_PAGE = 'Next';
 const String CLOSE = 'Close';
+const String MANAGER_COMMENT = 'Manager Comments';
+const String ADD_COMMENT = 'Add Comment';
+const String SEND_COMMENTS = 'Send Comments';
+const String SEND_EMAIL = 'Email Comments';

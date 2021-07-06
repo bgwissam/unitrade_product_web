@@ -10,6 +10,9 @@ const buttonStyle =
 const buttonStyle2 =
     TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Colors.red);
 
+const buttonStyle3 =
+    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white);
+
 const inkWellText = TextStyle(
     fontSize: 28.0,
     fontWeight: FontWeight.bold,
