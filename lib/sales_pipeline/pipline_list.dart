@@ -8,11 +8,16 @@ import 'package:unitrade_web_v2/shared/string.dart';
 
 class PipelineList extends StatefulWidget {
   const PipelineList(
-      {Key key, this.clientName, this.daysInMonth, this.salesData})
+      {Key key,
+      this.clientName,
+      this.daysInMonth,
+      this.salesData,
+      this.salesName})
       : super(key: key);
   final List<dynamic> clientName;
   final int daysInMonth;
   final List<SalesPipeline> salesData;
+  final String salesName;
 
   @override
   _PipelineListState createState() => _PipelineListState();
@@ -75,35 +80,94 @@ class _PipelineListState extends State<PipelineList> {
           ? Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(border: Border.all(width: 5.0)),
-                  height: MediaQuery.of(context).size.height - 50,
-                  child: HorizontalDataTable(
-                    leftHandSideColumnWidth: 130,
-                    rightHandSideColumnWidth: MediaQuery.of(context).size.width,
-                    isFixedHeader: true,
-                    headerWidgets: _getTitleWidget(),
-                    leftSideItemBuilder: _generateFirstColumn,
-                    rightSideItemBuilder: _generateVisitData,
-                    itemCount: widget.clientName.length,
-                    rowSeparatorWidget: Divider(
-                      color: Colors.black,
-                      thickness: 2.0,
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 3.0),
+                      color: Colors.grey[300],
                     ),
-                    leftHandSideColBackgroundColor: Colors.grey[400],
-                    rightHandSideColBackgroundColor: Colors.grey[200],
-                    verticalScrollbarStyle: const ScrollbarStyle(
-                      isAlwaysShown: true,
-                      thickness: 4.0,
-                      radius: Radius.circular(5.0),
+                    child: _buildHeaderDetails(),
+                  ),
+                  SizedBox(height: _sizedBoxHeight),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(border: Border.all(width: 3.0)),
+                      height: MediaQuery.of(context).size.height - 240,
+                      child: HorizontalDataTable(
+                        leftHandSideColumnWidth: 130,
+                        rightHandSideColumnWidth:
+                            MediaQuery.of(context).size.width,
+                        isFixedHeader: true,
+                        headerWidgets: _getTitleWidget(),
+                        leftSideItemBuilder: _generateFirstColumn,
+                        rightSideItemBuilder: _generateVisitData,
+                        itemCount: widget.clientName.length,
+                        rowSeparatorWidget: Divider(
+                          color: Colors.black,
+                          thickness: 2.0,
+                        ),
+                        leftHandSideColBackgroundColor: Colors.grey[400],
+                        rightHandSideColBackgroundColor: Colors.grey[200],
+                        verticalScrollbarStyle: const ScrollbarStyle(
+                          isAlwaysShown: true,
+                          thickness: 4.0,
+                          radius: Radius.circular(5.0),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             )
           : Loading(),
+    );
+  }
+
+  //Will show the header of the page
+  _buildHeaderDetails() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              SALES_PERSON,
+              style: textStyle6,
+            ),
+            SizedBox(
+              width: _sizedBoxHeight * 2,
+            ),
+            Text(
+              widget.salesName,
+              style: textStyle1,
+            )
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Number of Visits:',
+              style: textStyle6,
+            ),
+            SizedBox(
+              width: _sizedBoxHeight * 2,
+            ),
+            Text(
+              widget.salesData.length.toString(),
+              style: textStyle1,
+            )
+          ],
+        ),
+      ],
     );
   }
 
@@ -127,9 +191,7 @@ class _PipelineListState extends State<PipelineList> {
         }
       });
     }
-    commentList.forEach((element) {
-      print('The manager Comments: ${element.managerComments}');
-    });
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -153,7 +215,11 @@ class _PipelineListState extends State<PipelineList> {
                   ),
                 ),
                 actions: [
-                  TextButton(onPressed: () async {}, child: Text(SEND_EMAIL))
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: TextButton(
+                        onPressed: () async {}, child: Text(SEND_EMAIL)),
+                  )
                 ],
               )
             : Center(
@@ -178,7 +244,7 @@ class _PipelineListState extends State<PipelineList> {
           style: textStyle4,
           textAlign: TextAlign.center,
         ),
-        height: MediaQuery.of(context).size.height / 10,
+        height: MediaQuery.of(context).size.height / 13,
         width: MediaQuery.of(context).size.width / 6,
       ),
       for (int i = 1; i <= widget.daysInMonth; i++)
@@ -188,7 +254,7 @@ class _PipelineListState extends State<PipelineList> {
             style: textStyle5,
             textAlign: TextAlign.center,
           ),
-          height: MediaQuery.of(context).size.height / 10,
+          height: MediaQuery.of(context).size.height / 13,
           width: MediaQuery.of(context).size.width / 39,
         ),
     ];
@@ -199,7 +265,7 @@ class _PipelineListState extends State<PipelineList> {
       child: Container(
         child: Text(widget.clientName[index].toString(),
             style: textStyle1, textAlign: TextAlign.center),
-        height: MediaQuery.of(context).size.height / 10,
+        height: MediaQuery.of(context).size.height / 13,
         width: MediaQuery.of(context).size.width / 6,
       ),
     );
@@ -361,7 +427,7 @@ class _PipelineListState extends State<PipelineList> {
                       )
                     : Text(''),
               ),
-              height: MediaQuery.of(context).size.height / 10,
+              height: MediaQuery.of(context).size.height / 13,
               width: MediaQuery.of(context).size.width / 39,
             ),
           )

@@ -52,7 +52,8 @@ const String TAB_LIGHT_TEXT = 'Lighting';
 const String TAB_ACCESSORIES_TEXT = 'Accessories';
 const String TAB_MACHINE_TEXT = 'Machines';
 const String UPDATE_STOCK = 'Update Stock';
-
+const String PROCEED = 'Proceed, I agree';
+const String CANCEL = 'Cancel';
 //Product Type
 const String PRODUCT_TYPE = 'Product Type';
 const String NO_PRODUCTS = 'No Products';
@@ -225,3 +226,4 @@ const String MANAGER_COMMENT = 'Manager Comments';
 const String ADD_COMMENT = 'Add Comment';
 const String SEND_COMMENTS = 'Send Comments';
 const String SEND_EMAIL = 'Email Comments';
+const String SALES_PERSON = 'Sales Person';

@@ -491,7 +491,118 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ? () async {
                                       csvFileContentList.clear();
                                       csvFileModuleList.clear();
-                                      await loadCSVFromStorage();
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                  'Essential Requirements'),
+                                              content: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    3,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    4,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      child: Text(
+                                                        'Needed CSV Header elements: (Exactly the same as)',
+                                                        style: textStyle6,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          _sizedBoxHeight / 2,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text('Business Line',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                        Text('Item Code',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                        Text(
+                                                            'Inventory on Hand',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                        Text('City',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          _sizedBoxHeight / 2,
+                                                    ),
+                                                    Container(
+                                                        child: Text(
+                                                            'The city column should container only: (Exactly the same as)',
+                                                            style: textStyle6)),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text('RIYADH',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                        Text('KHO',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                        Text('JED',
+                                                            style: textStyle1),
+                                                        SizedBox(
+                                                            width:
+                                                                _sizedBoxHeight),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      await loadCSVFromStorage();
+                                                    },
+                                                    child: Text(PROCEED)),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(CANCEL))
+                                              ],
+                                            );
+                                          });
                                     }
                                   : null,
                             ),
@@ -728,6 +839,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                                               selectedYear,
                                                                           daysInMonth:
                                                                               daysInMonth,
+                                                                          salesName:
+                                                                              '${normalUsers[selectedIndex].firstName} ${normalUsers[selectedIndex].lastName} ',
                                                                         ),
                                                                       ),
                                                                     );

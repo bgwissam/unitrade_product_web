@@ -55,3 +55,9 @@ const textStyle5 = TextStyle(
     fontFamily: 'Lato',
     fontWeight: FontWeight.bold,
     color: Colors.grey);
+
+const textStyle6 = TextStyle(
+    fontSize: 18.0,
+    fontFamily: 'San Francisco',
+    fontWeight: FontWeight.bold,
+    color: Colors.black);

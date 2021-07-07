@@ -153,8 +153,9 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       String city = row['City'];
       String brand = row['Vendor'];
       String inv = row['Inventory on Hand'];
-      print('the city is: $city');
-      if (city == 'RIYADH' || city == 'KHO' || city == 'JED') {
+      if (city != null && city.trim() == 'RIYADH' ||
+          city.trim() == 'KHO' ||
+          city.trim() == 'JED') {
         switch (businessLine) {
           case '212003':
             businessUnit = 'wood';
@@ -234,6 +235,7 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
       else {
         _showDialogPlatform('City Field Issue',
             'The city field should contain either RIYADH, KHO, or JED. Any other value will not be accepted');
+        break;
       }
     }
     //will end the loading window once the whole file is updated
@@ -274,6 +276,8 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
         .doc(id)
         .update({'inventory.$city': inventory}).onError((error, stackTrace) {
       print('Could not update data due to: $error: $stackTrace');
+    }).catchError((err) {
+      print('The following error occured: $err');
     });
   }
 
