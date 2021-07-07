@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:unitrade_web_v2/models/client.dart';
 import 'package:unitrade_web_v2/services/database.dart';
+import 'package:unitrade_web_v2/services/email_management.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/loading.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
@@ -35,6 +36,7 @@ class _PipelineListState extends State<PipelineList> {
   String managerComments;
   List<SalesPipeline> commentList = [];
   DatabaseService db = DatabaseService();
+  EmailManagement em = EmailManagement();
   bool _isSaving = false;
   bool _isSendingData = false;
   @override
@@ -218,7 +220,11 @@ class _PipelineListState extends State<PipelineList> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: TextButton(
-                        onPressed: () async {}, child: Text(SEND_EMAIL)),
+                        onPressed: () async {
+                          em.sendCommentsEmail(commentList, widget.salesName,
+                              salesEmail, adminName, adminEmail);
+                        },
+                        child: Text(SEND_EMAIL)),
                   )
                 ],
               )
