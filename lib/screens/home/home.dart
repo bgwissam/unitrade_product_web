@@ -831,6 +831,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                                         builder:
                                                                             (builder) =>
                                                                                 PipelineGrid(
+                                                                          userId:
+                                                                              widget.userId,
                                                                           salesId:
                                                                               selectedSalesId,
                                                                           selectedMonth:

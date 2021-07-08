@@ -1235,6 +1235,15 @@ class DatabaseService {
     }
   }
 
+  //Update sales pipline comment sent value
+  Future updateCommentStatus(String uid) async {
+    try {
+      salesPipeline.doc(uid).update({
+        'commentsSent': true,
+      });
+    } catch (e) {}
+  }
+
   //This section will cover the sales pipeline collection
   List<SalesPipeline> _salespiplineDataFromSnaptshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {

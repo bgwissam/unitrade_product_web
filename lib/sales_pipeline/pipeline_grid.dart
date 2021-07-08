@@ -11,8 +11,10 @@ class PipelineGrid extends StatefulWidget {
       this.selectedYear,
       this.selectedMonth,
       this.daysInMonth,
-      this.salesName})
+      this.salesName,
+      this.userId})
       : super(key: key);
+  final String userId;
   final String salesId;
   final String selectedYear;
   final int selectedMonth;
@@ -48,6 +50,8 @@ class _PipelineGridState extends State<PipelineGrid> {
                     context,
                     MaterialPageRoute(
                         builder: (builder) => PipelineList(
+                              userId: widget.userId,
+                              salesId: widget.salesId,
                               clientName: snapshot.data,
                               daysInMonth: widget.daysInMonth,
                               salesData: salesData,
@@ -80,9 +84,6 @@ class _PipelineGridState extends State<PipelineGrid> {
       ),
     );
   }
-
-  //get user data
-  Future _getUserData() async {}
 
   _convertStringToDate() async {
     String month = '';

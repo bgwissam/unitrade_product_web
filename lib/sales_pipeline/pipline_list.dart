@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:unitrade_web_v2/models/client.dart';
+import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/services/email_management.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
@@ -13,8 +14,12 @@ class PipelineList extends StatefulWidget {
       this.clientName,
       this.daysInMonth,
       this.salesData,
-      this.salesName})
+      this.salesName,
+      this.userId,
+      this.salesId})
       : super(key: key);
+  final String userId;
+  final String salesId;
   final List<dynamic> clientName;
   final int daysInMonth;
   final List<SalesPipeline> salesData;
@@ -39,6 +44,12 @@ class _PipelineListState extends State<PipelineList> {
   EmailManagement em = EmailManagement();
   bool _isSaving = false;
   bool _isSendingData = false;
+  bool _isSendingMail = false;
+  //Admin and Sales data
+  UserData adminUser;
+  UserData salesUser;
+  String salesFullName;
+  String adminFullName;
   @override
   Widget build(BuildContext context) {
     return widget.clientName.isNotEmpty
@@ -57,9 +68,34 @@ class _PipelineListState extends State<PipelineList> {
   void initState() {
     super.initState();
     _populateColumn();
+    _getAdminSalesCredentials();
     a = widget.clientName.length;
     b = widget.daysInMonth;
     visitIds = List.generate(a, (index) => List(b), growable: false);
+  }
+
+  //Get admin and Sales credentials
+  Future _getAdminSalesCredentials() async {
+    //admin data
+    adminUser =
+        await db.unitradeCollection.doc(widget.userId).get().then((value) {
+      return UserData(
+          firstName: value.data()['firstName'],
+          lastName: value.data()['lastName'],
+          emailAddress: value.data()['emailAddress']);
+    });
+
+    //Sales User
+    salesUser =
+        await db.unitradeCollection.doc(widget.salesId).get().then((value) {
+      return UserData(
+          firstName: value.data()['firstName'],
+          lastName: value.data()['lastName'],
+          emailAddress: value.data()['emailAddress']);
+    });
+
+    adminFullName = adminUser.firstName + ' ' + adminUser.lastName;
+    salesFullName = salesUser.firstName + ' ' + salesUser.lastName;
   }
 
   Widget _buildMonthlySalesVisitTable() {
@@ -203,26 +239,45 @@ class _PipelineListState extends State<PipelineList> {
                 content: Container(
                   width: MediaQuery.of(context).size.width / 2,
                   height: (2 * MediaQuery.of(context).size.height) / 5,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: commentList.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title:
-                            Text(commentList[index].clientName ?? 'Not found'),
-                        subtitle: Text(
-                            commentList[index].managerComments ?? 'Not found'),
-                      );
-                    },
-                  ),
+                  child: !_isSendingMail
+                      ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: commentList.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                  commentList[index].clientName ?? 'Not found'),
+                              subtitle: Text(
+                                  commentList[index].managerComments ??
+                                      'Not found'),
+                            );
+                          },
+                        )
+                      : Card(
+                          child: Center(
+                            child: Loading(),
+                          ),
+                        ),
                 ),
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: TextButton(
                         onPressed: () async {
-                          em.sendCommentsEmail(commentList, widget.salesName,
-                              salesEmail, adminName, adminEmail);
+                          setState(() {
+                            _isSendingMail = !_isSendingMail;
+                          });
+                          await em.sendCommentsEmail(
+                              commentList,
+                              salesFullName,
+                              salesUser.emailAddress,
+                              adminFullName,
+                              adminUser.emailAddress);
+
+                          setState(() {
+                            _isSendingMail = !_isSendingMail;
+                            Navigator.pop(context);
+                          });
                         },
                         child: Text(SEND_EMAIL)),
                   )

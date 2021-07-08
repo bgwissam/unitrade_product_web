@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unitrade_web_v2/models/client.dart';
+import 'package:unitrade_web_v2/services/database.dart';
 
 class EmailManagement {
   final CollectionReference salesPipelineMail =
       FirebaseFirestore.instance.collection('salespipeline_mail');
-
-  /*
-  ApiKey: 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
-  */
 
   //Sends email with the comments of the sales manager for the sales team
   Future sendCommentsEmail(
@@ -16,7 +13,8 @@ class EmailManagement {
     String salesmanEmail,
     String adminName,
     String adminEmail,
-  ) {
+  ) async {
+    var db = DatabaseService();
     try {
       var buffer = StringBuffer();
       //set the detais
@@ -29,6 +27,11 @@ class EmailManagement {
       for (var comment in commentList) {
         buffer.write(
             '<tr><td>${comment.clientName}</td><td>${comment.managerComments}</td></tr><tr>&nbsp;</tr>');
+
+        await db.updateCommentStatus(comment.uid).catchError((err) {
+          print('An error occured while updating commnet staus: $err');
+          throw err;
+        });
       }
 
       buffer.write('<tr><td>Thank you</td></tr><tr>&nbsp;</tr>');
@@ -47,10 +50,12 @@ class EmailManagement {
           return value.id;
         }).catchError((err) {
           print('Mail could not be sent because: $err');
+          throw err;
         });
       }
     } catch (error, stackTrace) {
       print('the following error as occured: $error');
+      throw error;
     }
   }
 }
