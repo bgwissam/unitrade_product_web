@@ -149,6 +149,7 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
     missingCodes.add('Item Code, Business Line, Description, Price\n');
     //loop over the maplist
     for (var row in widget.mapList) {
+      print('the price: $row');
       setState(() {
         _itemsInFile++;
       });
@@ -198,8 +199,9 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
             });
             //CHeck if current items exists and is not null
             result.forEach((element) {
-              if (element.data()['price'] != null &&
-                  element.data()['price'] != double.parse(price)) {
+              print(
+                  '${element.data()['productPrice']} - ${element.data()['productPrice'].runtimeType} - Price: $price - Vendor: $brand');
+              if (element.data()['productPrice'] != double.parse(price)) {
                 setState(() {
                   _itemsUpdated++;
                 });
@@ -251,7 +253,7 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
     await FirebaseFirestore.instance
         .collection(businessUnit)
         .doc(id)
-        .update({'price': price}).onError((error, stackTrace) {
+        .update({'productPrice': price}).onError((error, stackTrace) {
       print('Could not update data due to: $error: $stackTrace');
     }).catchError((err) {
       print('The following error occured: $err');

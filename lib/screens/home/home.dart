@@ -6,6 +6,7 @@ import 'package:date_util/date_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
+import 'package:unitrade_web_v2/file_uploader/updateDataGrid.dart';
 import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
@@ -449,7 +450,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           ),
                         ),
 
-                        //Update stock levels
+                        //Update Data levels
                         Container(
                           height: height,
                           width: width,
@@ -481,7 +482,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       alignment: Alignment.centerLeft,
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                          'Allows to update the stock levels for items entered in the database, however great caution should be considered by following the instractions the follow.',
+                                          'Allow update data through uploading a CSV file',
                                           textAlign: TextAlign.start),
                                     ),
                                   ),
@@ -489,120 +490,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                               onTap: adminUser
                                   ? () async {
-                                      csvFileContentList.clear();
-                                      csvFileModuleList.clear();
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text(
-                                                  'Essential Requirements'),
-                                              content: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    3,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    4,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      child: Text(
-                                                        'Needed CSV Header elements: (Exactly the same as)',
-                                                        style: textStyle6,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height:
-                                                          _sizedBoxHeight / 2,
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text('Business Line',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                        Text('Item Code',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                        Text(
-                                                            'Inventory on Hand',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                        Text('City',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height:
-                                                          _sizedBoxHeight / 2,
-                                                    ),
-                                                    Container(
-                                                        child: Text(
-                                                            'The city column should container only: (Exactly the same as)',
-                                                            style: textStyle6)),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text('RIYADH',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                        Text('KHO',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                        Text('JED',
-                                                            style: textStyle1),
-                                                        SizedBox(
-                                                            width:
-                                                                _sizedBoxHeight),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      await loadCSVFromStorage();
-                                                    },
-                                                    child: Text(PROCEED)),
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(CANCEL))
-                                              ],
-                                            );
-                                          });
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (builder) => UpdateDataGrid(
+                                            isAdmin: adminUser,
+                                          ),
+                                        ),
+                                      );
                                     }
                                   : null,
                             ),
@@ -928,105 +823,105 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   //Picking a csv file from storage
-  loadCSVFromStorage() async {
-    String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
-        'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
-        'Transfers & SO,Inventory in Transit,On Hand & In Transit';
+  // loadCSVFromStorage() async {
+  //   String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
+  //       'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
+  //       'Transfers & SO,Inventory in Transit,On Hand & In Transit';
 
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      allowedExtensions: ['csv'],
-      withData: true,
-      type: FileType.custom,
-    );
+  //   FilePickerResult result = await FilePicker.platform.pickFiles(
+  //     allowMultiple: false,
+  //     allowedExtensions: ['csv'],
+  //     withData: true,
+  //     type: FileType.custom,
+  //   );
 
-    if (result == null) {
-      csvPlatformFile = null;
-      print('No csv file');
-    } else {
-      csvPlatformFile = result.files.first;
-      try {
-        String csvString = new String.fromCharCodes(csvPlatformFile.bytes);
-        //get the UTF8 decode as Uint8List
-        var outputAsUintList = new Uint8List.fromList(csvString.codeUnits);
-        //Split the Uint8List by newlines and characters to get csv file rows
-        csvFileContentList = utf8.decode(outputAsUintList).split('\n');
+  //   if (result == null) {
+  //     csvPlatformFile = null;
+  //     print('No csv file');
+  //   } else {
+  //     csvPlatformFile = result.files.first;
+  //     try {
+  //       String csvString = new String.fromCharCodes(csvPlatformFile.bytes);
+  //       //get the UTF8 decode as Uint8List
+  //       var outputAsUintList = new Uint8List.fromList(csvString.codeUnits);
+  //       //Split the Uint8List by newlines and characters to get csv file rows
+  //       csvFileContentList = utf8.decode(outputAsUintList).split('\n');
 
-        //Check if the column titles are in sequence
-        if (csvFileContentList[0].toString().trim().hashCode !=
-            csvFileHeaders.hashCode) {
-          print('Sorry, you don\'t have the right format');
-        }
-        //Check if csv file has any content
-        if (csvFileContentList.length == 0 ||
-            csvFileContentList[1].length == 0) {
-          print('The selected file has no content');
-        }
-        List csvList = [];
-        List<String> headerRow = csvFileContentList[0].toString().split(',');
-        //Add the headers
-        csvFileModuleList.add(headerRow);
-        //remove headers so it won't be mapped
-        csvFileContentList.removeAt(0);
-        //Remove duplicates
-        csvList = csvFileContentList.toSet().toList();
+  //       //Check if the column titles are in sequence
+  //       if (csvFileContentList[0].toString().trim().hashCode !=
+  //           csvFileHeaders.hashCode) {
+  //         print('Sorry, you don\'t have the right format');
+  //       }
+  //       //Check if csv file has any content
+  //       if (csvFileContentList.length == 0 ||
+  //           csvFileContentList[1].length == 0) {
+  //         print('The selected file has no content');
+  //       }
+  //       List csvList = [];
+  //       List<String> headerRow = csvFileContentList[0].toString().split(',');
+  //       //Add the headers
+  //       csvFileModuleList.add(headerRow);
+  //       //remove headers so it won't be mapped
+  //       csvFileContentList.removeAt(0);
+  //       //Remove duplicates
+  //       csvList = csvFileContentList.toSet().toList();
 
-        //Array class module
-        csvList.forEach((csvRow) {
-          if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
-            List<String> shortRow = [];
-            Map<String, dynamic> mappedList = new Map();
-            List<String> splitedRow = csvRow.toString().split(',');
+  //       //Array class module
+  //       csvList.forEach((csvRow) {
+  //         if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
+  //           List<String> shortRow = [];
+  //           Map<String, dynamic> mappedList = new Map();
+  //           List<String> splitedRow = csvRow.toString().split(',');
 
-            for (var i = 0; i < splitedRow.length; i++) {
-              shortRow.add(splitedRow[i]);
-              mappedList.addAll({headerRow[i]: splitedRow[i]});
-            }
+  //           for (var i = 0; i < splitedRow.length; i++) {
+  //             shortRow.add(splitedRow[i]);
+  //             mappedList.addAll({headerRow[i]: splitedRow[i]});
+  //           }
 
-            csvMapList.add(mappedList);
-            csvFileModuleList.add(shortRow);
-          }
-        });
+  //           csvMapList.add(mappedList);
+  //           csvFileModuleList.add(shortRow);
+  //         }
+  //       });
 
-        if (csvFileModuleList != null || csvFileModuleList.isNotEmpty) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (builder) {
-                return LoadCsvStockData(
-                  file: csvFileModuleList,
-                  mapList: csvMapList,
-                );
-              },
-            ),
-          );
-        }
-      } catch (e) {
-        String errorTitle, errorContent;
-        if (e.toString().contains('RangeError')) {
-          errorTitle = 'Range Error (Index)';
-          errorContent =
-              'There seems to be a comma in one of the cells, please remove then upload';
-        } else {
-          errorTitle = 'Unknown error';
-          errorContent = 'Please check with admin: $e';
-        }
+  //       if (csvFileModuleList != null || csvFileModuleList.isNotEmpty) {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (builder) {
+  //               return LoadCsvStockData(
+  //                 file: csvFileModuleList,
+  //                 mapList: csvMapList,
+  //               );
+  //             },
+  //           ),
+  //         );
+  //       }
+  //     } catch (e) {
+  //       String errorTitle, errorContent;
+  //       if (e.toString().contains('RangeError')) {
+  //         errorTitle = 'Range Error (Index)';
+  //         errorContent =
+  //             'There seems to be a comma in one of the cells, please remove then upload';
+  //       } else {
+  //         errorTitle = 'Unknown error';
+  //         errorContent = 'Please check with admin: $e';
+  //       }
 
-        showDialog(
-            context: context,
-            builder: (builder) => AlertDialog(
-                  title: Text(errorTitle),
-                  content: Text(errorContent),
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(OK_BUTTON))
-                  ],
-                ));
-        return e.toString();
-      }
-    }
-  }
+  //       showDialog(
+  //           context: context,
+  //           builder: (builder) => AlertDialog(
+  //                 title: Text(errorTitle),
+  //                 content: Text(errorContent),
+  //                 actions: [
+  //                   TextButton(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       child: Text(OK_BUTTON))
+  //                 ],
+  //               ));
+  //       return e.toString();
+  //     }
+  //   }
+  // }
 
   //Dailog box for exiting the website
   Future onBackPressed() async {

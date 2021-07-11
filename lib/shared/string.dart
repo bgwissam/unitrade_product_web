@@ -2,6 +2,7 @@
 const String MAIN_TITLE = 'Product Application Unitrade';
 const String HOME_PAGE = 'Home';
 const String WRONG_ENTRY = 'Wrong File Entry';
+const String DATA_PAGE_UPDATE = 'Bulk Data Update';
 
 //Signin Page
 const String SIGN_IN_TEXT = 'Sign in';
