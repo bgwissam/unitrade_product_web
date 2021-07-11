@@ -17,7 +17,7 @@ import 'package:unitrade_web_v2/screens/home/sign_out.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
-import 'package:unitrade_web_v2/shared/csv_file_converter.dart';
+import 'package:unitrade_web_v2/file_uploader/csv_stock_update.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 import 'package:unitrade_web_v2/shared/functions.dart';
 import 'package:unitrade_web_v2/brands/brand_form.dart';
@@ -993,7 +993,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             context,
             MaterialPageRoute(
               builder: (builder) {
-                return LoadCsvDataScreen(
+                return LoadCsvStockData(
                   file: csvFileModuleList,
                   mapList: csvMapList,
                 );

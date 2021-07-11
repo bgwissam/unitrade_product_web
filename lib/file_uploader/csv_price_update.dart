@@ -1,20 +1,20 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
-class LoadCsvDataScreen extends StatefulWidget {
+class LoadCsvPriceData extends StatefulWidget {
   final List<dynamic> file;
   final List<Map<String, dynamic>> mapList;
 
-  const LoadCsvDataScreen({Key key, this.file, this.mapList}) : super(key: key);
+  const LoadCsvPriceData({Key key, this.file, this.mapList}) : super(key: key);
 
   @override
-  _LoadCsvDataScreenState createState() => _LoadCsvDataScreenState();
+  _LoadCsvPriceDataState createState() => _LoadCsvPriceDataState();
 }
 
-class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
+class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
   bool _isUpdating = false;
   int _itemsUpdated = 0;
   int _itemsInFile = 0;
@@ -33,14 +33,18 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
           title: Text('CSV Data'),
           backgroundColor: Colors.amberAccent,
           actions: [
-            TextButton(
-              onPressed: () async {
-                setState(() {
-                  _isUpdating = true;
-                });
-                _updateDataPerItemCode();
-              },
-              child: Text('Update Data', style: TextStyle(color: Colors.black)),
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: TextButton(
+                onPressed: () async {
+                  setState(() {
+                    _isUpdating = true;
+                  });
+                  _updateDataPerItemCode();
+                },
+                child:
+                    Text('Update Data', style: TextStyle(color: Colors.black)),
+              ),
             )
           ],
         ),
@@ -142,100 +146,74 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
     String businessUnit;
     List<String> missingCodes = [];
     List<List<String>> csvConversionFile = [];
-    missingCodes.add('Item Code, Business Line, Inventory on Hand\n');
+    missingCodes.add('Item Code, Business Line, Description, Price\n');
     //loop over the maplist
     for (var row in widget.mapList) {
       setState(() {
         _itemsInFile++;
       });
       String businessLine = row['Business Line'];
-      String itemCode = row['Item Code'];
-      String city = row['City'];
       String brand = row['Vendor'];
-      String inv = row['Inventory on Hand'];
-      if (city != null && city.trim() == 'RIYADH' ||
-          city.trim() == 'KHO' ||
-          city.trim() == 'JED') {
-        switch (businessLine) {
-          case '212003':
-            businessUnit = 'wood';
-            break;
-          case '212004':
-            if (brand != 'LARIUS')
-              businessUnit = 'paint';
-            else
-              businessUnit = 'machines';
-            break;
-          case '212005':
-            businessUnit = 'accessories';
-            break;
-          case '212006':
-            businessUnit = 'solid';
-            break;
-          default:
-            businessUnit = null;
-        }
-        if (businessUnit != null) {
-          //get the item from the database
-          await FirebaseFirestore.instance
-              .collection(businessUnit)
-              .where('itemCode', isEqualTo: itemCode.trim())
-              .get()
-              .then((value) {
-            if (value.docs.length == 0) {
-              //Will add the codes that are missing in our database to add them later
-              if (!missingCodes.contains(itemCode)) {
-                missingCodes.add('$itemCode, $businessLine, $inv\n');
-                csvConversionFile.add(missingCodes);
-              }
-            } else {
-              //_updateData(e.id, businessUnit, row['Inventory on Hand']);
-              var result = value.docs.map((e) {
-                return e;
-              });
-              result.forEach((element) {
-                var invMap = new Map();
-                if (element.data()['inventory'] != null) {
-                  invMap = element.data()['inventory'];
+      String description = row['Description'];
+      String itemCode = row['Item Code'];
+      String price = row['Price'];
 
-                  //check if map contains key
-                  if (invMap.containsKey(city)) {
-                    //If the current inventory doesn't match the one in the database
-                    if (inv != invMap[city].toString()) {
-                      setState(() {
-                        _itemsUpdated++;
-                      });
-                      _updateData(
-                          element.id, businessUnit, int.parse(inv), city);
-                    }
-                  }
-                  //If current key doesn't match any key in our database
-                  else {
-                    setState(() {
-                      _itemsUpdated++;
-                    });
-                    _updateData(element.id, businessUnit, int.parse(inv), city);
-                  }
-                } else {
-                  //Add the field to the current item code
-                  _updateData(element.id, businessUnit, int.parse(inv), city);
-                }
-              });
-              return result;
+      switch (businessLine) {
+        case '212003':
+          businessUnit = 'wood';
+          break;
+        case '212004':
+          if (brand != 'LARIUS')
+            businessUnit = 'paint';
+          else
+            businessUnit = 'machines';
+          break;
+        case '212005':
+          businessUnit = 'accessories';
+          break;
+        case '212006':
+          businessUnit = 'solid';
+          break;
+        default:
+          businessUnit = null;
+      }
+      if (businessUnit != null) {
+        //get the item from the database
+        await FirebaseFirestore.instance
+            .collection(businessUnit)
+            .where('itemCode', isEqualTo: itemCode.trim())
+            .get()
+            .then((value) {
+          if (value.docs.length == 0) {
+            //Will add the codes that are missing in our database to add them later
+            if (!missingCodes.contains(itemCode)) {
+              missingCodes
+                  .add('$itemCode, $businessLine, $description, $price\n');
+              csvConversionFile.add(missingCodes);
             }
-          }).onError((error, stackTrace) {
-            print(
-                'An error occured with item ($itemCode): $error, $stackTrace');
-            return error;
-          }).catchError((error) {
-            print('An error occured obtaining data for item: $itemCode');
-          });
-        }
-      } //end if city check if else statement
-      else {
-        _showDialogPlatform('City Field Issue',
-            'The city field should contain either RIYADH, KHO, or JED. Any other value will not be accepted');
-        break;
+          } else {
+            //_updateData(e.id, businessUnit, row['Inventory on Hand']);
+            var result = value.docs.map((e) {
+              return e;
+            });
+            //CHeck if current items exists and is not null
+            result.forEach((element) {
+              if (element.data()['price'] != null &&
+                  element.data()['price'] != double.parse(price)) {
+                setState(() {
+                  _itemsUpdated++;
+                });
+                _updateData(element.id, businessUnit, double.parse(price));
+              }
+            });
+            return result;
+          }
+        }).onError((error, stackTrace) {
+          print('An error occured with item ($itemCode): $error, $stackTrace');
+          return error;
+        }).catchError((error) {
+          print('An error occured obtaining data for item: $itemCode');
+        });
       }
     }
     //will end the loading window once the whole file is updated
@@ -269,12 +247,11 @@ class _LoadCsvDataScreenState extends State<LoadCsvDataScreen> {
   }
 
   //Will update the database as per collection and item code
-  _updateData(
-      String id, String businessUnit, int inventory, String city) async {
+  _updateData(String id, String businessUnit, double price) async {
     await FirebaseFirestore.instance
         .collection(businessUnit)
         .doc(id)
-        .update({'inventory.$city': inventory}).onError((error, stackTrace) {
+        .update({'price': price}).onError((error, stackTrace) {
       print('Could not update data due to: $error: $stackTrace');
     }).catchError((err) {
       print('The following error occured: $err');
