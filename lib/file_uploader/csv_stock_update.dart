@@ -2,6 +2,7 @@
 import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:unitrade_web_v2/screens/authentication/wrapper.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
 class LoadCsvStockData extends StatefulWidget {
@@ -256,8 +257,10 @@ class _LoadCsvStockDataState extends State<LoadCsvStockData> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (builder) => Wrapper()),
+                      (route) => false);
                 },
                 child: Text(OK_BUTTON),
               ),
@@ -281,6 +284,7 @@ class _LoadCsvStockDataState extends State<LoadCsvStockData> {
       print('Could not update data due to: $error: $stackTrace');
     }).catchError((err) {
       print('The following error occured: $err');
+      throw err;
     });
   }
 

@@ -2,6 +2,8 @@
 import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:unitrade_web_v2/screens/authentication/wrapper.dart';
+import 'package:unitrade_web_v2/screens/home/home.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
 class LoadCsvPriceData extends StatefulWidget {
@@ -149,7 +151,6 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
     missingCodes.add('Item Code, Business Line, Description, Price\n');
     //loop over the maplist
     for (var row in widget.mapList) {
-      print('the price: $row');
       setState(() {
         _itemsInFile++;
       });
@@ -158,7 +159,6 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
       String description = row['Description'];
       String itemCode = row['Item Code'];
       String price = row['Price'];
-
       switch (businessLine) {
         case '212003':
           businessUnit = 'wood';
@@ -178,7 +178,7 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
         default:
           businessUnit = null;
       }
-      if (businessUnit != null) {
+      if (businessUnit != null && price != null && itemCode != null) {
         //get the item from the database
         await FirebaseFirestore.instance
             .collection(businessUnit)
@@ -233,8 +233,10 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (builder) => Wrapper()),
+                      (route) => false);
                 },
                 child: Text(OK_BUTTON),
               ),
@@ -276,25 +278,5 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
     //clean up
     html.document.body.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
-  }
-
-  Widget _showDialogPlatform(String title, String content) {
-    showDialog(
-        context: context,
-        builder: (builder) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: Text(OK_BUTTON),
-              ),
-            ],
-          );
-        });
   }
 }

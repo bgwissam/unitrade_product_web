@@ -55,6 +55,7 @@ const String TAB_MACHINE_TEXT = 'Machines';
 const String UPDATE_STOCK = 'Update Stock';
 const String PROCEED = 'Proceed, I agree';
 const String CANCEL = 'Cancel';
+const String UPDATE_DATA = 'Update Data';
 //Product Type
 const String PRODUCT_TYPE = 'Product Type';
 const String NO_PRODUCTS = 'No Products';

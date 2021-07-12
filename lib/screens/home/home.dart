@@ -465,7 +465,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       padding: EdgeInsets.only(left: 10),
                                       alignment: Alignment.bottomLeft,
                                       color: Colors.amberAccent,
-                                      child: Text(UPDATE_STOCK,
+                                      child: Text(UPDATE_DATA,
                                           style: textStyle2,
                                           textAlign: TextAlign.center),
                                     ),
