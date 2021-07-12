@@ -33,7 +33,7 @@ dependencies:
   google_maps_flutter: any
   geolocator: any
   google_maps_place_picker: any
-  google_maps_webservice:
+  google_maps_flutter_web: any
   horizontal_data_table:
   date_util:
   

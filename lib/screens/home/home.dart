@@ -5,8 +5,11 @@ import 'dart:typed_data';
 import 'package:date_util/date_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
 import 'package:unitrade_web_v2/file_uploader/updateDataGrid.dart';
+import 'package:unitrade_web_v2/locations/get_map_widget.dart';
 import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
@@ -63,6 +66,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List csvFileContentList = [];
   List csvFileModuleList = [];
   List<Map<String, dynamic>> csvMapList = [];
+  //Location service
+  LatLng _center;
   void initState() {
     super.initState();
     _getUserData();
@@ -123,6 +128,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (company != null) {
         company = company.capitalize();
       }
+
       setState(() {
         roles.contains('isAdmin') ? adminUser = true : adminUser = false;
       });
@@ -801,12 +807,29 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 ],
                               ),
                               onTap: adminUser
-                                  ? () {
-                                      Navigator.push(
+                                  ? () async {
+                                      if (_center == null) {
+                                        await _determinePosition();
+                                        Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  GoogleMapLocation()));
+                                                  GoogleMapClientLocation(
+                                                    center: _center,
+                                                    roles: roles,
+                                                    salesId: widget.userId,
+                                                  )),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GoogleMapClientLocation(
+                                                    center: _center,
+                                                  )),
+                                        );
+                                      }
                                     }
                                   : null,
                             ),
@@ -822,106 +845,43 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
-  //Picking a csv file from storage
-  // loadCSVFromStorage() async {
-  //   String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
-  //       'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
-  //       'Transfers & SO,Inventory in Transit,On Hand & In Transit';
+  //Get the current position of the device
+  //when the location service is not enabled or permissions are denied
+  //the future will return an error
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    var lat, long;
+    //Test if location service is enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-  //   FilePickerResult result = await FilePicker.platform.pickFiles(
-  //     allowMultiple: false,
-  //     allowedExtensions: ['csv'],
-  //     withData: true,
-  //     type: FileType.custom,
-  //   );
+    if (!serviceEnabled) {
+      return Future.error('Location service is disabled');
+    }
 
-  //   if (result == null) {
-  //     csvPlatformFile = null;
-  //     print('No csv file');
-  //   } else {
-  //     csvPlatformFile = result.files.first;
-  //     try {
-  //       String csvString = new String.fromCharCodes(csvPlatformFile.bytes);
-  //       //get the UTF8 decode as Uint8List
-  //       var outputAsUintList = new Uint8List.fromList(csvString.codeUnits);
-  //       //Split the Uint8List by newlines and characters to get csv file rows
-  //       csvFileContentList = utf8.decode(outputAsUintList).split('\n');
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        //Permission are denied, try requesting persmission again
+        return Future.error('Location permission are denied');
+      }
+    }
 
-  //       //Check if the column titles are in sequence
-  //       if (csvFileContentList[0].toString().trim().hashCode !=
-  //           csvFileHeaders.hashCode) {
-  //         print('Sorry, you don\'t have the right format');
-  //       }
-  //       //Check if csv file has any content
-  //       if (csvFileContentList.length == 0 ||
-  //           csvFileContentList[1].length == 0) {
-  //         print('The selected file has no content');
-  //       }
-  //       List csvList = [];
-  //       List<String> headerRow = csvFileContentList[0].toString().split(',');
-  //       //Add the headers
-  //       csvFileModuleList.add(headerRow);
-  //       //remove headers so it won't be mapped
-  //       csvFileContentList.removeAt(0);
-  //       //Remove duplicates
-  //       csvList = csvFileContentList.toSet().toList();
-
-  //       //Array class module
-  //       csvList.forEach((csvRow) {
-  //         if (csvRow != null && csvRow.toString().trim().isNotEmpty) {
-  //           List<String> shortRow = [];
-  //           Map<String, dynamic> mappedList = new Map();
-  //           List<String> splitedRow = csvRow.toString().split(',');
-
-  //           for (var i = 0; i < splitedRow.length; i++) {
-  //             shortRow.add(splitedRow[i]);
-  //             mappedList.addAll({headerRow[i]: splitedRow[i]});
-  //           }
-
-  //           csvMapList.add(mappedList);
-  //           csvFileModuleList.add(shortRow);
-  //         }
-  //       });
-
-  //       if (csvFileModuleList != null || csvFileModuleList.isNotEmpty) {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (builder) {
-  //               return LoadCsvStockData(
-  //                 file: csvFileModuleList,
-  //                 mapList: csvMapList,
-  //               );
-  //             },
-  //           ),
-  //         );
-  //       }
-  //     } catch (e) {
-  //       String errorTitle, errorContent;
-  //       if (e.toString().contains('RangeError')) {
-  //         errorTitle = 'Range Error (Index)';
-  //         errorContent =
-  //             'There seems to be a comma in one of the cells, please remove then upload';
-  //       } else {
-  //         errorTitle = 'Unknown error';
-  //         errorContent = 'Please check with admin: $e';
-  //       }
-
-  //       showDialog(
-  //           context: context,
-  //           builder: (builder) => AlertDialog(
-  //                 title: Text(errorTitle),
-  //                 content: Text(errorContent),
-  //                 actions: [
-  //                   TextButton(
-  //                       onPressed: () => Navigator.pop(context),
-  //                       child: Text(OK_BUTTON))
-  //                 ],
-  //               ));
-  //       return e.toString();
-  //     }
-  //   }
-  // }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location persmission are denied forever, we cannot handle permission requests');
+    }
+    //if permissions are granted
+    var currentLocation = await Geolocator.getCurrentPosition();
+    setState(() {
+      lat = currentLocation.latitude;
+      long = currentLocation.longitude;
+    });
+    _center = LatLng(lat, long);
+    print('current Location: $currentLocation');
+    return currentLocation;
+  }
 
   //Dailog box for exiting the website
   Future onBackPressed() async {
