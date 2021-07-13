@@ -827,6 +827,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                               builder: (context) =>
                                                   GoogleMapClientLocation(
                                                     center: _center,
+                                                    roles: roles,
+                                                    salesId: widget.userId,
                                                   )),
                                         );
                                       }

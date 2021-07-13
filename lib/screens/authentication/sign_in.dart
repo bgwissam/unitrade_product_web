@@ -82,19 +82,17 @@ class _SignInState extends State<SignIn> {
                     onFieldSubmitted: (value) async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        var result = await _auth.signInWithUserNameandPassword(email, password);
-                        if(result == 'User is verified'){
+                        var result = await _auth.signInWithUserNameandPassword(
+                            email, password);
+                        if (result == 'User is verified') {
                           setState(() {
-                            Navigator.pushReplacementNamed(
-                                        context,
-                                        '/home');
+                            Navigator.pushReplacementNamed(context, '/home');
                           });
                         } else {
                           setState(() {
                             message = result;
                           });
                         }
-                        
                       }
                     },
                     validator: (val) => val.isEmpty ? PASSWORD_EMPTY : null,
@@ -127,13 +125,15 @@ class _SignInState extends State<SignIn> {
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        var result = await _auth.signInWithUserNameandPassword(email, password);
-                        if(result == 'User is verified'){
+                        var result = await _auth.signInWithUserNameandPassword(
+                            email, password);
+                        if (result == 'User is verified') {
                           setState(() {
-                            Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Wrapper()));
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Wrapper()),
+                                (route) => false);
                           });
                         } else {
                           setState(() {

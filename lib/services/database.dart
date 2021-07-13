@@ -30,6 +30,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('clients');
   final CollectionReference salesPipeline =
       FirebaseFirestore.instance.collection('sales_pipeline');
+  final CollectionReference quotationCollection =
+      FirebaseFirestore.instance.collection('quotes');
 
   //Add a new user to the users database
   Future<String> addUserData(
