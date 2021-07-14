@@ -359,7 +359,6 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
             csvFileModuleList.add(shortRow);
           }
         });
-        print('The mapped List: $csvMapList');
         if (csvFileModuleList != null || csvFileModuleList.isNotEmpty) {
           if (stockUpdate) {
             Navigator.push(

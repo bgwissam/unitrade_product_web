@@ -229,3 +229,6 @@ const String ADD_COMMENT = 'Add Comment';
 const String SEND_COMMENTS = 'Send Comments';
 const String SEND_EMAIL = 'Email Comments';
 const String SALES_PERSON = 'Sales Person';
+
+//Client details
+const String CLiENT_DETAILS = 'Client Details';

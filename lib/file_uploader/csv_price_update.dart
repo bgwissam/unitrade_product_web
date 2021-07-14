@@ -199,8 +199,6 @@ class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
             });
             //CHeck if current items exists and is not null
             result.forEach((element) {
-              print(
-                  '${element.data()['productPrice']} - ${element.data()['productPrice'].runtimeType} - Price: $price - Vendor: $brand');
               if (element.data()['productPrice'] != double.parse(price)) {
                 setState(() {
                   _itemsUpdated++;
