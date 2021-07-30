@@ -65,6 +65,7 @@ const String SELECT_PRODUCT_TYPE = 'Select product type';
 const String SELECT_PRODUCT_CATEGORY = 'Select product category';
 const String SAVE_PRODUCT = 'Save Product';
 const String UPDATE_PRICE = 'Update Product Price';
+const String UPDATE_CLIENT_BALANCE = 'Update Client Balance';
 const String PRODUCT_NAME = 'Product Name';
 const String PRODUCT_PACKAGE = 'Packing';
 const String PRODUCT_PACKAGE_VALIDATION = 'packing is required';

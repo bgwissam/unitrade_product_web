@@ -387,6 +387,7 @@ class _RegisterUserState extends State<RegisterUser> {
                               countryOfResidence: countryOfResidence,
                               cityOfResidence: cityOfResidence,
                               isActive: false,
+                              usersAccessList: [],
                             );
 
                             setState(() {

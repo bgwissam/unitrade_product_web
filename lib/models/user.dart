@@ -15,16 +15,19 @@ class UserData {
   final String cityOfResidence;
   final List<dynamic> roles;
   final bool isActive;
+  final List<dynamic> usersAccessList;
 
-  UserData(
-      {this.uid,
-      this.firstName,
-      this.lastName,
-      this.company,
-      this.phonNumber,
-      this.emailAddress,
-      this.countryOfResidence,
-      this.cityOfResidence,
-      this.roles,
-      this.isActive});
+  UserData({
+    this.uid,
+    this.firstName,
+    this.lastName,
+    this.company,
+    this.phonNumber,
+    this.emailAddress,
+    this.countryOfResidence,
+    this.cityOfResidence,
+    this.roles,
+    this.isActive,
+    this.usersAccessList,
+  });
 }

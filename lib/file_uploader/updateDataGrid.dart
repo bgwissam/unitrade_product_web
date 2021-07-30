@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:unitrade_web_v2/file_uploader/csv_client_statement_update.dart';
 import 'package:unitrade_web_v2/file_uploader/csv_price_update.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
@@ -64,7 +65,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                       Expanded(
                         flex: 2,
                         child: Container(
-                          padding: EdgeInsets.only(left: 10),
+                          padding: EdgeInsets.only(left: 10, bottom: 10),
                           alignment: Alignment.bottomLeft,
                           color: Colors.amberAccent,
                           child: Text(UPDATE_STOCK,
@@ -168,7 +169,8 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                         onPressed: () async {
                                           await loadCSVFromStorage(
                                               stockUpdate: true,
-                                              priceUpdate: false);
+                                              priceUpdate: false,
+                                              clientBalanceUpdate: false);
                                         },
                                         child: Text(PROCEED)),
                                     TextButton(
@@ -214,7 +216,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                         child: Container(
                           color: Colors.white,
                           alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 10),
+                          padding: EdgeInsets.only(left: 10, bottom: 10),
                           child: Text(
                               'Allows to update the price for items entered in the database, however great caution should be considered by following the instractions the follow.',
                               textAlign: TextAlign.start),
@@ -277,7 +279,146 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                         onPressed: () async {
                                           await loadCSVFromStorage(
                                               stockUpdate: false,
-                                              priceUpdate: true);
+                                              priceUpdate: true,
+                                              clientBalanceUpdate: false);
+                                        },
+                                        child: Text(PROCEED)),
+                                    TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(CANCEL))
+                                  ],
+                                );
+                              });
+                        }
+                      : null,
+                ),
+              ),
+            ),
+
+            //Update Customer data
+            Container(
+              height: height,
+              width: width,
+              child: Card(
+                elevation: _elevation,
+                child: InkWell(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10, bottom: 10),
+                          alignment: Alignment.bottomLeft,
+                          color: Colors.amberAccent,
+                          child: Text(UPDATE_CLIENT_BALANCE,
+                              style: textStyle2, textAlign: TextAlign.center),
+                        ),
+                      ),
+                      Divider(
+                        height: 3.0,
+                        thickness: 3.0,
+                        color: Colors.black,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.white,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                              'Allows to update the aging balance of each client in the system.',
+                              textAlign: TextAlign.start),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: adminUser
+                      ? () async {
+                          csvFileContentList.clear();
+                          csvFileModuleList.clear();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Essential Requirements'),
+                                  content: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 50,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Text(
+                                            'Needed CSV Header elements: (Exactly the same as)',
+                                            style: textStyle6,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: _sizedBoxHeight / 2,
+                                        ),
+                                        Expanded(
+                                          child: Table(
+                                            border: TableBorder.all(),
+                                            children: [
+                                              TableRow(children: [
+                                                TableCell(
+                                                  child: Text('Invoice-to',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text(
+                                                      'Business Partner',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Total Balance',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('0-30 Days',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('31-60 Days',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('61-90 Days',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('91-180 Days',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('181-360 Days',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Above 360 Days',
+                                                      style: textStyle1),
+                                                )
+                                              ])
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await loadCSVFromStorage(
+                                              stockUpdate: false,
+                                              priceUpdate: false,
+                                              clientBalanceUpdate: true);
                                         },
                                         child: Text(PROCEED)),
                                     TextButton(
@@ -300,7 +441,8 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
   }
 
   //Picking a csv file from storage
-  loadCSVFromStorage({bool stockUpdate, bool priceUpdate}) async {
+  loadCSVFromStorage(
+      {bool stockUpdate, bool priceUpdate, bool clientBalanceUpdate}) async {
     String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
         'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
         'Transfers & SO,Inventory in Transit,On Hand & In Transit';
@@ -379,6 +521,19 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
               MaterialPageRoute(
                 builder: (builder) {
                   return LoadCsvPriceData(
+                    file: csvFileModuleList,
+                    mapList: csvMapList,
+                  );
+                },
+              ),
+            );
+          }
+          if (clientBalanceUpdate) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (builder) {
+                  return LoadCsvStatementData(
                     file: csvFileModuleList,
                     mapList: csvMapList,
                   );

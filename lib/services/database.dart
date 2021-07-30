@@ -44,7 +44,8 @@ class DatabaseService {
       String emailAddress,
       String countryOfResidence,
       String cityOfResidence,
-      List<dynamic> roles}) async {
+      List<dynamic> roles,
+      List<dynamic> usersAccessList}) async {
     try {
       return await unitradeCollection.add({
         'firstName': firstName,
@@ -56,6 +57,7 @@ class DatabaseService {
         'countryOfResidence': countryOfResidence,
         'cityOfResidence': cityOfResidence,
         'roles': roles,
+        'userAccessList': usersAccessList,
       }).then((value) {
         return 'your data has been updated successfully $value';
       });
@@ -75,7 +77,8 @@ class DatabaseService {
       String emailAddress,
       String countryOfResidence,
       String cityOfResidence,
-      List<dynamic> roles}) async {
+      List<dynamic> roles,
+      List<dynamic> usersAccessList}) async {
     try {
       return await unitradeCollection.doc(uid).set({
         'firstName': firstName,
@@ -87,6 +90,7 @@ class DatabaseService {
         'countryOfResidence': countryOfResidence,
         'cityOfResidence': cityOfResidence,
         'roles': roles,
+        'userAccessList': usersAccessList,
       }).then((value) {
         return 'your data has been updated successfully';
       });
@@ -107,7 +111,8 @@ class DatabaseService {
           countryOfResidence: snapshot.data()['countryOfResidence'],
           cityOfResidence: snapshot.data()['cityOfResidnce'],
           isActive: snapshot.data()['isActive'] ?? true,
-          roles: snapshot.data()['roles'] ?? null);
+          roles: snapshot.data()['roles'] ?? null,
+          usersAccessList: snapshot.data()['usersAccessList']);
     }).toList();
   }
 
