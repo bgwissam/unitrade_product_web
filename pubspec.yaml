@@ -36,6 +36,7 @@ dependencies:
   google_maps_flutter_web: any
   horizontal_data_table:
   date_util:
+  flutter_staggered_animations: any
   
 dev_dependencies:
   flutter_test:

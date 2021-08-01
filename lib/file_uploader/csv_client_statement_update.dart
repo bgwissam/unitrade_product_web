@@ -226,7 +226,7 @@ class _LoadCsvStatementDataState extends State<LoadCsvStatementData> {
           return AlertDialog(
             title: Text(UPDATE_DETAILS),
             content: Text(
-                'Items updated: $_itemsUpdated fields.\n${missingClients.length} items are missing from your database!'),
+                'Items updated: $_itemsUpdated fields.\n${missingClients.length - 1} items are missing from your database!'),
             actions: [
               TextButton(
                 onPressed: () {

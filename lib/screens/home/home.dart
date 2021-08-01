@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:date_util/date_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
@@ -66,6 +67,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List csvFileContentList = [];
   List csvFileModuleList = [];
   List<Map<String, dynamic>> csvMapList = [];
+  var animationDuration = 600;
   //Location service
   LatLng _center;
   void initState() {
@@ -205,639 +207,683 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height - 210,
-                  child: GridView.count(
-                      primary: false,
-                      crossAxisCount: 3,
-                      childAspectRatio: 0.85,
-                      mainAxisSpacing: 50,
-                      crossAxisSpacing: 110,
-                      shrinkWrap: true,
-                      children: [
-                        //viewing current products
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            color: Colors.grey[300],
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    color: Colors.amberAccent,
-                                    child: Text(PRODUCTS,
-                                        style: textStyle2,
-                                        textAlign: TextAlign.start),
-                                  ),
-                                ),
-                                Divider(
-                                  height: 3.0,
-                                  thickness: 3.0,
-                                  color: Colors.black,
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    color: Colors.white,
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                        'Products section will present all the products available at our company.',
-                                        textAlign: TextAlign.start),
-                                  ),
-                                ),
-                              ]),
-                              onTap: () async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProductStreamer(roles: roles)));
-                              },
-                            ),
-                          ),
-                        ),
-
-                        //Adding a product
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              onTap: adminUser
-                                  ? () async {
-                                      addProduct();
-                                    }
-                                  : null,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(ADD_PRODUCT,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'This section will allow you to add in a new product for any category and brand you specify.',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        //Adding a brand
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(ADD_BRAND,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'This section will allow you to add in a new brand, and specify the categories under which the brand will occupy',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: roles.contains('isSuperAdmin')
-                                  ? () async {
-                                      addBrand();
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ),
-
-                        //Viewing current brands
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(VIEW_BRANDS,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'From here you can view the brands as well as edit them',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => BrandGrid(
-                                              roles: roles,
-                                            )));
-                              },
-                            ),
-                          ),
-                        ),
-
-                        //Register new users
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(REGISTER_USER,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'Register a new user by defining the roles features in order to access the web page and the mobile app.',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: adminUser
-                                  ? () {
+                  child: AnimationLimiter(
+                    child: GridView.count(
+                        primary: false,
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.85,
+                        mainAxisSpacing: 50,
+                        crossAxisSpacing: 110,
+                        shrinkWrap: true,
+                        children: [
+                          //viewing current products
+                          AnimationConfiguration.staggeredGrid(
+                            position: 0,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  color: Colors.grey[300],
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          padding: EdgeInsets.only(left: 10),
+                                          alignment: Alignment.bottomLeft,
+                                          color: Colors.amberAccent,
+                                          child: Text(PRODUCTS,
+                                              style: textStyle2,
+                                              textAlign: TextAlign.start),
+                                        ),
+                                      ),
+                                      Divider(
+                                        height: 3.0,
+                                        thickness: 3.0,
+                                        color: Colors.black,
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                              'Products section will present all the products available at our company.',
+                                              textAlign: TextAlign.start),
+                                        ),
+                                      ),
+                                    ]),
+                                    onTap: () async {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  RegisterUser()));
-                                    }
-                                  : null,
+                                                  ProductStreamer(
+                                                      roles: roles)));
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
 
-                        //Update Data levels
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(UPDATE_DATA,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'Allow update data through uploading a CSV file',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: adminUser
-                                  ? () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (builder) => UpdateDataGrid(
-                                            isAdmin: adminUser,
+                          //Adding a product
+                          AnimationConfiguration.staggeredGrid(
+                            position: 1,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    onTap: adminUser
+                                        ? () async {
+                                            addProduct();
+                                          }
+                                        : null,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(ADD_PRODUCT,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
                                           ),
                                         ),
-                                      );
-                                    }
-                                  : null,
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'This section will allow you to add in a new product for any category and brand you specify.',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
 
-                        //Sales pipline view
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(SALES_PIPELINE,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
+                          //Adding a brand
+                          AnimationConfiguration.staggeredGrid(
+                            position: 2,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(ADD_BRAND,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'This section will allow you to add in a new brand, and specify the categories under which the brand will occupy',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    onTap: roles.contains('isSuperAdmin')
+                                        ? () async {
+                                            addBrand();
+                                          }
+                                        : null,
                                   ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'Sales pipeline monitures the activity of the sales team on a daily basis',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                              onTap: adminUser
-                                  ? () {
-                                      //will open a dialog to allow selecting a sales person
-                                      //after which you can view their sales activity
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return StatefulBuilder(
-                                              builder: (context, setState) {
-                                                return AlertDialog(
-                                                    title: Text(
-                                                        SELECT_SALES_PERSON),
-                                                    content: Container(
-                                                      height: 320,
-                                                      width: 800,
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            child: Text(
-                                                                'Please select a sales person, month, and year from the folloing list in order to view their pipeline data'),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10.0,
-                                                          ),
-                                                          Container(
-                                                            height: 120,
-                                                            width: 700,
-                                                            decoration: BoxDecoration(
-                                                                border: Border
-                                                                    .all(),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            25)),
-                                                            child: ListView
-                                                                .builder(
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    itemCount:
-                                                                        normalUsers
-                                                                            .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                                index) =>
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: Container(
-                                                                                color: selectedIndex != null && selectedIndex == index ? Colors.red : Colors.white,
-                                                                                child: InkWell(
-                                                                                  child: Text('${normalUsers[index].firstName} ${normalUsers[index].lastName}'),
-                                                                                  onTap: () {
-                                                                                    setState(() {
-                                                                                      selectedIndex = index;
-                                                                                      selectedSalesId = normalUsers[index].uid;
-                                                                                    });
-                                                                                  },
-                                                                                ),
-                                                                              ),
-                                                                            )),
-                                                          ),
-                                                          SizedBox(
-                                                            height:
-                                                                _sizedBoxHeight,
-                                                          ),
-                                                          //Select the month and year you want to view
-                                                          Container(
-                                                            height: 150.0,
-                                                            width: 750.0,
+                            ),
+                          ),
+
+                          //Viewing current brands
+                          AnimationConfiguration.staggeredGrid(
+                            position: 3,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(VIEW_BRANDS,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'From here you can view the brands as well as edit them',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => BrandGrid(
+                                                    roles: roles,
+                                                  )));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          //Register new users
+                          AnimationConfiguration.staggeredGrid(
+                            position: 4,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(REGISTER_USER,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'Register a new user by defining the roles features in order to access the web page and the mobile app.',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: adminUser
+                                        ? () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        RegisterUser()));
+                                          }
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          //Update Data levels
+                          AnimationConfiguration.staggeredGrid(
+                            position: 5,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(UPDATE_DATA,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'Allow update data through uploading a CSV file',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: adminUser
+                                        ? () async {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    UpdateDataGrid(
+                                                  isAdmin: adminUser,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          //Sales pipline view
+                          AnimationConfiguration.staggeredGrid(
+                            position: 6,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(SALES_PIPELINE,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'Sales pipeline monitures the activity of the sales team on a daily basis',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: adminUser
+                                        ? () {
+                                            //will open a dialog to allow selecting a sales person
+                                            //after which you can view their sales activity
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return StatefulBuilder(
+                                                    builder:
+                                                        (context, setState) {
+                                                      return AlertDialog(
+                                                          title: Text(
+                                                              SELECT_SALES_PERSON),
+                                                          content: Container(
+                                                            height: 320,
+                                                            width: 800,
                                                             child: Column(
                                                               children: [
-                                                                //Select year
                                                                 Container(
+                                                                  child: Text(
+                                                                      'Please select a sales person, month, and year from the folloing list in order to view their pipeline data'),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10.0,
+                                                                ),
+                                                                Container(
+                                                                  height: 120,
+                                                                  width: 700,
                                                                   decoration: BoxDecoration(
                                                                       border: Border
                                                                           .all(),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                              20)),
-                                                                  height: 60.0,
-                                                                  width: 600.0,
-                                                                  child: Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              60.0,
-                                                                          child:
-                                                                              Text(
-                                                                            'Year: ',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style:
-                                                                                textStyle1,
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                              5.0,
-                                                                        ),
-                                                                        Container(
-                                                                          width:
-                                                                              60.0,
-                                                                          child:
-                                                                              TextFormField(
-                                                                            initialValue:
-                                                                                currentYear.toString().split('-')[0],
-                                                                            keyboardType:
-                                                                                TextInputType.number,
-                                                                            maxLength:
-                                                                                4,
-                                                                            onChanged:
-                                                                                (val) {
-                                                                              if (val != null)
-                                                                                selectedYear = val;
-                                                                            },
-                                                                          ),
-                                                                        ),
-                                                                      ]),
+                                                                              25)),
+                                                                  child: ListView
+                                                                      .builder(
+                                                                          shrinkWrap:
+                                                                              true,
+                                                                          itemCount: normalUsers
+                                                                              .length,
+                                                                          itemBuilder: (context, index) =>
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Container(
+                                                                                  color: selectedIndex != null && selectedIndex == index ? Colors.red : Colors.white,
+                                                                                  child: InkWell(
+                                                                                    child: Text('${normalUsers[index].firstName} ${normalUsers[index].lastName}'),
+                                                                                    onTap: () {
+                                                                                      setState(() {
+                                                                                        selectedIndex = index;
+                                                                                        selectedSalesId = normalUsers[index].uid;
+                                                                                      });
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                              )),
                                                                 ),
                                                                 SizedBox(
                                                                   height:
                                                                       _sizedBoxHeight,
                                                                 ),
-                                                                //Select month of year
+                                                                //Select the month and year you want to view
                                                                 Container(
-                                                                  height: 60.0,
-                                                                  width: 600.0,
-                                                                  child: Center(
-                                                                    child: ListView.builder(
-                                                                        shrinkWrap: true,
-                                                                        scrollDirection: Axis.horizontal,
-                                                                        itemCount: months.length,
-                                                                        itemBuilder: (context, index) {
-                                                                          return Card(
-                                                                            color: monthIndex == index
-                                                                                ? Colors.red
-                                                                                : Colors.grey,
-                                                                            elevation: monthIndex == index
-                                                                                ? 0.0
-                                                                                : 3.0,
-                                                                            child:
-                                                                                InkWell(
-                                                                              onTap: () {
-                                                                                setState(() {
-                                                                                  monthIndex = index;
-                                                                                  selectedYear != null ? daysInMonth = dateUtility.daysInMonth(index + 1, int.parse(selectedYear)) : daysInMonth = dateUtility.daysInMonth(index + 1, 2021);
-                                                                                });
-                                                                              },
-                                                                              child: Center(
+                                                                  height: 150.0,
+                                                                  width: 750.0,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      //Select year
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                            border:
+                                                                                Border.all(),
+                                                                            borderRadius: BorderRadius.circular(20)),
+                                                                        height:
+                                                                            60.0,
+                                                                        width:
+                                                                            600.0,
+                                                                        child: Row(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                            children: [
+                                                                              Container(
+                                                                                width: 60.0,
                                                                                 child: Text(
-                                                                                  months[index],
+                                                                                  'Year: ',
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: textStyle1,
                                                                                 ),
                                                                               ),
-                                                                            ),
-                                                                          );
-                                                                        }),
+                                                                              SizedBox(
+                                                                                width: 5.0,
+                                                                              ),
+                                                                              Container(
+                                                                                width: 60.0,
+                                                                                child: TextFormField(
+                                                                                  initialValue: currentYear.toString().split('-')[0],
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  maxLength: 4,
+                                                                                  onChanged: (val) {
+                                                                                    if (val != null) selectedYear = val;
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ]),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            _sizedBoxHeight,
+                                                                      ),
+                                                                      //Select month of year
+                                                                      Container(
+                                                                        height:
+                                                                            60.0,
+                                                                        width:
+                                                                            600.0,
+                                                                        child:
+                                                                            Center(
+                                                                          child: ListView.builder(
+                                                                              shrinkWrap: true,
+                                                                              scrollDirection: Axis.horizontal,
+                                                                              itemCount: months.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                return Card(
+                                                                                  color: monthIndex == index ? Colors.red : Colors.grey,
+                                                                                  elevation: monthIndex == index ? 0.0 : 3.0,
+                                                                                  child: InkWell(
+                                                                                    onTap: () {
+                                                                                      setState(() {
+                                                                                        monthIndex = index;
+                                                                                        selectedYear != null ? daysInMonth = dateUtility.daysInMonth(index + 1, int.parse(selectedYear)) : daysInMonth = dateUtility.daysInMonth(index + 1, 2021);
+                                                                                      });
+                                                                                    },
+                                                                                    child: Center(
+                                                                                      child: Text(
+                                                                                        months[index],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              }),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed:
-                                                            selectedIndex !=
-                                                                        null &&
-                                                                    monthIndex !=
-                                                                        0
-                                                                ? () async {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (builder) =>
-                                                                                PipelineGrid(
-                                                                          userId:
-                                                                              widget.userId,
-                                                                          salesId:
-                                                                              selectedSalesId,
-                                                                          selectedMonth:
-                                                                              monthIndex + 1,
-                                                                          selectedYear:
-                                                                              selectedYear,
-                                                                          daysInMonth:
-                                                                              daysInMonth,
-                                                                          salesName:
-                                                                              '${normalUsers[selectedIndex].firstName} ${normalUsers[selectedIndex].lastName} ',
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: selectedIndex !=
+                                                                          null &&
+                                                                      monthIndex !=
+                                                                          0
+                                                                  ? () async {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (builder) =>
+                                                                              PipelineGrid(
+                                                                            userId:
+                                                                                widget.userId,
+                                                                            salesId:
+                                                                                selectedSalesId,
+                                                                            selectedMonth:
+                                                                                monthIndex + 1,
+                                                                            selectedYear:
+                                                                                selectedYear,
+                                                                            daysInMonth:
+                                                                                daysInMonth,
+                                                                            salesName:
+                                                                                '${normalUsers[selectedIndex].firstName} ${normalUsers[selectedIndex].lastName} ',
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                    );
-                                                                  }
-                                                                : null,
-                                                        child: Text(NEXT_PAGE),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(CLOSE),
-                                                      ),
-                                                    ]);
-                                              },
-                                            );
-                                          });
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ),
-
-                        //View location on google map
-                        Container(
-                          height: height,
-                          width: width,
-                          child: Card(
-                            elevation: _elevation,
-                            child: InkWell(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
-                                      color: Colors.amberAccent,
-                                      child: Text(CLIENT_MAP,
-                                          style: textStyle2,
-                                          textAlign: TextAlign.center),
-                                    ),
+                                                                      );
+                                                                    }
+                                                                  : null,
+                                                              child: Text(
+                                                                  NEXT_PAGE),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child:
+                                                                  Text(CLOSE),
+                                                            ),
+                                                          ]);
+                                                    },
+                                                  );
+                                                });
+                                          }
+                                        : null,
                                   ),
-                                  Divider(
-                                    height: 3.0,
-                                    thickness: 3.0,
-                                    color: Colors.black,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      color: Colors.white,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                          'The map will allow to view all the clients assigned to UniTrade by the sales team',
-                                          textAlign: TextAlign.start),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                              onTap: adminUser
-                                  ? () async {
-                                      if (_center == null) {
-                                        await _determinePosition();
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GoogleMapClientLocation(
-                                                    center: _center,
-                                                    roles: roles,
-                                                    salesId: widget.userId,
-                                                  )),
-                                        );
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GoogleMapClientLocation(
-                                                    center: _center,
-                                                    roles: roles,
-                                                    salesId: widget.userId,
-                                                  )),
-                                        );
-                                      }
-                                    }
-                                  : null,
                             ),
                           ),
-                        )
-                      ]),
+
+                          //View location on google map
+                          AnimationConfiguration.staggeredGrid(
+                            position: 7,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            alignment: Alignment.bottomLeft,
+                                            color: Colors.amberAccent,
+                                            child: Text(CLIENT_MAP,
+                                                style: textStyle2,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 3.0,
+                                          thickness: 3.0,
+                                          color: Colors.black,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            color: Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                                'The map will allow to view all the clients assigned to UniTrade by the sales team',
+                                                textAlign: TextAlign.start),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: adminUser
+                                        ? () async {
+                                            if (_center == null) {
+                                              await _determinePosition();
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        GoogleMapClientLocation(
+                                                          center: _center,
+                                                          roles: roles,
+                                                          salesId:
+                                                              widget.userId,
+                                                        )),
+                                              );
+                                            } else {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        GoogleMapClientLocation(
+                                                          center: _center,
+                                                          roles: roles,
+                                                          salesId:
+                                                              widget.userId,
+                                                        )),
+                                              );
+                                            }
+                                          }
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ]),
+                  ),
                 ),
               ],
             ),
