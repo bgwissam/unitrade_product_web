@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:unitrade_web_v2/file_uploader/csv_client_statement_update.dart';
+import 'package:unitrade_web_v2/file_uploader/csv_new_current_item_update.dart';
 import 'package:unitrade_web_v2/file_uploader/csv_price_update.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
@@ -28,6 +29,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
   List csvFileContentList = [];
   List csvFileModuleList = [];
   PlatformFile csvPlatformFile;
+  String _csvFileHeader;
   List<Map<String, dynamic>> csvMapList = [];
   var animationDuration = 600;
   @override
@@ -193,6 +195,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                           TextButton(
                                               onPressed: () async {
                                                 await loadCSVFromStorage(
+                                                    newCurrentItemUpdate: false,
                                                     stockUpdate: true,
                                                     priceUpdate: false,
                                                     clientBalanceUpdate: false);
@@ -321,8 +324,138 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                           TextButton(
                                               onPressed: () async {
                                                 await loadCSVFromStorage(
+                                                    newCurrentItemUpdate: false,
                                                     stockUpdate: false,
                                                     priceUpdate: true,
+                                                    clientBalanceUpdate: false);
+                                              },
+                                              child: Text(PROCEED)),
+                                          TextButton(
+                                              onPressed: () async {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(CANCEL))
+                                        ],
+                                      );
+                                    });
+                              }
+                            : null,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              //Add update current items
+              AnimationConfiguration.staggeredGrid(
+                position: 1,
+                duration: Duration(milliseconds: animationDuration),
+                columnCount: 4,
+                child: FadeInAnimation(
+                  child: Container(
+                    height: height,
+                    width: width,
+                    child: Card(
+                      elevation: _elevation,
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: EdgeInsets.only(left: 10),
+                                alignment: Alignment.bottomLeft,
+                                color: Colors.amberAccent,
+                                child: Text(ADD_UPDATE_ITEMS,
+                                    style: textStyle2,
+                                    textAlign: TextAlign.center),
+                              ),
+                            ),
+                            Divider(
+                              height: 3.0,
+                              thickness: 3.0,
+                              color: Colors.black,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                color: Colors.white,
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(left: 10, bottom: 10),
+                                child: Text(
+                                    'Allow adding new items or updating current items with all field and requirements',
+                                    textAlign: TextAlign.start),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: adminUser
+                            ? () async {
+                                csvFileContentList.clear();
+                                csvFileModuleList.clear();
+                                _csvFileHeader =
+                                    'Business Line,City,Item Code,Description,Thickness,Width,Length,Vendor,Inventory Unit,Category';
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Essential Requirements'),
+                                        content: Expanded(
+                                          child: Table(
+                                            border: TableBorder.all(),
+                                            children: [
+                                              TableRow(children: [
+                                                TableCell(
+                                                  child: Text('Business Line',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('City',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Item Code',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Description',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Thickness',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Width',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Length',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Vendor',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Inventory Unit',
+                                                      style: textStyle1),
+                                                ),
+                                                TableCell(
+                                                  child: Text('Category',
+                                                      style: textStyle1),
+                                                ),
+                                              ])
+                                            ],
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                await loadCSVFromStorage(
+                                                    newCurrentItemUpdate: true,
+                                                    stockUpdate: false,
+                                                    priceUpdate: false,
                                                     clientBalanceUpdate: false);
                                               },
                                               child: Text(PROCEED)),
@@ -478,6 +611,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                           TextButton(
                                               onPressed: () async {
                                                 await loadCSVFromStorage(
+                                                    newCurrentItemUpdate: false,
                                                     stockUpdate: false,
                                                     priceUpdate: false,
                                                     clientBalanceUpdate: true);
@@ -507,10 +641,11 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
 
   //Picking a csv file from storage
   loadCSVFromStorage(
-      {bool stockUpdate, bool priceUpdate, bool clientBalanceUpdate}) async {
-    String csvFileHeaders = 'Item Code,Description,Inventory on Hand,City,' +
-        'Inventory Unit,Length,Width,Thickness,Vendor,Business Unit,Inventory on Hand in SU,Inventory ' +
-        'Transfers & SO,Inventory in Transit,On Hand & In Transit';
+      {bool stockUpdate,
+      bool priceUpdate,
+      bool clientBalanceUpdate,
+      bool newCurrentItemUpdate}) async {
+    String csvFileHeaders;
 
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -533,13 +668,42 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
 
         //Check if the column titles are in sequence
         if (csvFileContentList[0].toString().trim().hashCode !=
-            csvFileHeaders.hashCode) {
-          print('Sorry, you don\'t have the right format');
+            _csvFileHeader.hashCode) {
+          return showDialog(
+              context: context,
+              builder: (builder) {
+                return AlertDialog(
+                  title: Text('Wrong File Header'),
+                  content: Text(
+                      'Your csv file header does not match the requirement for this function, please change the header as mentioned before updating.'),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text(OK_BUTTON))
+                  ],
+                );
+              });
         }
         //Check if csv file has any content
         if (csvFileContentList.length == 0 ||
             csvFileContentList[1].length == 0) {
-          print('The selected file has no content');
+          return showDialog(
+              context: context,
+              builder: (builder) {
+                return AlertDialog(
+                  title: Text('No Content'),
+                  content: Text('Your csv file does not have any content.'),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text(OK_BUTTON))
+                  ],
+                );
+              });
         }
         List csvList = [];
         List<String> headerRow = csvFileContentList[0].toString().split(',');
@@ -599,6 +763,19 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
               MaterialPageRoute(
                 builder: (builder) {
                   return LoadCsvStatementData(
+                    file: csvFileModuleList,
+                    mapList: csvMapList,
+                  );
+                },
+              ),
+            );
+          }
+          if (newCurrentItemUpdate) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (builder) {
+                  return NewCurrentItemUpdate(
                     file: csvFileModuleList,
                     mapList: csvMapList,
                   );

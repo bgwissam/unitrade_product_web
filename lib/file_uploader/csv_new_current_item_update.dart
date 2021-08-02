@@ -1,21 +1,23 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/screens/authentication/wrapper.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
-class LoadCsvPriceData extends StatefulWidget {
+class NewCurrentItemUpdate extends StatefulWidget {
+  const NewCurrentItemUpdate(
+      {Key key, this.file, this.mapList, this.collectionName})
+      : super(key: key);
   final List<dynamic> file;
   final List<Map<String, dynamic>> mapList;
-
-  const LoadCsvPriceData({Key key, this.file, this.mapList}) : super(key: key);
+  final String collectionName;
 
   @override
-  _LoadCsvPriceDataState createState() => _LoadCsvPriceDataState();
+  _NewCurrentItemUpdateState createState() => _NewCurrentItemUpdateState();
 }
 
-class _LoadCsvPriceDataState extends State<LoadCsvPriceData> {
+class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
   bool _isUpdating = false;
   int _itemsUpdated = 0;
   int _itemsInFile = 0;
