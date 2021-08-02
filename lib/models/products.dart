@@ -219,6 +219,47 @@ class Machines {
       this.pdfUrl});
 }
 
+class Industrial {
+  String uid;
+  String itemCode;
+  String productName;
+  String productType;
+  String productCategory;
+  String productBrand;
+  double length;
+  double width;
+  double thickness;
+  double productPack;
+  String color;
+  String description;
+  double productPrice;
+  double productCost;
+  Map<String, dynamic> inventory;
+  List<dynamic> productTags;
+  List<dynamic> imageListUrls;
+  String pdfUrl;
+
+  Industrial(
+      {this.uid,
+      this.itemCode,
+      this.productName,
+      this.productType,
+      this.productCategory,
+      this.productBrand,
+      this.length,
+      this.width,
+      this.thickness,
+      this.productPack,
+      this.color,
+      this.description,
+      this.productPrice,
+      this.productCost,
+      this.inventory,
+      this.productTags,
+      this.imageListUrls,
+      this.pdfUrl});
+}
+
 class Orders {
   String orderId;
   String userId;

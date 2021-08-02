@@ -26,6 +26,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('lights');
   final CollectionReference accessoriesCollection =
       FirebaseFirestore.instance.collection('accessories');
+  final CollectionReference industrialCollection =
+      FirebaseFirestore.instance.collection('industrial');
   final CollectionReference clientCollection =
       FirebaseFirestore.instance.collection('clients');
   final CollectionReference salesPipeline =
@@ -1231,7 +1233,7 @@ class DatabaseService {
         .map(_machineDataProductsFromSnapshot);
   }
 
-  //Delete current accessory product
+  //Delete current machine product
   Future deleteMachineProduct({String uid, List<dynamic> imageUids}) async {
     try {
       await machineCollection.doc(uid).delete();
@@ -1241,6 +1243,91 @@ class DatabaseService {
       print('Product could not be deleted $e');
     }
   }
+
+  //Section for Industrial Products
+  //Add a new Product
+  Future addIndustrialProduct(
+      {String itemCode,
+      String productName,
+      String productBrand,
+      String productType,
+      double length,
+      double width,
+      double thickness,
+      double productPack,
+      String productCategory,
+      String color,
+      String description,
+      double productPrice,
+      double productCost,
+      List<dynamic> productTags,
+      List<dynamic> imageListUrls,
+      String pdfUrl}) async {
+    try {
+      industrialCollection.add({
+        'itemCode': itemCode,
+        'productName': productName,
+        'productBrand': productBrand,
+        'productType': productType,
+        length ?? 'length': length,
+        width ?? 'width': width,
+        thickness ?? 'thickness': thickness,
+        productPack ?? 'productPack': productPack,
+        'productCategory': productCategory,
+        'productPrice': productPrice,
+        'productCost': productCost,
+        'description': description,
+        'imageListUrls': imageListUrls,
+        'pdfUrl': pdfUrl,
+      });
+    } catch (e) {
+      print('Product could not be updated $e');
+    }
+  }
+
+  //Update a current Product
+  Future updateIndustrialProduct(
+      {String uid,
+      String itemCode,
+      String productName,
+      String productBrand,
+      String productType,
+      double length,
+      double width,
+      double thickness,
+      double productPack,
+      String productCategory,
+      String color,
+      String description,
+      double productPrice,
+      double productCost,
+      List<dynamic> productTags,
+      List<dynamic> imageListUrls,
+      String pdfUrl}) async {
+    try {
+      industrialCollection.doc(uid).set({
+        'itemCode': itemCode.trim(),
+        'productName': productName.trim(),
+        'productBrand': productBrand,
+        'productType': productType,
+        length ?? 'length': length,
+        width ?? 'width': width,
+        thickness ?? 'thickness': thickness,
+        productPack ?? 'productPack': productPack,
+        'productCategory': productCategory,
+        'productPrice': productPrice,
+        'productCost': productCost,
+        'description': description,
+        'imageListUrls': imageListUrls,
+        'pdfUrl': pdfUrl,
+      });
+    } catch (e) {
+      print('Product could not be updated $e');
+    }
+  }
+  //Read a product
+
+  //Delete a product
 
   //Update sales pipline comment sent value
   Future updateCommentStatus(String uid) async {

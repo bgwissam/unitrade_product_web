@@ -400,52 +400,78 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text('Essential Requirements'),
-                                        content: Expanded(
-                                          child: Table(
-                                            border: TableBorder.all(),
+                                        content: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              50,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                          child: Column(
                                             children: [
-                                              TableRow(children: [
-                                                TableCell(
-                                                  child: Text('Business Line',
-                                                      style: textStyle1),
+                                              Container(
+                                                child: Text(
+                                                  'Needed CSV Header elements: (Exactly the same as)',
+                                                  style: textStyle6,
                                                 ),
-                                                TableCell(
-                                                  child: Text('City',
-                                                      style: textStyle1),
+                                              ),
+                                              SizedBox(
+                                                height: _sizedBoxHeight / 2,
+                                              ),
+                                              Expanded(
+                                                child: Table(
+                                                  border: TableBorder.all(),
+                                                  children: [
+                                                    TableRow(children: [
+                                                      TableCell(
+                                                        child: Text(
+                                                            'Business Line',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('City',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Item Code',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text(
+                                                            'Description',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Thickness',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Width',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Length',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Vendor',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text(
+                                                            'Inventory Unit',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Category',
+                                                            style: textStyle1),
+                                                      ),
+                                                    ])
+                                                  ],
                                                 ),
-                                                TableCell(
-                                                  child: Text('Item Code',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Description',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Thickness',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Width',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Length',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Vendor',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Inventory Unit',
-                                                      style: textStyle1),
-                                                ),
-                                                TableCell(
-                                                  child: Text('Category',
-                                                      style: textStyle1),
-                                                ),
-                                              ])
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -674,8 +700,18 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
               builder: (builder) {
                 return AlertDialog(
                   title: Text('Wrong File Header'),
-                  content: Text(
-                      'Your csv file header does not match the requirement for this function, please change the header as mentioned before updating.'),
+                  content: Column(
+                    children: [
+                      Text(
+                          'Your csv file header does not match the requirement for this function, please change the header as mentioned before updating.'),
+                      SizedBox(height: _sizedBoxHeight),
+                      Text('You header: ${csvFileContentList[0].toString()}'),
+                      SizedBox(
+                        height: _sizedBoxHeight,
+                      ),
+                      Text('Required: $_csvFileHeader')
+                    ],
+                  ),
                   actions: [
                     TextButton(
                         onPressed: () async {

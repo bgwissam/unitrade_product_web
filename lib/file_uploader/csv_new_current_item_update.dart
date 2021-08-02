@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/screens/authentication/wrapper.dart';
+import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -22,7 +23,7 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
   int _itemsUpdated = 0;
   int _itemsInFile = 0;
   int totalRecords = 0;
-
+  DatabaseService db = DatabaseService();
   @override
   void initState() {
     super.initState();
@@ -147,6 +148,7 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
 
   _updateDataPerItemCode() async {
     String businessUnit;
+    String productType = 'Building';
     List<String> missingCodes = [];
     List<List<String>> csvConversionFile = [];
     missingCodes.add('Item Code, Business Line, Description, Price\n');
@@ -156,11 +158,21 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
         _itemsInFile++;
       });
       String businessLine = row['Business Line'];
+
       String brand = row['Vendor'];
       String description = row['Description'];
       String itemCode = row['Item Code'];
+      String city = row['City'];
+      String thickness = row['Thickness'];
+      String width = row['Width'];
+      String length = row['Length'];
+      String quantity = row['Inventory Unit'];
       String price = row['Price'];
+      String category = row['Category'];
       switch (businessLine) {
+        case '212001':
+          businessUnit = 'industrial';
+          break;
         case '212003':
           businessUnit = 'wood';
           break;
@@ -179,7 +191,12 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
         default:
           businessUnit = null;
       }
-      if (businessUnit != null && price != null && itemCode != null) {
+      if (businessUnit != null &&
+          brand != null &&
+          category != null &&
+          itemCode != null &&
+          description != null &&
+          quantity != null) {
         //get the item from the database
         await FirebaseFirestore.instance
             .collection(businessUnit)
@@ -187,14 +204,23 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
             .get()
             .then((value) {
           if (value.docs.length == 0) {
+            db.addIndustrialProduct(
+              itemCode: itemCode.trim(),
+              productName: description.trim(),
+              productBrand: brand.trim(),
+              productCategory: category.trim(),
+              productType: productType,
+              length: double.parse(length),
+              thickness: double.parse(thickness),
+              width: double.parse(thickness),
+            );
             //Will add the codes that are missing in our database to add them later
             if (!missingCodes.contains(itemCode)) {
-              missingCodes
-                  .add('$itemCode, $businessLine, $description, $price\n');
+              missingCodes.add(
+                  '$itemCode, $businessLine, $description, $brand, $category\n');
               csvConversionFile.add(missingCodes);
             }
           } else {
-            //_updateData(e.id, businessUnit, row['Inventory on Hand']);
             var result = value.docs.map((e) {
               return e;
             });
