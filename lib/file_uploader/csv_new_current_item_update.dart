@@ -162,13 +162,14 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
       String brand = row['Vendor'];
       String description = row['Description'];
       String itemCode = row['Item Code'];
-      String city = row['City'];
       String thickness = row['Thickness'];
       String width = row['Width'];
       String length = row['Length'];
-      String quantity = row['Inventory Unit'];
-      String price = row['Price'];
       String category = row['Category'];
+      String quantity = row['Inventory Unit'];
+      String weight = row['Weigth'];
+      String weightUnit = row['Weight Unit'];
+      String price = row['price'];
       switch (businessLine) {
         case '212001':
           businessUnit = 'industrial';
@@ -191,6 +192,7 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
         default:
           businessUnit = null;
       }
+
       if (businessUnit != null &&
           brand != null &&
           category != null &&
@@ -202,9 +204,9 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
             .collection(businessUnit)
             .where('itemCode', isEqualTo: itemCode.trim())
             .get()
-            .then((value) {
+            .then((value) async {
           if (value.docs.length == 0) {
-            db.addIndustrialProduct(
+            await db.addIndustrialProduct(
               itemCode: itemCode.trim(),
               productName: description.trim(),
               productBrand: brand.trim(),
@@ -212,28 +214,22 @@ class _NewCurrentItemUpdateState extends State<NewCurrentItemUpdate> {
               productType: productType,
               length: double.parse(length),
               thickness: double.parse(thickness),
-              width: double.parse(thickness),
+              width: double.parse(width),
             );
-            //Will add the codes that are missing in our database to add them later
-            if (!missingCodes.contains(itemCode)) {
-              missingCodes.add(
-                  '$itemCode, $businessLine, $description, $brand, $category\n');
-              csvConversionFile.add(missingCodes);
-            }
           } else {
-            var result = value.docs.map((e) {
+            value.docs.map((e) async {
+              await db.updateIndustrialProduct(
+                  uid: e.id,
+                  itemCode: itemCode.trim(),
+                  productName: description.trim(),
+                  productBrand: brand.trim(),
+                  productCategory: category.trim(),
+                  productType: productType,
+                  length: double.parse(length),
+                  thickness: double.parse(thickness),
+                  width: double.parse(thickness));
               return e;
             });
-            //CHeck if current items exists and is not null
-            result.forEach((element) {
-              if (element.data()['productPrice'] != double.parse(price)) {
-                setState(() {
-                  _itemsUpdated++;
-                });
-                _updateData(element.id, businessUnit, double.parse(price));
-              }
-            });
-            return result;
           }
         }).onError((error, stackTrace) {
           print('An error occured with item ($itemCode): $error, $stackTrace');

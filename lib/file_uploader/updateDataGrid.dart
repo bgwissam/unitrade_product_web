@@ -394,7 +394,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                 csvFileContentList.clear();
                                 csvFileModuleList.clear();
                                 _csvFileHeader =
-                                    'Business Line,City,Item Code,Description,Thickness,Width,Length,Vendor,Inventory Unit,Category';
+                                    'Business Line,City,Item Code,Description,Thickness,Width,Length,Unit,Price,Weight,Weight Unit,Vendor,Inventory Unit,Category,Null';
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -456,6 +456,23 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                                             style: textStyle1),
                                                       ),
                                                       TableCell(
+                                                        child: Text('Unit',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Price',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Weight',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text(
+                                                            'Weight Unit',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
                                                         child: Text('Vendor',
                                                             style: textStyle1),
                                                       ),
@@ -466,6 +483,10 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                                       ),
                                                       TableCell(
                                                         child: Text('Category',
+                                                            style: textStyle1),
+                                                      ),
+                                                      TableCell(
+                                                        child: Text('Null',
                                                             style: textStyle1),
                                                       ),
                                                     ])
@@ -671,8 +692,6 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
       bool priceUpdate,
       bool clientBalanceUpdate,
       bool newCurrentItemUpdate}) async {
-    String csvFileHeaders;
-
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       allowedExtensions: ['csv'],

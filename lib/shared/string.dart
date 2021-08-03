@@ -52,6 +52,7 @@ const String TAB_SS_TEXT = 'Surface';
 const String TAB_LIGHT_TEXT = 'Lighting';
 const String TAB_ACCESSORIES_TEXT = 'Accessories';
 const String TAB_MACHINE_TEXT = 'Machines';
+const String TAB_INDUSTRIAL_TEXT = 'Industrial';
 const String UPDATE_STOCK = 'Update Stock';
 const String PROCEED = 'Proceed, I agree';
 const String CANCEL = 'Cancel';

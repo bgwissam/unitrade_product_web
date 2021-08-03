@@ -3,7 +3,6 @@ import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_type.dart';
 import 'package:unitrade_web_v2/services/database.dart';
-import 'package:unitrade_web_v2/shared/dropdownLists.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 
 class ProductStreamer extends StatefulWidget {
@@ -38,7 +37,7 @@ class _ProductStreamerState extends State<ProductStreamer>
   var categories = [];
   void initState() {
     super.initState();
-    _tabController = new TabController(length: 4, vsync: this);
+    _tabController = new TabController(length: 5, vsync: this);
     roles = widget.roles;
   }
 
@@ -70,7 +69,8 @@ class _ProductStreamerState extends State<ProductStreamer>
               text: TAB_WOOD_TEXT,
             ),
             new Tab(text: TAB_SS_TEXT),
-            new Tab(text: TAB_ACCESSORIES_TEXT)
+            new Tab(text: TAB_ACCESSORIES_TEXT),
+            new Tab(text: TAB_INDUSTRIAL_TEXT)
           ],
           controller: _tabController,
           indicatorSize: TabBarIndicatorSize.tab,
@@ -82,6 +82,7 @@ class _ProductStreamerState extends State<ProductStreamer>
           _buildWoodWiget(),
           _buildSolidSurfaceWiget(),
           _buildAccessoriesWiget(),
+          _buildIndustrialWidget(),
         ],
         controller: _tabController,
       ),
@@ -618,6 +619,93 @@ class _ProductStreamerState extends State<ProductStreamer>
                   width: MediaQuery.of(context).size.width / 4,
                   height: inkWellHeight,
                   child: Image.asset('images/brands/indaux.jpg'),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: distanceBetweenInkWells,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIndustrialWidget() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            //Extra Form
+            Container(
+              height: inkWellHeight,
+              child: InkWell(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(CORIAN_BRAND);
+                    if (result != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductType(
+                            productType: SOLID_SURFACE,
+                            brandName: CORIAN_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[500]),
+                      borderRadius: BorderRadius.circular(25.0)),
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: inkWellHeight,
+                  child: Image.asset('images/brands/corian.jpg'),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: distanceBetweenInkWells,
+            ),
+            //Variant
+            Container(
+              height: inkWellHeight,
+              child: InkWell(
+                onTap: () async {
+                  if (widget.roles.isNotEmpty) {
+                    var result = await _getProductCategories(MONTELLI_BRAND);
+                    if (result != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductType(
+                            productType: SOLID_SURFACE,
+                            brandName: MONTELLI_BRAND,
+                            user: user,
+                            roles: roles,
+                            category: categories,
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[500]),
+                      borderRadius: BorderRadius.circular(25.0)),
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: inkWellHeight,
+                  child: Image.asset('images/brands/montelli.jpg'),
                 ),
               ),
             ),

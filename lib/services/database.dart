@@ -1224,7 +1224,6 @@ class DatabaseService {
 
   Stream<List<Machines>> machineProducts(
       {String brandName, String productType, String productCategory}) {
-    print('$brandName $productType $productCategory');
     return machineCollection
         .where('productBrand', isEqualTo: brandName)
         .where('productType', isEqualTo: productType)
@@ -1254,7 +1253,9 @@ class DatabaseService {
       double length,
       double width,
       double thickness,
-      double productPack,
+      double measureUnit,
+      double weight,
+      String weightUnit,
       String productCategory,
       String color,
       String description,
@@ -1269,63 +1270,102 @@ class DatabaseService {
         'productName': productName,
         'productBrand': productBrand,
         'productType': productType,
-        length ?? 'length': length,
-        width ?? 'width': width,
-        thickness ?? 'thickness': thickness,
-        productPack ?? 'productPack': productPack,
+        'length': length,
+        'width': width,
+        'thickness': thickness,
+        measureUnit ?? 'measureUnit': measureUnit,
+        'weight': weight,
+        'weightUnut': weightUnit,
         'productCategory': productCategory,
-        'productPrice': productPrice,
-        'productCost': productCost,
+        productPrice ?? 'productPrice': productPrice,
+        productCost ?? 'productCost': productCost,
         'description': description,
-        'imageListUrls': imageListUrls,
-        'pdfUrl': pdfUrl,
+        imageListUrls ?? 'imageListUrls': imageListUrls,
       });
     } catch (e) {
-      print('Product could not be updated $e');
+      print('Product could not be added: $e');
     }
   }
 
   //Update a current Product
-  Future updateIndustrialProduct(
-      {String uid,
-      String itemCode,
-      String productName,
-      String productBrand,
-      String productType,
-      double length,
-      double width,
-      double thickness,
-      double productPack,
-      String productCategory,
-      String color,
-      String description,
-      double productPrice,
-      double productCost,
-      List<dynamic> productTags,
-      List<dynamic> imageListUrls,
-      String pdfUrl}) async {
+  Future updateIndustrialProduct({
+    String uid,
+    String itemCode,
+    String productName,
+    String productBrand,
+    String productType,
+    double length,
+    double width,
+    double thickness,
+    double measureUnit,
+    double weight,
+    String weightUnit,
+    String productCategory,
+    String color,
+    String description,
+    double productPrice,
+    double productCost,
+    List<dynamic> imageListUrls,
+  }) async {
     try {
       industrialCollection.doc(uid).set({
-        'itemCode': itemCode.trim(),
-        'productName': productName.trim(),
+        'itemCode': itemCode,
+        'productName': productName,
         'productBrand': productBrand,
         'productType': productType,
-        length ?? 'length': length,
-        width ?? 'width': width,
-        thickness ?? 'thickness': thickness,
-        productPack ?? 'productPack': productPack,
+        'length': length,
+        'width': width,
+        'thickness': thickness,
+        measureUnit ?? 'measureUnit': measureUnit,
+        'weight': weight,
+        'weightUnit': weightUnit,
         'productCategory': productCategory,
-        'productPrice': productPrice,
-        'productCost': productCost,
+        productPrice ?? 'productPrice': productPrice,
+        productCost ?? 'productCost': productCost,
         'description': description,
-        'imageListUrls': imageListUrls,
-        'pdfUrl': pdfUrl,
+        imageListUrls ?? 'imageListUrls': imageListUrls,
       });
     } catch (e) {
-      print('Product could not be updated $e');
+      print('Product could not be updated: $e');
     }
   }
+
   //Read a product
+  List<Industrial> _industrialDataProductsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Industrial(
+        uid: doc.id,
+        itemCode: doc.data()['itemCode'],
+        productName: doc.data()['productName'],
+        productBrand: doc.data()['productBrand'],
+        productType: doc.data()['productType'],
+        length: doc.data()['length'],
+        width: doc.data()['width'],
+        thickness: doc.data()['thickness'],
+        measureUnit: doc.data()['productPack'],
+        weight: doc.data()['weight'],
+        weightUnit: doc.data()['weightUnit'],
+        productCategory: doc.data()['productCategory'],
+        color: doc.data()['color'],
+        description: doc.data()['description'],
+        productPrice: doc.data()['productPrice'],
+        productCost: doc.data()['productCost'],
+        imageListUrls: doc.data()['imageListUrls'],
+        inventory: doc.data()['inventory'],
+      );
+    }).toList();
+  }
+
+  //Stream industrial product
+  Stream<List<Industrial>> industrialProducts(
+      {String brandName, String productType, String productCategory}) {
+    return machineCollection
+        .where('productBrand', isEqualTo: brandName)
+        .where('productType', isEqualTo: productType)
+        .where('productCategory', isEqualTo: productCategory)
+        .snapshots()
+        .map(_industrialDataProductsFromSnapshot);
+  }
 
   //Delete a product
 

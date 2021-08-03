@@ -226,10 +226,13 @@ class Industrial {
   String productType;
   String productCategory;
   String productBrand;
-  double length;
-  double width;
-  double thickness;
-  double productPack;
+  var length;
+  var width;
+  var thickness;
+  String measureUnit;
+  var productPack;
+  var weight;
+  String weightUnit;
   String color;
   String description;
   double productPrice;
@@ -249,7 +252,9 @@ class Industrial {
       this.length,
       this.width,
       this.thickness,
-      this.productPack,
+      this.measureUnit,
+      this.weight,
+      this.weightUnit,
       this.color,
       this.description,
       this.productPrice,
