@@ -104,6 +104,8 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                             ? () async {
                                 csvFileContentList.clear();
                                 csvFileModuleList.clear();
+                                _csvFileHeader =
+                                    'Business Line,Item Code,Inventory on Hand,Vendor,City,Null';
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -264,6 +266,8 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                             ? () async {
                                 csvFileContentList.clear();
                                 csvFileModuleList.clear();
+                                _csvFileHeader =
+                                    'Business Line,Item Code,Price,Vendor,Null';
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {

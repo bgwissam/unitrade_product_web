@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/models/client.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
+import 'dart:js' as js;
 
 class ClientDetails extends StatefulWidget {
   const ClientDetails({Key key, this.clientName, this.clientId, this.visitList})
@@ -19,7 +20,9 @@ class _ClientDetailsState extends State<ClientDetails> {
   int quoteNumber;
   final _elevation = 3.0;
   var salesId = [];
-
+  var _sizedBoxHeight = 15.0;
+  List<String> pdfUrl = [];
+  List<SalesPipeline> visitDetailsList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +40,8 @@ class _ClientDetailsState extends State<ClientDetails> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 50,
+            width: MediaQuery.of(context).size.width - 50,
             child: Column(
               children: [
                 Row(
@@ -59,7 +62,93 @@ class _ClientDetailsState extends State<ClientDetails> {
                         itemCount: widget.visitList.length,
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (builder) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.grey[100],
+                                    title: Text(
+                                      '${visitDetailsList[index].clientName} - ${visitDetailsList[index].visitDate.toDate().toString().split(' ')[0]}',
+                                      style: textStyle4,
+                                    ),
+                                    content: Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(12.0),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                4,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                color: Colors.grey[300]),
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    'Visit Purpose: ${visitDetailsList[index].visitPurpose}',
+                                                    style: textStyle1,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: _sizedBoxHeight,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    'Visit Details: ${visitDetailsList[index].visitDetails}',
+                                                    style: textStyle1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: _sizedBoxHeight * 2,
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(12.0),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                4,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                color: Colors.grey[300]),
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    'Purpose Label: ${visitDetailsList[index].purposeLabel}',
+                                                    style: textStyle1,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: _sizedBoxHeight,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    'Purpose Value: ${visitDetailsList[index].purposeValue}',
+                                                    style: textStyle1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             child: Card(
                               elevation: _elevation,
                               child: Center(
@@ -76,6 +165,21 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       if (snapshot.hasData) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.done) {
+                                          visitDetailsList.add(SalesPipeline(
+                                            clientName:
+                                                snapshot.data['clientName'],
+                                            visitDate:
+                                                snapshot.data['currentDate'],
+                                            visitDetails:
+                                                snapshot.data['visitDetails'],
+                                            visitPurpose:
+                                                snapshot.data['visitPurpose'],
+                                            purposeLabel:
+                                                snapshot.data['purposeLabel'],
+                                            purposeValue:
+                                                snapshot.data['purposeValue'],
+                                            clientId: snapshot.data['clientId'],
+                                          ));
                                           salesId.add(snapshot.data.id);
                                           return Container(
                                             padding: EdgeInsets.symmetric(
@@ -125,6 +229,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                             .where('clientId', isEqualTo: widget.clientId)
                             .get()
                             .then((value) => value.docs.map((e) {
+                                  pdfUrl.add(e.data()['pdfUrl']);
                                   return QuoteData(
                                     quoteId: e.data()['quoteId'],
                                     itemQuoted: e.data()['itemsQuoted'],
@@ -144,7 +249,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               var quoteList = snapshot.data.reversed.toList();
-
+                              pdfUrl = pdfUrl.reversed.toList();
                               quoteNumber = quoteList.length;
                               return Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +286,10 @@ class _ClientDetailsState extends State<ClientDetails> {
                                             color: _cardColor,
                                             elevation: _elevation,
                                             child: InkWell(
-                                              onTap: () {},
+                                              onTap: () {
+                                                js.context.callMethod(
+                                                    'open', [pdfUrl[index]]);
+                                              },
                                               child: Container(
                                                 padding: EdgeInsets.all(12.0),
                                                 child: Text(
