@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:unitrade_web_v2/models/client.dart';
 import 'package:unitrade_web_v2/services/database.dart';
@@ -23,6 +24,7 @@ class _ClientDetailsState extends State<ClientDetails> {
   var _sizedBoxHeight = 15.0;
   List<String> pdfUrl = [];
   List<SalesPipeline> visitDetailsList = [];
+  var _currentClient = Clients();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +34,18 @@ class _ClientDetailsState extends State<ClientDetails> {
       ),
       body: _buildClientDetailsWindow(),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getClientById();
+  }
+
+  //Future to obtain client details
+  Future<Clients> getClientById() async {
+    _currentClient = await db.getClientbyClientId(clientUid: widget.clientId);
+    return _currentClient;
   }
 
   Widget _buildClientDetailsWindow() {
@@ -72,78 +86,76 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       '${visitDetailsList[index].clientName} - ${visitDetailsList[index].visitDate.toDate().toString().split(' ')[0]}',
                                       style: textStyle4,
                                     ),
-                                    content: Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(12.0),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                4,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                                color: Colors.grey[300]),
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    'Visit Purpose: ${visitDetailsList[index].visitPurpose}',
-                                                    style: textStyle1,
-                                                  ),
+                                    content: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(12.0),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              4,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(),
+                                              borderRadius:
+                                                  BorderRadius.circular(25.0),
+                                              color: Colors.grey[300]),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Visit Purpose: ${visitDetailsList[index].visitPurpose}',
+                                                  style: textStyle1,
                                                 ),
-                                                SizedBox(
-                                                  height: _sizedBoxHeight,
+                                              ),
+                                              SizedBox(
+                                                height: _sizedBoxHeight,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  'Visit Details: ${visitDetailsList[index].visitDetails}',
+                                                  style: textStyle1,
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    'Visit Details: ${visitDetailsList[index].visitDetails}',
-                                                    style: textStyle1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(
-                                            height: _sizedBoxHeight * 2,
+                                        ),
+                                        SizedBox(
+                                          height: _sizedBoxHeight * 2,
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(12.0),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              4,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              color: Colors.grey[300]),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Purpose Label: ${visitDetailsList[index].purposeLabel}',
+                                                  style: textStyle1,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: _sizedBoxHeight,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  'Purpose Value: ${visitDetailsList[index].purposeValue}',
+                                                  style: textStyle1,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          Container(
-                                            padding: EdgeInsets.all(12.0),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                4,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                color: Colors.grey[300]),
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    'Purpose Label: ${visitDetailsList[index].purposeLabel}',
-                                                    style: textStyle1,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: _sizedBoxHeight,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    'Purpose Value: ${visitDetailsList[index].purposeValue}',
-                                                    style: textStyle1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   );
                                 },
@@ -331,6 +343,91 @@ class _ClientDetailsState extends State<ClientDetails> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: _sizedBoxHeight,
+                ),
+                //Section for Client detials display
+                Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: FutureBuilder(
+                      future: getClientById(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  height:
+                                      (MediaQuery.of(context).size.height / 2) -
+                                          25,
+                                  width:
+                                      (MediaQuery.of(context).size.width / 2) -
+                                          25,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Name: ${_currentClient.clientName}',
+                                          style: textStyle4),
+                                      Text(
+                                          'Phone: ${_currentClient.clientPhoneNumber}',
+                                          style: textStyle4),
+                                      Text(
+                                          'Business Sector: ${_currentClient.clientBusinessSector}',
+                                          style: textStyle4),
+                                      Text(
+                                          'Address: ${_currentClient.clientGoogleAddress}',
+                                          style: textStyle4)
+                                    ],
+                                  ),
+                                ),
+                                //Get client images
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  height:
+                                      (MediaQuery.of(context).size.height / 2) -
+                                          25,
+                                  width:
+                                      (MediaQuery.of(context).size.width / 2) -
+                                          25,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: _currentClient.imageUrls.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          child: Hero(
+                                            tag: 'kit$index}',
+                                            child: Image.network(
+                                              _currentClient.imageUrls[index],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ]);
+                        } else {
+                          return Center(
+                            child: Text('No Data was retrieved'),
+                          );
+                        }
+                      }),
+                ),
               ],
             ),
             //create another column for additional data
@@ -351,4 +448,7 @@ class _ClientDetailsState extends State<ClientDetails> {
       ),
     );
   }
+
+  //Future to get image urls
+  Future<void> _getImageUrls() async {}
 }

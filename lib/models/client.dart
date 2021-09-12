@@ -1,21 +1,42 @@
 class Clients {
   String uid;
+  String lcNumber;
   String clientName;
   String clientPhoneNumber;
   String clientCity;
   String clientBusinessSector;
-  String email;
+  var email;
   String salesInCharge;
+  String contactPerson;
+  String paymentTerms;
+  String clientGoogleAddress;
+  double lat;
+  double long;
+  List<dynamic> clientVisits;
+  double wonQuotesValue;
+  List<dynamic> imageUrls;
+  Map company212;
+  Map company150;
 
-  Clients({
-    this.uid,
-    this.clientName,
-    this.clientPhoneNumber,
-    this.clientCity,
-    this.clientBusinessSector,
-    this.email,
-    this.salesInCharge,
-  });
+  Clients(
+      {this.uid,
+      this.lcNumber,
+      this.clientName,
+      this.clientPhoneNumber,
+      this.clientCity,
+      this.clientBusinessSector,
+      this.email,
+      this.salesInCharge,
+      this.contactPerson,
+      this.paymentTerms,
+      this.clientGoogleAddress,
+      this.lat,
+      this.long,
+      this.clientVisits,
+      this.wonQuotesValue,
+      this.imageUrls,
+      this.company150,
+      this.company212});
 }
 
 //Sales pipeline datamodel

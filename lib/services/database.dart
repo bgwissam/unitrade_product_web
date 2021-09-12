@@ -305,7 +305,7 @@ class DatabaseService {
   Future deleteClient({String uid, bool isAdmin}) async {
     try {
       if (isAdmin) {
-        return clientCollection
+        return await clientCollection
             .doc(uid)
             .delete()
             .then((value) => print('Client was successfully deleted'));
@@ -313,6 +313,26 @@ class DatabaseService {
       return;
     } catch (e) {
       print('Client could not be deleted');
+    }
+  }
+
+  //Get client by client Id
+  Future getClientbyClientId({String clientUid}) async {
+    try {
+      var currentClient = Clients();
+      return await clientCollection.doc(clientUid).get().then((value) {
+        currentClient = Clients(
+          clientName: value.data()['clientName'],
+          clientBusinessSector: value.data()['clientSector'],
+          clientGoogleAddress: value.data()['clientLocation'],
+          clientPhoneNumber: value.data()['clientPhone'],
+          lcNumber: value.data()['clientLcNumber'],
+          imageUrls: value.data()['imageUrls'],
+        );
+        return currentClient;
+      });
+    } catch (e) {
+      print('Client could not be retreived: $e');
     }
   }
 
