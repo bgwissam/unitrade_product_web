@@ -76,7 +76,7 @@ class _GoogleMapLocationState extends State<GoogleMapLocation> {
                     position:
                         LatLng(elements.data()['lat'], elements.data()['long']),
                     icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueOrange),
+                        BitmapDescriptor.hueYellow),
                     infoWindow: InfoWindow(
                         title: elements.data()['clientName'],
                         snippet:
@@ -129,6 +129,8 @@ class _GoogleMapLocationState extends State<GoogleMapLocation> {
           });
     return listMarkers;
   }
+
+  //add market color depending on client type
 
   //Client details dialog
   // ignore: missing_return

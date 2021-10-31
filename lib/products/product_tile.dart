@@ -151,6 +151,7 @@ class _ProductTileState extends State<ProductTile> {
   //return container paint
   Widget _buildPaintList() {
     Map<String, dynamic> itemStock = new Map();
+    stockChildren.clear();
     if (widget.product.inventory != null)
       widget.product.inventory.forEach((key, value) {
         if (value != 0) {
