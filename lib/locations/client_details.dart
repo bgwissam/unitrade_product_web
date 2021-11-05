@@ -389,37 +389,44 @@ class _ClientDetailsState extends State<ClientDetails> {
                                   ),
                                 ),
                                 //Get client images
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  height:
-                                      (MediaQuery.of(context).size.height / 2) -
-                                          25,
-                                  width:
-                                      (MediaQuery.of(context).size.width / 2) -
-                                          25,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: _currentClient.imageUrls.length,
-                                    itemBuilder: (context, index) {
-                                      return Container(
+                                _currentClient.imageUrls != null
+                                    ? Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                          child: Hero(
-                                            tag: 'kit$index}',
-                                            child: Image.network(
-                                              _currentClient.imageUrls[index],
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                            horizontal: 10, vertical: 15),
+                                        height: (MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                2) -
+                                            25,
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    2) -
+                                                25,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount:
+                                              _currentClient.imageUrls.length,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                                child: Hero(
+                                                  tag: 'kit$index}',
+                                                  child: Image.network(
+                                                    _currentClient
+                                                        .imageUrls[index],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                      )
+                                    : SizedBox.shrink(),
                               ]);
                         } else {
                           return Center(

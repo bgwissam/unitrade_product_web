@@ -28,6 +28,7 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
   List<Marker> noMarkers = [];
   DatabaseService db = DatabaseService();
   int quoteNumber;
+  int counter = 0;
   bool _isListReady = false;
   Marker marker1 = Marker(
       markerId: MarkerId('No clients were loaded'),
@@ -52,31 +53,75 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
 
   //Function will get the client markers assign by each sales depending on their previlage
   Future<List<Marker>> _getClientMarker() async {
-    var markerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size.fromRadius(10)),
-        'assets/images/markers/yellow_marker.png');
-    print('the marker icon: $markerIcon');
+    List<dynamic> showroom;
+    var kitchenColor = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(40, 40)),
+            'assets/images/markers/marker.jpg')
+        .then((value) => value);
     widget.roles.contains('isAdmin')
         ? await db.clientCollection.get().then((value) async {
-            return value.docs.map((elements) {
+            return value.docs.map((elements) async {
               if (elements.data()['lat'] != null &&
                   elements.data()['long'] != null &&
                   elements.data()['clientName'] != null) {
+                if (elements.data()['clientSector'] == 'Fabricator') {
+                  showroom = await db.clientCollection
+                      .doc(elements.id)
+                      .collection('showrooms')
+                      .get()
+                      .then((value) {
+                    return value.docs.map((e) {
+                      return e.data()['showrooms'];
+                    }).toList();
+                  }).catchError((err) {
+                    print('An error occured: $err');
+                  });
+                }
+                if (elements.data()['clientSector'] == 'Fabricator') {
+                  if (showroom != null && showroom.isNotEmpty) {
+                    // print('${showroom.length}');
+                    for (var chain in showroom) {
+                      for (var room in chain) {
+                        return listMarkers.add(
+                          Marker(
+                            markerId: MarkerId(room['name']),
+                            position: LatLng(room['lat'], room['long']),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueBlue),
+                            infoWindow: InfoWindow(
+                              title: room['name'],
+                              snippet: 'nothing now',
+                              onTap: () {
+                                _openDetailsDialog(
+                                    clientName: room['name'],
+                                    images: room['imageUrls']);
+                              },
+                            ),
+                          ),
+                        );
+                        print(
+                            'room: ${room['name']} - ${room['lat']} - ${room['long']} - ${listMarkers.length}');
+                      }
+                    }
+                  }
+                }
+
                 listMarkers.add(
                   Marker(
                     markerId: MarkerId(elements.data()['clientName']),
                     position:
                         LatLng(elements.data()['lat'], elements.data()['long']),
-                    icon: markerIcon,
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueBlue),
                     infoWindow: InfoWindow(
                         title: elements.data()['clientName'],
                         snippet:
                             '${elements.data()['contactName']} - ${elements.data()['clientPhone']}',
                         onTap: () {
                           _openDetailsDialog(
-                              elements.data()['clientName'],
-                              elements.id,
-                              elements
+                              clientName: elements.data()['clientName'],
+                              clientId: elements.id,
+                              visitList: elements
                                   .data()['clientVisits']
                                   .reversed
                                   .toList());
@@ -85,6 +130,8 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                 );
               }
             }).toList();
+          }).catchError((err) {
+            print('An error occured: $err');
           })
         : await db.clientCollection
             .where('salesInCharge', isEqualTo: widget.salesId)
@@ -106,9 +153,9 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                             '${elements.data()['contactName']} - ${elements.data()['clientPhone']}',
                         onTap: () {
                           _openDetailsDialog(
-                              elements.data()['clientName'],
-                              elements.id,
-                              elements
+                              clientName: elements.data()['clientName'],
+                              clientId: elements.id,
+                              visitList: elements
                                   .data()['clientVisits']
                                   .reversed
                                   .toList());
@@ -118,7 +165,7 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
               }
             }).toList();
           });
-
+    print(listMarkers.length);
     return listMarkers;
   }
 
@@ -158,7 +205,10 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
 
   //Navigate to details window
   void _openDetailsDialog(
-      String clientName, String clientId, List<dynamic> visitList) {
+      {String clientName,
+      String clientId,
+      List<dynamic> visitList,
+      List<dynamic> images}) {
     if (clientName != null && clientId != null && visitList.isNotEmpty) {
       Navigator.push(
         context,
@@ -169,6 +219,8 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                   visitList: visitList,
                 )),
       );
+    } else if (images != null && images.isNotEmpty) {
+      print('the images here will be displayed');
     } else {
       showDialog(
         context: context,
