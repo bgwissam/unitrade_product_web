@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Google Map Client Display'),
+        title:
+            Text('Google Map Client Display - Clients: ${listMarkers.length}'),
       ),
       body: _buildGoogleMapWidget(),
     );
@@ -48,6 +50,7 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
   @override
   void initState() {
     super.initState();
+    //_getClientMarker();
     noMarkers.add(marker1);
   }
 
@@ -76,18 +79,15 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                   }).catchError((err) {
                     print('An error occured: $err');
                   });
-                }
-                if (elements.data()['clientSector'] == 'Fabricator') {
+                  // print('the clients 1: ${listMarkers.length}');
                   if (showroom != null && showroom.isNotEmpty) {
-                    // print('${showroom.length}');
                     for (var chain in showroom) {
                       for (var room in chain) {
-                        return listMarkers.add(
+                        listMarkers.add(
                           Marker(
                             markerId: MarkerId(room['name']),
                             position: LatLng(room['lat'], room['long']),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueBlue),
+                            icon: kitchenColor,
                             infoWindow: InfoWindow(
                               title: room['name'],
                               snippet: 'nothing now',
@@ -99,35 +99,37 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                             ),
                           ),
                         );
-                        print(
-                            'room: ${room['name']} - ${room['lat']} - ${room['long']} - ${listMarkers.length}');
+
+                        // print(
+                        //     'room: ${room['name']} - ${room['lat']} - ${room['long']} - ${listMarkers.length}');
                       }
                     }
                   }
+                } else {
+                  //print('the clients 2: ${listMarkers.length}');
+                  listMarkers.add(
+                    Marker(
+                      markerId: MarkerId(elements.data()['clientName']),
+                      position: LatLng(
+                          elements.data()['lat'], elements.data()['long']),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueBlue),
+                      infoWindow: InfoWindow(
+                          title: elements.data()['clientName'],
+                          snippet:
+                              '${elements.data()['contactName']} - ${elements.data()['clientPhone']}',
+                          onTap: () {
+                            _openDetailsDialog(
+                                clientName: elements.data()['clientName'],
+                                clientId: elements.id,
+                                visitList: elements
+                                    .data()['clientVisits']
+                                    .reversed
+                                    .toList());
+                          }),
+                    ),
+                  );
                 }
-
-                listMarkers.add(
-                  Marker(
-                    markerId: MarkerId(elements.data()['clientName']),
-                    position:
-                        LatLng(elements.data()['lat'], elements.data()['long']),
-                    icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueBlue),
-                    infoWindow: InfoWindow(
-                        title: elements.data()['clientName'],
-                        snippet:
-                            '${elements.data()['contactName']} - ${elements.data()['clientPhone']}',
-                        onTap: () {
-                          _openDetailsDialog(
-                              clientName: elements.data()['clientName'],
-                              clientId: elements.id,
-                              visitList: elements
-                                  .data()['clientVisits']
-                                  .reversed
-                                  .toList());
-                        }),
-                  ),
-                );
               }
             }).toList();
           }).catchError((err) {
@@ -166,41 +168,13 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
             }).toList();
           });
     print(listMarkers.length);
+
     return listMarkers;
   }
 
-  //add market color depending on client type
-  Future<BitmapDescriptor> _addMarkerColor(String clientType) async {
-    print('the client Type: $clientType');
-    switch (clientType) {
-      case 'Fabricator':
-        return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(), 'assets/images/markers/yellow_marker.png')
-            .then((value) {
-          print('the value: $value - ${value.runtimeType}');
-          return value;
-        });
-      // case 'Retail':
-      //   return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-      // case 'Factory':
-      //   return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
-      // case 'Carpentry':
-      //   return BitmapDescriptor.defaultMarkerWithHue(
-      //       BitmapDescriptor.hueYellow);
-      // case 'Kitchen Retail':
-      //   return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-      // case 'Contractor':
-      //   return BitmapDescriptor.defaultMarkerWithHue(
-      //       BitmapDescriptor.hueMagenta);
-      default:
-        var color = await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(), 'assets/images/markers/yellow_marker.png')
-            .then((value) {
-          return value;
-        });
-        print('the color type: ${color.runtimeType}');
-        return color;
-    }
+  _getMarkersStream() {
+    //stream data
+    return db.clientCollection.where('lat', isNotEqualTo: null).snapshots();
   }
 
   //Navigate to details window
@@ -233,57 +207,121 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
     }
   }
 
-  Future _nothing() async {}
+  _getGoogleLocationMarkers(var client) {
+    for (var i = 0; i < client.length; i++) {
+      print('the client: ${client[i]['clientName']}');
+      if (client[i]['lat'] != null) {
+        listMarkers.add(
+          Marker(
+            markerId: MarkerId(client[i]['clientName']),
+            position: LatLng(client[i]['lat'], client[i]['long']),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            infoWindow: InfoWindow(
+              title: client[i]['clientName'],
+              snippet:
+                  '${client[i]['contactName']} - ${client[i]['clientPhone']}',
+              onTap: () {
+                _openDetailsDialog(
+                    clientName: client[i]['clientName'],
+                    clientId: client[i].id,
+                    visitList: client[i]['clientVisits'].reversed.toList());
+              },
+            ),
+          ),
+        );
+      }
+    }
+  }
 
   Widget _buildGoogleMapWidget() {
-    return Container(
-      child: FutureBuilder(
-          future: _getClientMarker(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return GoogleMap(
-                  mapType: MapType.satellite,
-                  initialCameraPosition:
-                      CameraPosition(target: widget.center, zoom: 12.0),
-                  onMapCreated: (GoogleMapController _controller) {
-                    _mapController = _controller;
-                  },
-                  mapToolbarEnabled: true,
-                  gestureRecognizers: Set()
-                    ..add(Factory<PanGestureRecognizer>(
-                        () => PanGestureRecognizer()))
-                    ..add(Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer()))
-                    ..add(Factory<HorizontalDragGestureRecognizer>(
-                        () => HorizontalDragGestureRecognizer()))
-                    ..add(Factory<ScaleGestureRecognizer>(
-                        () => ScaleGestureRecognizer())),
-                  markers: listMarkers.isNotEmpty
-                      ? Set.of(listMarkers)
-                      : Set.of(noMarkers),
-                );
-              } else {
-                return Center(
-                  child: Container(
-                    child: Loading(),
-                  ),
-                );
-              }
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Container(
-                  child: Text(snapshot.error.toString()),
-                ),
-              );
-            } else {
-              return Center(
-                child: Container(
-                  child: Loading(),
-                ),
-              );
+    return StreamBuilder<QuerySnapshot>(
+        stream: _getMarkersStream(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData && snapshot.data.containsKey('lat')) {
+            if (snapshot.data.docs != null) {
+              _getGoogleLocationMarkers(snapshot.data.docs);
             }
-          }),
-    );
+            return GoogleMap(
+              mapType: MapType.satellite,
+              initialCameraPosition:
+                  CameraPosition(target: widget.center, zoom: 12.0),
+              onMapCreated: (GoogleMapController _controller) {
+                _mapController = _controller;
+              },
+              mapToolbarEnabled: true,
+              gestureRecognizers: Set()
+                ..add(
+                    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                ..add(Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer()))
+                ..add(Factory<HorizontalDragGestureRecognizer>(
+                    () => HorizontalDragGestureRecognizer()))
+                ..add(Factory<ScaleGestureRecognizer>(
+                    () => ScaleGestureRecognizer())),
+              markers: Set.of(listMarkers),
+
+              // listMarkers.isNotEmpty
+              //     ? Set.of(listMarkers)
+              //     : Set.of(noMarkers),
+            );
+          } else {
+            return Center(
+              child: Container(
+                child: Text('No data obtained'),
+              ),
+            );
+          }
+        });
+
+    //   FutureBuilder(
+    //       future: _getClientMarker(),
+    //       builder: (context, snapshot) {
+    //         if (snapshot.hasData) {
+    //           print('the clients: ${snapshot.data.length}');
+    //           if (snapshot.connectionState == ConnectionState.done) {
+    //             return GoogleMap(
+    //               mapType: MapType.satellite,
+    //               initialCameraPosition:
+    //                   CameraPosition(target: widget.center, zoom: 12.0),
+    //               onMapCreated: (GoogleMapController _controller) {
+    //                 _mapController = _controller;
+    //               },
+    //               mapToolbarEnabled: true,
+    //               gestureRecognizers: Set()
+    //                 ..add(Factory<PanGestureRecognizer>(
+    //                     () => PanGestureRecognizer()))
+    //                 ..add(Factory<VerticalDragGestureRecognizer>(
+    //                     () => VerticalDragGestureRecognizer()))
+    //                 ..add(Factory<HorizontalDragGestureRecognizer>(
+    //                     () => HorizontalDragGestureRecognizer()))
+    //                 ..add(Factory<ScaleGestureRecognizer>(
+    //                     () => ScaleGestureRecognizer())),
+    //               markers: listMarkers.isNotEmpty
+    //                   ? Set.of(listMarkers)
+    //                   : Set.of(noMarkers),
+    //             );
+    //           } else {
+    //             return Center(
+    //               child: Container(
+    //                 child: Loading(),
+    //               ),
+    //             );
+    //           }
+    //         } else if (snapshot.hasError) {
+    //           return Center(
+    //             child: Container(
+    //               child: Text(snapshot.error.toString()),
+    //             ),
+    //           );
+    //         } else {
+    //           return Center(
+    //             child: Container(
+    //               child: Loading(),
+    //             ),
+    //           );
+    //         }
+    //       }),
+    // );
   }
 }
