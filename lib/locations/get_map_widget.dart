@@ -37,6 +37,7 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
   var carpentryColor;
   var retailColor;
   var contractorColor;
+  String clientSector;
   bool _isListReady = false;
   Marker marker1 = Marker(
       markerId: MarkerId('No clients were loaded'),
@@ -58,100 +59,148 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
               child: Row(
                 children: [
                   //Kitchen Dealers
-                  SizedBox(
-                    width: size.width / 10,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage('assets/images/markers/blue.jpg'),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Kitchen Retail';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                        _getShowroomMarkers();
+                      });
+                    },
+                    child: SizedBox(
+                      width: size.width / 10,
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image:
+                                  AssetImage('assets/images/markers/blue.jpg'),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        'Kitchen',
-                        style: textStyle7,
+                        title: Text(
+                          'Kitchen',
+                          style: textStyle7,
+                        ),
                       ),
                     ),
                   ),
                   //Factories
-                  SizedBox(
-                    width: size.width / 10,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage('assets/images/markers/red.jpg'),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Factory';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                      });
+                    },
+                    child: SizedBox(
+                      width: size.width / 10,
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image:
+                                  AssetImage('assets/images/markers/red.jpg'),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        'Factory',
-                        style: textStyle7,
+                        title: Text(
+                          'Factory',
+                          style: textStyle7,
+                        ),
                       ),
                     ),
                   ),
                   //Carpentries
-                  SizedBox(
-                    width: size.width / 10,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                                AssetImage('assets/images/markers/yellow.jpg'),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Carpentry';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                      });
+                    },
+                    child: SizedBox(
+                      width: size.width / 10,
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage(
+                                  'assets/images/markers/yellow.jpg'),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        'Carpenty',
-                        style: textStyle7,
+                        title: Text(
+                          'Carpenty',
+                          style: textStyle7,
+                        ),
                       ),
                     ),
                   ),
                   //Fabricators
-                  SizedBox(
-                    width: size.width / 10,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                                AssetImage('assets/images/markers/green.jpg'),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Fabricator';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                      });
+                    },
+                    child: SizedBox(
+                      width: size.width / 10,
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image:
+                                  AssetImage('assets/images/markers/green.jpg'),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        'Fabricator',
-                        style: textStyle7,
+                        title: Text(
+                          'Fabricator',
+                          style: textStyle7,
+                        ),
                       ),
                     ),
                   ),
                   //Retails
-                  SizedBox(
-                    width: size.width / 10,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                                AssetImage('assets/images/markers/purple.jpg'),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Retail';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                      });
+                    },
+                    child: SizedBox(
+                      width: size.width / 10,
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage(
+                                  'assets/images/markers/purple.jpg'),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        'Retail',
-                        style: textStyle7,
+                        title: Text(
+                          'Retail',
+                          style: textStyle7,
+                        ),
                       ),
                     ),
                   ),
@@ -217,8 +266,12 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
 
   //Function will get the client markers assign by each sales depending on their previlage
   Future<List<Marker>> _getClientMarkers() async {
+    print('the client sector: $clientSector');
     widget.roles.contains('isAdmin')
-        ? await db.clientCollection.get().then((value) async {
+        ? await db.clientCollection
+            .where('clientSector', isEqualTo: clientSector)
+            .get()
+            .then((value) async {
             return value.docs.map((elements) async {
               if (elements.data()['lat'] != null &&
                   elements.data()['long'] != null &&
