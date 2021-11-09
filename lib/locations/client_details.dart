@@ -25,6 +25,7 @@ class _ClientDetailsState extends State<ClientDetails> {
   List<String> pdfUrl = [];
   List<SalesPipeline> visitDetailsList = [];
   var _currentClient = Clients();
+  String _currentSales;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +46,8 @@ class _ClientDetailsState extends State<ClientDetails> {
   //Future to obtain client details
   Future<Clients> getClientById() async {
     _currentClient = await db.getClientbyClientId(clientUid: widget.clientId);
+
+    _currentSales = await db.getUserById(_currentClient.salesInCharge);
     return _currentClient;
   }
 
@@ -384,6 +387,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                                           style: textStyle4),
                                       Text(
                                           'Address: ${_currentClient.clientGoogleAddress}',
+                                          style: textStyle4),
+                                      Text('Sales In Charge: $_currentSales',
                                           style: textStyle4)
                                     ],
                                   ),

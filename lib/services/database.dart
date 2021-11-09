@@ -118,6 +118,12 @@ class DatabaseService {
     }).toList();
   }
 
+  Future<String> getUserById(String userId) async {
+    return await unitradeCollection.doc(userId).get().then((value) {
+      return '${value.data()['firstName']} ${value.data()['lastName']}';
+    });
+  }
+
   //get user doc stream
   Stream<List<UserData>> get userData {
     return unitradeCollection.snapshots().map(_userDataFromSnapshot);
@@ -328,6 +334,7 @@ class DatabaseService {
           clientPhoneNumber: value.data()['clientPhone'],
           lcNumber: value.data()['clientLcNumber'],
           imageUrls: value.data()['imageUrls'],
+          salesInCharge: value.data()['salesInCharge'],
         );
         return currentClient;
       });

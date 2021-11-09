@@ -54,8 +54,8 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
           children: [
             Text('Google Map Client Display - Clients: ${listMarkers.length}'),
             SizedBox(
-              height: 120,
-              width: size.width / 2,
+              height: 100,
+              width: size.width / 3 + 100,
               child: Row(
                 children: [
                   //Kitchen Dealers
@@ -68,20 +68,18 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                         _getShowroomMarkers();
                       });
                     },
-                    child: SizedBox(
-                      width: size.width / 10,
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image:
-                                  AssetImage('assets/images/markers/blue.jpg'),
-                            ),
-                          ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/blue.jpg'),
                         ),
-                        title: Text(
+                      ),
+                      child: Center(
+                        child: Text(
                           'Kitchen',
                           style: textStyle7,
                         ),
@@ -97,20 +95,18 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                         _getClientMarkers();
                       });
                     },
-                    child: SizedBox(
-                      width: size.width / 10,
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image:
-                                  AssetImage('assets/images/markers/red.jpg'),
-                            ),
-                          ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/red.jpg'),
                         ),
-                        title: Text(
+                      ),
+                      child: Center(
+                        child: Text(
                           'Factory',
                           style: textStyle7,
                         ),
@@ -121,25 +117,23 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        clientSector = 'Carpentry';
+                        clientSector = null;
                         listMarkers.clear();
                         _getClientMarkers();
                       });
                     },
-                    child: SizedBox(
-                      width: size.width / 10,
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(
-                                  'assets/images/markers/yellow.jpg'),
-                            ),
-                          ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/yellow.jpg'),
                         ),
-                        title: Text(
+                      ),
+                      child: Center(
+                        child: Text(
                           'Carpenty',
                           style: textStyle7,
                         ),
@@ -155,20 +149,18 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                         _getClientMarkers();
                       });
                     },
-                    child: SizedBox(
-                      width: size.width / 10,
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image:
-                                  AssetImage('assets/images/markers/green.jpg'),
-                            ),
-                          ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/green.jpg'),
                         ),
-                        title: Text(
+                      ),
+                      child: Center(
+                        child: Text(
                           'Fabricator',
                           style: textStyle7,
                         ),
@@ -184,25 +176,62 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                         _getClientMarkers();
                       });
                     },
-                    child: SizedBox(
-                      width: size.width / 10,
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(
-                                  'assets/images/markers/purple.jpg'),
-                            ),
-                          ),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/purple.jpg'),
                         ),
-                        title: Text(
+                      ),
+                      child: Center(
+                        child: Text(
                           'Retail',
                           style: textStyle7,
                         ),
                       ),
                     ),
+                  ),
+                  //Contractor
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        clientSector = 'Contractor';
+                        listMarkers.clear();
+                        _getClientMarkers();
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: 40,
+                      width: size.width / 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/markers/grey.jpg'),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Contractor',
+                          style: textStyle7,
+                        ),
+                      ),
+                    ),
+                  ),
+                  //Clear all filters
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        clientSector = null;
+                        listMarkers.clear();
+                        _getClientMarkers();
+                        _getShowroomMarkers();
+                      });
+                    },
+                    child: Text('Clear', style: textStyle6),
                   ),
                 ],
               ),
@@ -246,6 +275,11 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
             ImageConfiguration(size: Size(15, 30)),
             'assets/images/markers/purple.jpg')
         .then((value) => value);
+
+    contractorColor = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(15, 30)),
+            'assets/images/markers/grey.jpg')
+        .then((value) => value);
   }
 
   _setMarkerColor(String clientSector) {
@@ -261,12 +295,15 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
     if (clientSector == 'Factory') {
       return factoryColor;
     }
+    if (clientSector == 'Contractor') {
+      return contractorColor;
+    }
     return kitchenColor;
   }
 
   //Function will get the client markers assign by each sales depending on their previlage
   Future<List<Marker>> _getClientMarkers() async {
-    print('the client sector: $clientSector');
+    print('client sector: $clientSector');
     widget.roles.contains('isAdmin')
         ? await db.clientCollection
             .where('clientSector', isEqualTo: clientSector)
