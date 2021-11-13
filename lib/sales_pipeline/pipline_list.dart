@@ -70,7 +70,7 @@ class _PipelineListState extends State<PipelineList> {
     _populateColumn();
     _getAdminSalesCredentials();
     a = widget.clientName.length;
-    b = widget.daysInMonth;
+    b = widget.daysInMonth + 1;
     visitIds = List.generate(a, (index) => List(b), growable: false);
   }
 
@@ -528,6 +528,7 @@ class _PipelineListState extends State<PipelineList> {
 
         int day =
             int.parse(date.toLocal().toString().split(' ')[0].split('-')[2]);
+
         client = widget.salesData[k].clientName;
         if (widget.clientName[index] == client &&
             widget.salesData[k].salesId != null) {
@@ -536,6 +537,7 @@ class _PipelineListState extends State<PipelineList> {
         }
       }
     }
+
     return visitDays;
   }
 }

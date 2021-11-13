@@ -96,13 +96,13 @@ class _PipelineGridState extends State<PipelineGrid> {
     DateTime startingDate =
         DateTime.parse('${widget.selectedYear}-$month-01 00:00:00');
     DateTime endingDate = DateTime.parse(
-        '${widget.selectedYear}-$month-${widget.daysInMonth} 00:00:00');
+        '${widget.selectedYear}-$month-${widget.daysInMonth} 23:59:59');
 
     print('The date Range is: $startingDate - $endingDate');
 
     //will obtain the sales visits for the selected user and the date range
     DatabaseService db = DatabaseService();
-
+    print('starting date: $startingDate - endingDate: $endingDate');
     var result = await db.salesPipeline
         .where('userId', isEqualTo: widget.salesId)
         .where('currentDate', isGreaterThanOrEqualTo: startingDate)
