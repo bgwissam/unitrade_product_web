@@ -105,7 +105,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                 csvFileContentList.clear();
                                 csvFileModuleList.clear();
                                 _csvFileHeader =
-                                    'Business Line,Item Code,Inventory on Hand,Vendor,City,Null';
+                                    'Business Line,Item Code,Description,Inventory on Hand,Vendor,City,Null';
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -115,7 +115,7 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              3,
+                                              2,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height /
@@ -146,6 +146,10 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                                                   SizedBox(
                                                       width: _sizedBoxHeight),
                                                   Text('Item Code',
+                                                      style: textStyle1),
+                                                  SizedBox(
+                                                      width: _sizedBoxHeight),
+                                                  Text('Description',
                                                       style: textStyle1),
                                                   SizedBox(
                                                       width: _sizedBoxHeight),

@@ -117,7 +117,7 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        clientSector = null;
+                        clientSector = 'Carpentry';
                         listMarkers.clear();
                         _getClientMarkers();
                       });
@@ -411,7 +411,8 @@ class _GoogleMapClientLocationState extends State<GoogleMapClientLocation> {
                         icon: kitchenColor,
                         infoWindow: InfoWindow(
                           title: room['name'],
-                          snippet: 'nothing now',
+                          snippet:
+                              'Fabricator: ${elements.data()['clientName']}',
                           onTap: () {
                             _openDetailsDialog(
                                 clientName: room['name'],

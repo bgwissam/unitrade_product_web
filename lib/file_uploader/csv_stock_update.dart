@@ -188,8 +188,9 @@ class _LoadCsvStockDataState extends State<LoadCsvStockData> {
             if (value.docs.length == 0) {
               //Will add the codes that are missing in our database to add them later
               if (!missingCodes.contains(itemCode)) {
-                missingCodes
-                    .add('$itemCode, $businessLine, $description, $inv\n');
+                String desc = description.replaceAll(' ', '_');
+                print(desc);
+                missingCodes.add('$itemCode, $businessLine, $desc, $inv\n');
                 csvConversionFile.add(missingCodes);
               }
             } else {
