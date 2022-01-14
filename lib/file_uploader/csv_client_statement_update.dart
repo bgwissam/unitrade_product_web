@@ -170,10 +170,11 @@ class _LoadCsvStatementDataState extends State<LoadCsvStatementData> {
       double col_91_180 =
           double.tryParse(row['91-180 Days'].toString().trim()) ?? 0.0;
       double col_180_360 =
-          double.tryParse(row['180-360 Days'].toString().trim()) ?? 0.0;
+          double.tryParse(row['181-360 Days'].toString().trim()) ?? 0.0;
       double colAbove =
           double.tryParse(row['Above 360 Days'].toString().trim()) ?? 0.0;
-
+      print(
+          'Row: $totalBalance - $col_0_30 - $col_31_60 - $col_61_90 - $col_91_180 - $col_180_360 - $colAbove');
       if (lcNumber != null) {
         //get the item from the database
         await FirebaseFirestore.instance

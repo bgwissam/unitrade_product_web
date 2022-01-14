@@ -577,6 +577,9 @@ class _UpdateDataGridState extends State<UpdateDataGrid> {
                             ? () async {
                                 csvFileContentList.clear();
                                 csvFileModuleList.clear();
+                                _csvFileHeader =
+                                    'Invoice-to,Business Partner,Total Balance,0-30 Days,31-60 Days,61-90 Days,91-180 Days,181-360 Days,Above 360 Days,Null';
+
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
