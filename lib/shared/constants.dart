@@ -67,3 +67,9 @@ const textStyle7 = TextStyle(
     fontFamily: 'San Francisco',
     fontWeight: FontWeight.bold,
     color: Colors.white);
+
+const textStyle8 = TextStyle(
+    fontSize: 14.0,
+    fontFamily: 'San Francisco',
+    fontWeight: FontWeight.bold,
+    color: Colors.black);
