@@ -95,3 +95,34 @@ class QuoteData {
   String pdfUrl;
   String error;
 }
+
+class PurchaseModel {
+  PurchaseModel(
+      {this.uid,
+      this.salesId,
+      this.requestDate,
+      this.clientName,
+      this.clientId,
+      this.itemsRequested,
+      this.productBrand,
+      this.responseDate,
+      this.leadTime,
+      this.validity,
+      this.orderStatus,
+      this.emailStatus,
+      this.comments});
+
+  String uid;
+  String salesId;
+  var requestDate;
+  String clientName;
+  String clientId;
+  var itemsRequested;
+  String productBrand;
+  var responseDate;
+  String leadTime;
+  String validity;
+  String orderStatus;
+  String emailStatus;
+  String comments;
+}

@@ -44,6 +44,7 @@ const String ALERT_PRODUCT = ' product';
 
 //Home Page
 const String PRODUCTS = 'Products';
+const String PURCHASING = 'Purchasing';
 const String ADD_PRODUCT = 'Add New Product';
 const String TAB_COATINGS_AND_ADHESIVES = 'Coatings and Adhesives';
 const String TAB_PAINT_TEXT = 'Paint';

@@ -15,6 +15,8 @@ import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
+import 'package:unitrade_web_v2/purchasing/purchasing_grid.dart';
+import 'package:unitrade_web_v2/purchasing/purchasing_list.dart';
 import 'package:unitrade_web_v2/sales_pipeline/pipeline_grid.dart';
 import 'package:unitrade_web_v2/screens/home/product_streamer.dart';
 import 'package:unitrade_web_v2/screens/home/register.dart';
@@ -265,6 +267,62 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                               builder: (context) =>
                                                   ProductStreamer(
                                                       roles: roles)));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          //Puchasing Section
+                          AnimationConfiguration.staggeredGrid(
+                            position: 0,
+                            duration: Duration(milliseconds: animationDuration),
+                            columnCount: 3,
+                            child: FadeInAnimation(
+                              child: Container(
+                                height: height,
+                                width: width,
+                                child: Card(
+                                  color: Colors.grey[300],
+                                  elevation: _elevation,
+                                  child: InkWell(
+                                    child: Column(children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          padding: EdgeInsets.only(left: 10),
+                                          alignment: Alignment.bottomLeft,
+                                          color: Colors.amberAccent,
+                                          child: Text(PURCHASING,
+                                              style: textStyle2,
+                                              textAlign: TextAlign.start),
+                                        ),
+                                      ),
+                                      Divider(
+                                        height: 3.0,
+                                        thickness: 3.0,
+                                        color: Colors.black,
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          color: Colors.white,
+                                          alignment: Alignment.centerLeft,
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                              'This section will hold the functions and data available for the purchasing department',
+                                              textAlign: TextAlign.start),
+                                        ),
+                                      ),
+                                    ]),
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => PurchasingGrid(),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),

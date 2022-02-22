@@ -34,6 +34,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('sales_pipeline');
   final CollectionReference quotationCollection =
       FirebaseFirestore.instance.collection('quotes');
+  final CollectionReference purchaseCollection =
+      FirebaseFirestore.instance.collection('purchases');
 
   //Add a new user to the users database
   Future<String> addUserData(
@@ -1438,5 +1440,91 @@ class DatabaseService {
         .orderBy('currentDate', descending: false)
         .snapshots()
         .map(_salespiplineDataFromSnaptshot);
+  }
+
+  //This section will cover the purchasing requests that will be handled by admins
+  //and the purchasing department
+
+  //Update a purchase request
+  Future<Map<String, dynamic>> updatedPurchaseRequest({
+    String uid,
+    String salesId,
+    DateTime requestDate,
+    String clientName,
+    String clientId,
+    List<Map<String, dynamic>> itemsRequested,
+    String productBrand,
+    String orderStatus,
+    String comments,
+  }) async {
+    try {
+      return await purchaseCollection
+          .doc(uid)
+          .update({
+            'salesId': salesId,
+            'reqeustDate': requestDate,
+            'clientName': clientName,
+            'clientId': clientId,
+            'itemsRequested': itemsRequested,
+            'productBrand': productBrand,
+            'orderStatus': orderStatus,
+            'comments': comments,
+          })
+          .then((value) => {
+                'status': 1,
+                'error': null,
+              })
+          .catchError((err) => {
+                'status': 0,
+                'error': err,
+              });
+    } catch (e, stackTrace) {
+      print(
+          'An error occured in updating your purchase request: $e - $stackTrace');
+
+      return {
+        'status': 0,
+        'error': e,
+      };
+    }
+  }
+
+  //Get a purchase request
+  //Streaming function
+  Stream<List<PurchaseModel>> getPurchaseRequestById({String salesId}) {
+    return purchaseCollection
+        .where('salesId', isEqualTo: salesId)
+        .orderBy('requestDate', descending: true)
+        .snapshots()
+        .map(_mapPurchaseList);
+  }
+
+  //get all purchase requests
+  Stream<List<PurchaseModel>> getAllPurchaseRequests() {
+    return purchaseCollection
+        .orderBy('requestDate', descending: true)
+        .snapshots()
+        .map(_mapPurchaseList);
+  }
+
+  //Map result function
+  List<PurchaseModel> _mapPurchaseList(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return PurchaseModel(
+        uid: doc.id,
+        salesId: doc.data()['salesId'],
+        requestDate: doc.data()['requestDate'],
+        clientName: doc.data()['clientName'],
+        clientId: doc.data()['clientId'],
+        itemsRequested: doc.data()['itemsRequested'],
+        productBrand: doc.data()['productBrand'],
+        responseDate: doc.data()['responseDate'],
+        leadTime: doc.data()['leadTime'],
+        validity: doc.data()['validity'],
+        emailStatus: doc.data()['emailStatus'],
+        orderStatus: doc.data()['orderStatus'],
+        comments: doc.data()['comments'],
+      );
+    }).toList();
   }
 }
