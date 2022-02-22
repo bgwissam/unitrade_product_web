@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unitrade_web_v2/models/client.dart';
+import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
+import 'package:unitrade_web_v2/shared/loading.dart';
 
 class PurchasingForm extends StatefulWidget {
   const PurchasingForm({Key key, this.purchaseModel, this.salesName})
@@ -15,13 +17,16 @@ class PurchasingForm extends StatefulWidget {
 
 class _PurchasingFormState extends State<PurchasingForm> {
   final _formKey = GlobalKey<FormState>();
+  DatabaseService db = DatabaseService();
   Size _size;
   RegExp regExp = new RegExp(r'^[a-zA-Z]');
   List<double> cost;
   List<double> price;
   List<double> margin;
   List<String> leadTime;
-
+  List<Map<String, dynamic>> itemsRequested = [];
+  bool _loading = false;
+  String comments;
   @override
   void initState() {
     cost = List.generate(
@@ -48,11 +53,45 @@ class _PurchasingFormState extends State<PurchasingForm> {
             padding: const EdgeInsets.only(right: 10),
             child: TextButton(
               onPressed: () async {
-                if (_formKey.currentState.validate()) {}
+                if (_formKey.currentState.validate()) {
+                  setState(() {
+                    _loading = true;
+                  });
+                  //populate the items reqested list
+                  for (var i = 0;
+                      i < widget.purchaseModel.itemsRequested.length;
+                      i++) {
+                    itemsRequested.add({
+                      'description': widget.purchaseModel.itemsRequested[i]
+                          ['description'],
+                      'itemCode': widget.purchaseModel.itemsRequested[i]
+                          ['itemCode'],
+                      'packing': widget.purchaseModel.itemsRequested[i]
+                          ['packing'],
+                      'quantity': widget.purchaseModel.itemsRequested[i]
+                          ['quantity'],
+                      'cost': cost[i],
+                      'price': price[i],
+                      'leadTime': leadTime[i]
+                    });
+                  }
+
+                  //update the current purhcase order
+                  await db.updatedPurchaseRequest(
+                    uid: widget.purchaseModel.uid,
+                    itemsRequested: itemsRequested,
+                    orderStatus: 'Responded',
+                    comments: comments,
+                  );
+                }
+                setState(() {
+                  _loading = false;
+                });
+                Navigator.pop(context);
               },
               child: Text(
                 'Save',
-                style: textStyle7,
+                style: textStyle6,
               ),
             ),
           )
@@ -60,7 +99,16 @@ class _PurchasingFormState extends State<PurchasingForm> {
       ),
       body: Form(
         key: _formKey,
-        child: _buildPurchaseForm(),
+        child: Stack(
+          children: [
+            _buildPurchaseForm(),
+            _loading
+                ? Center(
+                    child: Loading(),
+                  )
+                : SizedBox()
+          ],
+        ),
       ),
     );
   }
@@ -103,7 +151,7 @@ class _PurchasingFormState extends State<PurchasingForm> {
               ),
               //List of items requested
               SizedBox(
-                height: _size.height / 2,
+                height: 2 * _size.height / 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -169,7 +217,17 @@ class _PurchasingFormState extends State<PurchasingForm> {
                                                 horizontal: 10),
                                             child: TextFormField(
                                                 style: textStyle8,
-                                                initialValue: '',
+                                                initialValue: widget
+                                                                .purchaseModel
+                                                                .itemsRequested[
+                                                            index]['cost'] !=
+                                                        null
+                                                    ? widget
+                                                        .purchaseModel
+                                                        .itemsRequested[index]
+                                                            ['cost']
+                                                        .toString()
+                                                    : '',
                                                 keyboardType: TextInputType
                                                     .numberWithOptions(
                                                         decimal: true),
@@ -238,7 +296,17 @@ class _PurchasingFormState extends State<PurchasingForm> {
                                                 horizontal: 10),
                                             child: TextFormField(
                                                 style: textStyle8,
-                                                initialValue: '',
+                                                initialValue: widget
+                                                                .purchaseModel
+                                                                .itemsRequested[
+                                                            index]['price'] !=
+                                                        null
+                                                    ? widget
+                                                        .purchaseModel
+                                                        .itemsRequested[index]
+                                                            ['price']
+                                                        .toString()
+                                                    : '0.0',
                                                 keyboardType: TextInputType
                                                     .numberWithOptions(
                                                         decimal: true),
@@ -306,7 +374,17 @@ class _PurchasingFormState extends State<PurchasingForm> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             child: TextFormField(
-                                                initialValue: '',
+                                                initialValue: widget
+                                                                .purchaseModel
+                                                                .itemsRequested[index]
+                                                            ['leadTime'] !=
+                                                        null
+                                                    ? widget
+                                                        .purchaseModel
+                                                        .itemsRequested[index]
+                                                            ['leadTime']
+                                                        .toString()
+                                                    : '',
                                                 decoration: InputDecoration(
                                                   filled: true,
                                                   hintText: 'Lead time of item',
@@ -359,7 +437,31 @@ class _PurchasingFormState extends State<PurchasingForm> {
                     ),
                   ],
                 ),
-              )
+              ),
+
+              //Comments
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: TextFormField(
+                  initialValue: widget.purchaseModel.comments ?? '',
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    filled: true,
+                    hintText: 'Any additional comments',
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.grey)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.blue)),
+                  ),
+                  onChanged: (val) {
+                    if (val.isNotEmpty) {
+                      comments = val;
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),

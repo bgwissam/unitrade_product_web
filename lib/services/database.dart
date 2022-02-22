@@ -1448,10 +1448,6 @@ class DatabaseService {
   //Update a purchase request
   Future<Map<String, dynamic>> updatedPurchaseRequest({
     String uid,
-    String salesId,
-    DateTime requestDate,
-    String clientName,
-    String clientId,
     List<Map<String, dynamic>> itemsRequested,
     String productBrand,
     String orderStatus,
@@ -1461,14 +1457,10 @@ class DatabaseService {
       return await purchaseCollection
           .doc(uid)
           .update({
-            'salesId': salesId,
-            'reqeustDate': requestDate,
-            'clientName': clientName,
-            'clientId': clientId,
             'itemsRequested': itemsRequested,
-            'productBrand': productBrand,
             'orderStatus': orderStatus,
             'comments': comments,
+            'responseDate': DateTime.now(),
           })
           .then((value) => {
                 'status': 1,
