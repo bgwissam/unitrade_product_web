@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unitrade_web_v2/models/client.dart';
 import 'package:unitrade_web_v2/services/database.dart';
+import 'package:unitrade_web_v2/services/email_management.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
 import 'package:unitrade_web_v2/shared/loading.dart';
+import 'package:unitrade_web_v2/shared/snackbar_widget.dart';
 
 class PurchasingForm extends StatefulWidget {
   const PurchasingForm({Key key, this.purchaseModel, this.salesName})
@@ -18,6 +20,7 @@ class PurchasingForm extends StatefulWidget {
 class _PurchasingFormState extends State<PurchasingForm> {
   final _formKey = GlobalKey<FormState>();
   DatabaseService db = DatabaseService();
+  EmailManagement em = EmailManagement();
   Size _size;
   RegExp regExp = new RegExp(r'^[a-zA-Z]');
   List<double> cost;
@@ -27,8 +30,13 @@ class _PurchasingFormState extends State<PurchasingForm> {
   List<Map<String, dynamic>> itemsRequested = [];
   bool _loading = false;
   String comments;
+  String salesEmail;
+  String managerEmail;
+
   @override
   void initState() {
+    _getSalesDetails();
+
     cost = List.generate(
         widget.purchaseModel.itemsRequested.length, (index) => 0.0);
     price = List.generate(
@@ -38,6 +46,20 @@ class _PurchasingFormState extends State<PurchasingForm> {
     leadTime = List.generate(
         widget.purchaseModel.itemsRequested.length, (index) => '');
     super.initState();
+  }
+
+  Future<void> _getSalesDetails() async {
+    var managerResult;
+    var result = await db.getUserByIdDetailed(widget.purchaseModel.salesId);
+
+    if (result.directManagerId != null) {
+      managerResult = await db.getUserByIdDetailed(result.directManagerId);
+    }
+
+    setState(() {
+      salesEmail = result.emailAddress;
+      managerEmail = managerResult.emailAddress;
+    });
   }
 
   @override
@@ -53,6 +75,7 @@ class _PurchasingFormState extends State<PurchasingForm> {
             padding: const EdgeInsets.only(right: 10),
             child: TextButton(
               onPressed: () async {
+                //_snackBarWidget.context = context;
                 if (_formKey.currentState.validate()) {
                   setState(() {
                     _loading = true;
@@ -83,6 +106,16 @@ class _PurchasingFormState extends State<PurchasingForm> {
                     orderStatus: 'Responded',
                     comments: comments,
                   );
+
+                  //send an email informing
+                  await em.sendPurchasingResponse(
+                      'michael.molino@unitradeksa.com',
+                      'Michael Molino',
+                      widget.salesName,
+                      salesEmail,
+                      widget.purchaseModel.clientName,
+                      managerEmail,
+                      itemsRequested);
                 }
                 setState(() {
                   _loading = false;

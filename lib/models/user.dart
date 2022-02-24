@@ -15,6 +15,7 @@ class UserData {
   final String cityOfResidence;
   final List<dynamic> roles;
   final bool isActive;
+  final String directManagerId;
   final List<dynamic> usersAccessList;
 
   UserData({
@@ -28,6 +29,7 @@ class UserData {
     this.cityOfResidence,
     this.roles,
     this.isActive,
+    this.directManagerId,
     this.usersAccessList,
   });
 }

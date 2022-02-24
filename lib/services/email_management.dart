@@ -5,6 +5,8 @@ import 'package:unitrade_web_v2/services/database.dart';
 class EmailManagement {
   final CollectionReference salesPipelineMail =
       FirebaseFirestore.instance.collection('salespipeline_mail');
+  final CollectionReference purchaseMail =
+      FirebaseFirestore.instance.collection('purchase_mail');
 
   //Sends email with the comments of the sales manager for the sales team
   Future sendCommentsEmail(
@@ -39,11 +41,69 @@ class EmailManagement {
           '<tr><td>$adminName</td></tr><tr><td>$adminEmail</td></tr></table>');
 
       if (salesmanEmail != null && commentList.isNotEmpty) {
-        return salesPipelineMail.add({
+        try {
+          return salesPipelineMail.add({
+            'to': salesmanEmail,
+            'from': adminEmail,
+            'message': {
+              'subject': 'Pipeline Comments',
+              'html': buffer.toString(),
+            }
+          }).then((value) {
+            return value.id;
+          }).catchError((err) {
+            print('Mail could not be sent because: $err');
+            throw err;
+          });
+        } catch (e) {
+          print('An error occured trying to send the email: $e');
+        }
+      }
+    } catch (error) {
+      print('the following error as occured: $error');
+      throw error;
+    }
+  }
+
+//send purchasing response to user
+  Future sendPurchasingResponse(
+    String purchaserEmail,
+    String purchaserName,
+    String salesmanName,
+    String salesmanEmail,
+    String clientName,
+    String adminEmail,
+    List<Map<String, dynamic>> items,
+  ) async {
+    try {
+      var buffer = StringBuffer();
+      //set the detais
+      buffer.write(
+          '<table><tr><td>Dear ${salesmanName.firstLetterToUpperCase},</td></tr><tr>&nbsp;</tr>');
+      buffer.write(
+          '<tr><td>Kindly find below the details for your request</td></tr><tr>&nbsp;</tr>');
+
+      //add header row
+      buffer.write(
+          '<table border="1"><tr><td><b>Item Description</b></td><td><b>Item Code</b></td><td><b>Item Pack</b></td><td><b>Item Quantity</b></td><td><b>Price</b></td><td><b>Lead Time</b></td></tr>');
+
+      //Add row for each comment
+      for (var item in items) {
+        buffer.write(
+            '<tr><td>${item['description']}</td><td>${item['itemCode']}</td><td>${item['packing']}</td><td>${item['quantity']}</td><td>${item['price']}</td><td>${item['leadTime']}</td></tr><tr>&nbsp;</tr>');
+      }
+      buffer.write('</table>');
+      buffer.write('<tr><td>Thank you</td></tr><tr>&nbsp;</tr>');
+      buffer.write(
+          '<tr><td>$purchaserName</td></tr><tr><td>$purchaserEmail</td></tr></table>');
+
+      if (salesmanEmail != null && items.isNotEmpty) {
+        return purchaseMail.add({
           'to': salesmanEmail,
-          'from': adminEmail,
+          'from': purchaserEmail,
+          'cc': [adminEmail, 'mmolino@nesma.com'],
           'message': {
-            'subject': 'Pipeline Comments',
+            'subject': 'Purchase response for $clientName',
             'html': buffer.toString(),
           }
         }).then((value) {
@@ -53,7 +113,7 @@ class EmailManagement {
           throw err;
         });
       }
-    } catch (error, stackTrace) {
+    } catch (error) {
       print('the following error as occured: $error');
       throw error;
     }

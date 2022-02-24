@@ -120,6 +120,15 @@ class DatabaseService {
     }).toList();
   }
 
+  Future<UserData> getUserByIdDetailed(String userId) async {
+    return await unitradeCollection.doc(userId).get().then((value) => UserData(
+          firstName: value.data()['firstName'],
+          lastName: value.data()['lastName'],
+          emailAddress: value.data()['emailAddress'],
+          directManagerId: value.data()['directManager'],
+        ));
+  }
+
   Future<String> getUserById(String userId) async {
     return await unitradeCollection.doc(userId).get().then((value) {
       return '${value.data()['firstName']} ${value.data()['lastName']}';
