@@ -8,15 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:unitrade_web_v2/brands/brand_grid.dart';
 import 'package:unitrade_web_v2/file_uploader/updateDataGrid.dart';
 import 'package:unitrade_web_v2/locations/get_map_widget.dart';
-import 'package:unitrade_web_v2/locations/googl_map_locations.dart';
 import 'package:unitrade_web_v2/models/products.dart';
 import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/products/product_form.dart';
 import 'package:unitrade_web_v2/purchasing/purchasing_grid.dart';
-import 'package:unitrade_web_v2/purchasing/purchasing_list.dart';
 import 'package:unitrade_web_v2/sales_pipeline/pipeline_grid.dart';
 import 'package:unitrade_web_v2/screens/home/product_streamer.dart';
 import 'package:unitrade_web_v2/screens/home/register.dart';
@@ -24,7 +23,6 @@ import 'package:unitrade_web_v2/screens/home/sign_out.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
-import 'package:unitrade_web_v2/file_uploader/csv_stock_update.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
 import 'package:unitrade_web_v2/shared/functions.dart';
 import 'package:unitrade_web_v2/brands/brand_form.dart';
@@ -541,10 +539,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     onTap: adminUser
                                         ? () {
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        RegisterUser()));
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RegisterProvider(),
+                                              ),
+                                            );
                                           }
                                         : null,
                                   ),

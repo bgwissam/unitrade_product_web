@@ -107,13 +107,14 @@ class DatabaseService {
   List<UserData> _userDataFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((snapshot) {
       return UserData(
-          uid: uid,
+          uid: snapshot.id,
           firstName: snapshot.data()['firstName'] ?? '',
           lastName: snapshot.data()['lastName'] ?? '',
           company: snapshot.data()['company'] ?? '',
           phonNumber: snapshot.data()['phoneNumber'],
           countryOfResidence: snapshot.data()['countryOfResidence'],
           cityOfResidence: snapshot.data()['cityOfResidnce'],
+          emailAddress: snapshot.data()['emailAddress'],
           isActive: snapshot.data()['isActive'] ?? true,
           roles: snapshot.data()['roles'] ?? null,
           usersAccessList: snapshot.data()['usersAccessList']);
@@ -146,6 +147,25 @@ class DatabaseService {
         .where('roles', arrayContains: 'isNormalUser')
         .snapshots()
         .map(_userDataFromSnapshot);
+  }
+
+  //get all users this feature should only be available for super user
+  Future<List<UserData>> getAllUsers() {
+    return unitradeCollection.get().then((value) {
+      return value.docs
+          .map((snapshot) => UserData(
+              uid: uid,
+              firstName: snapshot.data()['firstName'] ?? '',
+              lastName: snapshot.data()['lastName'] ?? '',
+              company: snapshot.data()['company'] ?? '',
+              phonNumber: snapshot.data()['phoneNumber'],
+              countryOfResidence: snapshot.data()['countryOfResidence'],
+              cityOfResidence: snapshot.data()['cityOfResidnce'],
+              isActive: snapshot.data()['isActive'] ?? true,
+              roles: snapshot.data()['roles'] ?? null,
+              usersAccessList: snapshot.data()['usersAccessList']))
+          .toList();
+    });
   }
 
   //This section is to manage brand data

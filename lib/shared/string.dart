@@ -12,6 +12,8 @@ const String PASSWORD = 'Password';
 const String PASSWORD_EMPTY = 'Password cannot be empty';
 const String SUBMIT = 'Submit';
 const String REGISTER_USER = 'Register User';
+const String UPDATE_USER = 'Update User';
+const String NEW_USER = 'New User';
 
 //Register Page
 const String FIRST_NAME = 'First Name';

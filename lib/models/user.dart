@@ -9,6 +9,7 @@ class UserData {
   final String firstName;
   final String lastName;
   final String company;
+  final String nationality;
   final String phonNumber;
   final String emailAddress;
   final String countryOfResidence;
@@ -23,6 +24,7 @@ class UserData {
     this.firstName,
     this.lastName,
     this.company,
+    this.nationality,
     this.phonNumber,
     this.emailAddress,
     this.countryOfResidence,
