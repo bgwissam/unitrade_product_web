@@ -14,7 +14,7 @@ const String SUBMIT = 'Submit';
 const String REGISTER_USER = 'Register User';
 const String UPDATE_USER = 'Update User';
 const String NEW_USER = 'New User';
-
+const String ROLES = 'Roles';
 //Register Page
 const String FIRST_NAME = 'First Name';
 const String FIRST_NAME_VALIDATION = 'First name is required';

@@ -161,9 +161,12 @@ class AccessoriesOptions {
   }
 
   static List<String> itemSide() {
-    return [
-      'Left',
-      'Right'
-    ];
+    return ['Left', 'Right'];
+  }
+}
+
+class RolesList {
+  static List<String> roles() {
+    return ['isNormalUser', 'isAdmin', 'isSuperAdmin', 'isPurchaser'];
   }
 }
