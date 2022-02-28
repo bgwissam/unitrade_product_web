@@ -80,6 +80,7 @@ class DatabaseService {
       String phoneNumber,
       String emailAddress,
       String countryOfResidence,
+      String countryCode,
       String cityOfResidence,
       List<dynamic> roles,
       List<dynamic> usersAccessList}) async {
@@ -92,6 +93,7 @@ class DatabaseService {
         'phoneNumber': phoneNumber,
         'emailAddress': emailAddress,
         'countryOfResidence': countryOfResidence,
+        'countryCode': countryCode,
         'cityOfResidence': cityOfResidence,
         'roles': roles,
         'userAccessList': usersAccessList,
@@ -113,6 +115,7 @@ class DatabaseService {
           company: snapshot.data()['company'] ?? '',
           phonNumber: snapshot.data()['phoneNumber'],
           countryOfResidence: snapshot.data()['countryOfResidence'],
+          countryCode: snapshot.data()['countryCode'],
           cityOfResidence: snapshot.data()['cityOfResidnce'],
           emailAddress: snapshot.data()['emailAddress'],
           isActive: snapshot.data()['isActive'] ?? true,

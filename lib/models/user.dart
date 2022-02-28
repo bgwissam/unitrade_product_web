@@ -13,6 +13,7 @@ class UserData {
   final String phonNumber;
   final String emailAddress;
   final String countryOfResidence;
+  final String countryCode;
   final String cityOfResidence;
   final List<dynamic> roles;
   final bool isActive;
@@ -28,6 +29,7 @@ class UserData {
     this.phonNumber,
     this.emailAddress,
     this.countryOfResidence,
+    this.countryCode,
     this.cityOfResidence,
     this.roles,
     this.isActive,

@@ -59,8 +59,9 @@ class AuthService {
       bool isActive,
       String phoneNumber,
       String countryOfResidence,
+      String countryCode,
       String cityOfResidence,
-      List<String> roles,
+      List<dynamic> roles,
       List<dynamic> usersAccessList}) async {
     try {
       var result = await _auth.createUserWithEmailAndPassword(
@@ -80,6 +81,7 @@ class AuthService {
                 isActive: false,
                 emailAddress: email,
                 countryOfResidence: countryOfResidence,
+                countryCode: countryCode,
                 cityOfResidence: cityOfResidence ?? '',
                 roles: roles,
                 usersAccessList: usersAccessList)

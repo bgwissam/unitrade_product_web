@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dropdown.dart';
 import 'package:country_pickers/utils/utils.dart';
-import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +8,6 @@ import 'package:unitrade_web_v2/models/user.dart';
 import 'package:unitrade_web_v2/services/auth.dart';
 import 'package:unitrade_web_v2/services/database.dart';
 import 'package:unitrade_web_v2/shared/constants.dart';
-import 'package:unitrade_web_v2/shared/country_drop_down.dart';
 import 'package:unitrade_web_v2/shared/dropdownLists.dart';
 import 'package:unitrade_web_v2/shared/loading.dart';
 import 'package:unitrade_web_v2/shared/string.dart';
@@ -51,6 +47,7 @@ class _RegisterUserState extends State<RegisterUser> {
   String confirmEmail = '';
   String phoneNumber = '';
   String nationality = '';
+  String nationalityCode = '';
   String countryOfResidence = '';
   String cityOfResidence = '';
   String password = '';
@@ -58,7 +55,9 @@ class _RegisterUserState extends State<RegisterUser> {
   String errorText = '';
   List<dynamic> roles = [];
   String selectedRole;
-  String isActive;
+  bool isActive;
+  UserData _selectedUser;
+
   //Data controllers
   ScrollController _formScrollController = ScrollController();
   ScrollController _userListScrollController = ScrollController();
@@ -221,7 +220,9 @@ class _RegisterUserState extends State<RegisterUser> {
                                           //than itemBuilder's(dropdown menu item UI), then provide this selectedItemBuilder.
                                           onValuePicked: (Country country) {
                                             nationality = country.name;
+                                            nationalityCode = country.isoCode;
                                           },
+
                                           itemBuilder: (Country country) {
                                             return Row(
                                               children: <Widget>[
@@ -352,6 +353,9 @@ class _RegisterUserState extends State<RegisterUser> {
                                     child: TextFormField(
                                       controller: _emailAddressController,
                                       decoration: InputDecoration(
+                                        enabled: _selectedUser == null
+                                            ? true
+                                            : false,
                                         filled: true,
                                         fillColor: Colors.grey[100],
                                         enabledBorder: OutlineInputBorder(
@@ -496,81 +500,83 @@ class _RegisterUserState extends State<RegisterUser> {
                               thickness: 3,
                             ),
                             //list of roles
-                            Container(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(ROLES),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        color: Colors.grey[100],
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                          child:
-                                              DropdownButtonFormField<String>(
-                                        value: selectedRole,
-                                        isExpanded: true,
-                                        isDense: false,
-                                        hint: Center(
-                                          child: Text('Select user roles'),
-                                        ),
-                                        onChanged: (String val) {
-                                          setState(() {
-                                            if (!roles.contains(val)) {
-                                              roles.add(val);
-                                            }
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(ROLES),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Container(
+                                        height: 55,
+                                        child: DropdownButtonHideUnderline(
+                                            child:
+                                                DropdownButtonFormField<String>(
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                          ),
+                                          value: selectedRole,
+                                          isExpanded: true,
+                                          isDense: false,
+                                          hint: Center(
+                                            child: Text('Select user roles'),
+                                          ),
+                                          onChanged: (String val) {
+                                            setState(() {
+                                              if (!roles.contains(val)) {
+                                                roles.add(val);
+                                              }
 
-                                            selectedRole = val;
-                                          });
-                                        },
-                                        selectedItemBuilder:
-                                            (BuildContext context) {
-                                          return _rolesList
-                                              .map<Widget>(
-                                                (item) => Container(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    item,
-                                                    style: textStyle8,
+                                              selectedRole = val;
+                                            });
+                                          },
+                                          selectedItemBuilder:
+                                              (BuildContext context) {
+                                            return _rolesList
+                                                .map<Widget>(
+                                                  (item) => Container(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      item,
+                                                      style: textStyle8,
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList();
+                                          },
+                                          validator: (val) => roles.isEmpty
+                                              ? 'At least one role should be assigned'
+                                              : null,
+                                          items: _rolesList
+                                              .map(
+                                                (item) =>
+                                                    DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Center(
+                                                    child: Text(item),
                                                   ),
                                                 ),
                                               )
-                                              .toList();
-                                        },
-                                        validator: (val) => roles.isEmpty
-                                            ? 'At least one role should be assigned'
-                                            : null,
-                                        items: _rolesList
-                                            .map(
-                                              (item) =>
-                                                  DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Center(
-                                                  child: Text(item),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                      )),
-                                    ),
-                                  )
-                                ],
+                                              .toList(),
+                                        )),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                             roles.isEmpty
                                 ? SizedBox.shrink()
                                 : Container(
-                                    height: 50,
+                                    height: 55,
                                     child: ListView.builder(
                                         itemCount: roles.length,
                                         scrollDirection: Axis.horizontal,
@@ -597,68 +603,83 @@ class _RegisterUserState extends State<RegisterUser> {
                                   ),
 
                             //is active user or not
-                            Container(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(ROLES),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        color: Colors.grey[100],
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                          child:
-                                              DropdownButtonFormField<String>(
-                                        value: isActive,
-                                        isExpanded: true,
-                                        isDense: true,
-                                        hint: Center(
-                                          child: Text('Activate User'),
-                                        ),
-                                        onChanged: (String val) {
-                                          setState(() {});
-                                        },
-                                        selectedItemBuilder:
-                                            (BuildContext context) {
-                                          return ['True', 'False']
-                                              .map<Widget>(
-                                                (item) => Center(
-                                                  child: Text(
-                                                    item,
-                                                    style: textStyle8,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(ROLES),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Container(
+                                        height: 50,
+                                        child: DropdownButtonHideUnderline(
+                                            child:
+                                                DropdownButtonFormField<bool>(
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                          ),
+                                          value: _selectedUser == null
+                                              ? isActive
+                                              : _selectedUser.isActive,
+                                          isExpanded: true,
+                                          isDense: true,
+                                          hint: Center(
+                                            child: Text('Activate User'),
+                                          ),
+                                          onChanged: (val) {
+                                            setState(() {
+                                              _selectedUser == null
+                                                  ? isActive = val
+                                                  : isActive =
+                                                      _selectedUser.isActive;
+                                            });
+                                          },
+                                          selectedItemBuilder:
+                                              (BuildContext context) {
+                                            return [true, false]
+                                                .map<Widget>(
+                                                  (item) => Center(
+                                                    child: Text(
+                                                      item.toString(),
+                                                      style: textStyle8,
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList();
+                                          },
+                                          validator: (val) {
+                                            if (isActive == null &&
+                                                _selectedUser.isActive ==
+                                                    null) {
+                                              return 'Chose if you want to activate account';
+                                            }
+                                            return null;
+                                          },
+                                          items: [true, false]
+                                              .map(
+                                                (item) =>
+                                                    DropdownMenuItem<bool>(
+                                                  value: item,
+                                                  child: Center(
+                                                    child:
+                                                        Text(item.toString()),
                                                   ),
                                                 ),
                                               )
-                                              .toList();
-                                        },
-                                        validator: (val) => isActive == null
-                                            ? 'Chose if you want to activate account'
-                                            : null,
-                                        items: ['True', 'False']
-                                            .map(
-                                              (item) =>
-                                                  DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Center(
-                                                  child: Text(item),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                      )),
-                                    ),
-                                  )
-                                ],
+                                              .toList(),
+                                        )),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
 
@@ -694,6 +715,8 @@ class _RegisterUserState extends State<RegisterUser> {
                                                 _emailAddressController.text =
                                                     '';
                                                 userId = null;
+                                                _selectedUser = null;
+                                                roles = [];
                                               });
                                             }),
                                       )
@@ -724,13 +747,18 @@ class _RegisterUserState extends State<RegisterUser> {
                                               lastName: lastName.trim(),
                                               company: company.trim(),
                                               phoneNumber: phoneNumber,
-                                              countryOfResidence:
-                                                  countryOfResidence,
+                                              countryOfResidence: nationality,
+                                              countryCode: nationalityCode,
                                               cityOfResidence: cityOfResidence,
-                                              roles: [],
-                                              isActive: false,
+                                              roles: roles,
+                                              isActive: isActive,
                                               usersAccessList: [],
                                             );
+                                            if (mounted) {
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                            }
                                           } else {
                                             await db.setUserData(
                                               uid: userId,
@@ -743,12 +771,22 @@ class _RegisterUserState extends State<RegisterUser> {
                                                   _mobileController.text,
                                               countryOfResidence:
                                                   _nationalityController.text,
+                                              countryCode: nationalityCode ??
+                                                  _selectedUser.countryCode,
+                                              isActive: isActive ??
+                                                  _selectedUser.isActive,
+                                              roles: roles.isEmpty
+                                                  ? _selectedUser.roles
+                                                  : roles,
+                                              emailAddress:
+                                                  _selectedUser.emailAddress,
                                             );
+                                            if (mounted) {
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                            }
                                           }
-
-                                          setState(() {
-                                            loading = false;
-                                          });
                                         }
                                       }),
                                 ),
@@ -780,8 +818,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       _lasttNameController.text =
                                           userProvider[index].lastName;
                                       _nationalityController.text =
-                                          userProvider[index]
-                                              .countryOfResidence;
+                                          userProvider[index].countryCode;
                                       _companyController.text =
                                           userProvider[index].company;
                                       _mobileController.text =
@@ -791,6 +828,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       roles = userProvider[index].roles;
 
                                       userId = userProvider[index].uid;
+                                      _selectedUser = userProvider[index];
                                     });
                                   },
                                   child: ListTile(
@@ -807,5 +845,19 @@ class _RegisterUserState extends State<RegisterUser> {
               ],
             ),
           );
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lasttNameController.dispose();
+    _emailAddressController.dispose();
+    _nationalityController.dispose();
+    _companyController.dispose();
+    _mobileController.dispose();
+    _formScrollController.dispose();
+    _userListScrollController.dispose();
+
+    super.dispose();
   }
 }
